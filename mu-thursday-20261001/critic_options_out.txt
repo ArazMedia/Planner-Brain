@@ -1,0 +1,233 @@
+/workspace/mu-thursday-20261001/critic_options.py:184: UserWarning: This pattern is interpreted as a regular expression, and has match groups. To actually get the groups, use str.extract.
+  m_ = (s_.str[0] == "A") & (s_.str[2] == "put") & (s_.str[3].isin(["atm", "otm2"])) & (s_.str[4].isin(["W10", "W20"])) & (G.name.str.contains(r"\|(all|\|gap\|<3|\|gap\|<7|\|gap\|>=7|gap<=-3|gap>=3)$"))
+prints: 98 | realized vol (annualized) of the horizons the structures bet on:
+  day-1 open->close        std 4.23% -> 67% annualized (n=98)
+  day-1 open->Fri close    std 5.64% -> 63% annualized (n=98)
+  Thu close->Mon close     std 4.18% -> 47% annualized (n=98)
+  Thu close->Fri close     std 3.34% -> 53% annualized (n=98)
+
+structures priced: 1516 (family A 1300, family B 216) | half-spread/leg $0.50 | IV Oct2 65%, Oct9 55%
+
+=== Desk headline expressions (natural fills) ===
+A|Oct2|put|atm|W10|thu_close|all 98 576.263 -120.184 -0.208 -4.154 0.378 -0.236 -0.171 -0.066
+A|Oct2|put|atm|W20|thu_close|all 98 988.022 -45.972 -0.045 -0.792 0.469 -0.073 -0.008 0.106
+A|Oct9|put|atm|W10|thu_close|all 98 592.1 -152.579 -0.257 -8.515 0.204 -0.272 -0.238 -0.199
+A|Oct2|put|atm|W10|fri_close|all 98 576.263 -17.942 -0.031 -0.359 0.551 -0.008 -0.062 0.095
+A|Oct2|long_put<=650|thu_close|all 98 607.408 4.772 0.015 0.046 0.276 0.165 -0.184 -0.343
+A|Oct2|long_put<=650|fri_close|all 98 607.408 54.709 0.112 0.263 0.163 0.497 -0.402 -0.585
+B|thr7|intact>=50%|with_gap|W10|mon_close 21 563.934 -109.517 -0.195 -2.243 0.333 -0.218 -0.177 -0.177
+B|thr7|intactany|with_gap|W10|mon_close 22 564.087 -93.744 -0.167 -1.907 0.364 -0.218 -0.132 -0.162
+B|thr7|intact>=50%|with_gap|W10|fri_close 21 563.934 -161.454 -0.287 -3.962 0.19 -0.242 -0.32 -0.32
+B|thr5|intact>=50%|with_gap|W10|mon_close 32 562.246 -141.236 -0.252 -3.923 0.25 -0.277 -0.233 -0.276
+
+=== Leaderboard by t-stat among tradeable structures (n>=15, in budget): 326 of 1516 ===
+                                          name  n  maxloss  EV_usd  EV_R     t   win  EV_R_pre16  EV_R_post16  last12_R
+    A|Oct2|with_gap|atm|W10|fri_close||gap|>=7 22  567.866 140.368 0.247 1.475 0.682       0.569        0.024    -0.034
+        A|Oct2|put|otm2|W10|fri_close||gap|>=7 22  437.393 108.062 0.249 0.994 0.545       0.803       -0.135    -0.250
+       A|Oct2|long_put<=650|fri_close||gap|>=7 22  602.157 636.141 1.158 0.906 0.227       3.663       -0.577    -0.585
+       A|Oct2|long_put<=650|thu_close||gap|>=7 22  602.157 154.749 0.283 0.714 0.318       1.437       -0.516    -0.497
+         A|Oct2|put|otm2|W10|fri_close||gap|<3 33  442.186  61.589 0.137 0.709 0.515       0.076        0.257     0.152
+         A|Oct2|long_put<=650|fri_close|gap<=0 50  609.828 194.464 0.360 0.542 0.160       1.028       -0.827    -0.784
+        A|Oct2|long_put<=650|fri_close||gap|<3 33  610.981 170.342 0.262 0.533 0.212       0.258        0.270     0.164
+        A|Oct2|long_put<=650|thu_close|gap<=-3 31  605.190  82.501 0.157 0.503 0.355       0.465       -0.270    -0.230
+        A|Oct2|long_put<=650|fri_close|gap<=-3 31  605.190 228.897 0.454 0.456 0.161       1.331       -0.761    -0.784
+         A|Oct2|long_put<=650|thu_close|gap<=0 50  609.828  70.473 0.126 0.445 0.300       0.344       -0.261    -0.207
+B|thr5|intact>=50%|against_gap|W10|oct9_expiry 32  570.996  36.778 0.060 0.436 0.625       0.298       -0.125    -0.134
+         A|Oct2|put|atm|W10|fri_close||gap|>=7 22  575.921  41.403 0.074 0.403 0.591       0.369       -0.130    -0.200
+        A|Oct2|long_put<=650|thu_close||gap|<3 33  610.981  83.985 0.133 0.402 0.303       0.040        0.320     0.314
+     A|Oct2|with_gap|atm|W10|fri_close|gap<=-3 31  573.816  25.576 0.047 0.292 0.581       0.073        0.011    -0.048
+          A|Oct2|put|atm|W10|fri_close|gap<=-3 31  573.816  25.576 0.047 0.292 0.581       0.073        0.011    -0.048
+
+worst 5:
+                                     name  n  maxloss   EV_usd   EV_R       t
+       A|Oct9|call|otm2|W10|thu_close|all 98  481.939 -247.136 -0.513 -14.532
+        A|Oct9|call|atm|W10|thu_close|all 98  566.273 -248.014 -0.438 -13.954
+A|Oct9|against_gap|otm2|W10|thu_close|all 98  493.376 -216.939 -0.442 -12.134
+   A|Oct9|call|otm2|W10|thu_close||gap|<7 76  482.021 -235.347 -0.488 -11.825
+ A|Oct9|against_gap|atm|W10|thu_close|all 98  578.365 -216.901 -0.377 -11.781
+
+family B (fallback variants) sorted by t:
+                                          name  n  maxloss   EV_usd   EV_R      t   win  EV_R_pre16  EV_R_post16  last12_R
+B|thr5|intact>=50%|against_gap|W10|oct9_expiry 32  570.996   36.778  0.060  0.436 0.625       0.298       -0.125    -0.134
+  B|thr5|intactany|against_gap|W10|oct9_expiry 36  570.001   -1.979 -0.008 -0.024 0.583       0.174       -0.171    -0.134
+B|thr7|intact>=50%|against_gap|W10|oct9_expiry 21  568.237  -23.056 -0.044 -0.218 0.571       0.256       -0.269    -0.269
+B|thr3|intact>=50%|against_gap|W10|oct9_expiry 57  567.368  -17.461 -0.032 -0.269 0.561      -0.064        0.001    -0.123
+  B|thr3|intactany|against_gap|W10|oct9_expiry 65  567.671  -23.907 -0.044 -0.392 0.554      -0.047       -0.039    -0.123
+  B|thr7|intactany|against_gap|W10|oct9_expiry 22  568.007  -47.607 -0.088 -0.460 0.545       0.256       -0.326    -0.421
+        B|thr5|intact>=50%|put|W10|oct9_expiry 32  579.934  -48.684 -0.086 -0.545 0.531       0.107       -0.237    -0.140
+          B|thr5|intactany|put|W10|oct9_expiry 36  579.160  -79.160 -0.139 -0.940 0.500      -0.088       -0.184     0.007
+          B|thr7|intactany|put|W10|oct9_expiry 22  577.673 -123.127 -0.215 -1.136 0.455      -0.230       -0.205    -0.139
+        B|thr7|intact>=50%|put|W10|oct9_expiry 21  578.166 -149.595 -0.262 -1.357 0.429      -0.230       -0.285    -0.285
+        B|thr3|intact>=50%|put|W10|oct9_expiry 57  578.840 -109.227 -0.190 -1.676 0.474      -0.124       -0.258    -0.172
+          B|thr3|intactany|put|W10|oct9_expiry 65  578.404 -105.051 -0.182 -1.717 0.477      -0.151       -0.217    -0.025
+
+=== Multiple-testing haircut ===
+best tradeable: A|Oct2|with_gap|atm|W10|fri_close||gap|>=7 t=1.47 n=22 one-sided p=0.0775
+  Bonferroni with M=1516: adjusted p = 1.000; t needed for family-wise 5%: 3.99; expected max |t| of M null tests ~ sqrt(2 ln M) = 3.83
+  Bonferroni with M=3514: adjusted p = 1.000; t needed for family-wise 5%: 4.19; expected max |t| of M null tests ~ sqrt(2 ln M) = 4.04
+White reality check over 326 tradeable structures ($/print, B=4000): best mean $142.8/print (A|Oct2|long_put<=650|fri_close||gap|>=7), p = 0.424
+  A-open: 272 structures, best $142.8/print (A|Oct2|long_put<=650|fri_close||gap|>=7), reality-check p = 0.436
+  B-close: 54 structures, best $12.0/print (B|thr5|intact>=50%|against_gap|W10|oct9_expiry), reality-check p = 0.986
+
+=== IV sensitivity (natural fills): EV_R for key structures ===
+  open_put_W10 iv45%: -0.170R ($-95, n=98, risk $557) | iv55%: -0.191R ($-109, n=98, risk $568) | iv65%: -0.208R ($-120, n=98, risk $576) | iv80%: -0.228R ($-134, n=98, risk $586) | iv100%: -0.247R ($-147, n=98, risk $595)
+  open_put_W10_fri iv45%: +0.002R ($+1, n=98, risk $557) | iv55%: -0.017R ($-10, n=98, risk $568) | iv65%: -0.031R ($-18, n=98, risk $576) | iv80%: -0.046R ($-27, n=98, risk $586) | iv100%: -0.061R ($-36, n=98, risk $595)
+  open_put_W20_fri iv45%: +0.143R ($+131, n=98, risk $923) | iv55%: +0.098R ($+93, n=98, risk $961) | iv65%: +0.067R ($+65, n=98, risk $988) | iv80%: +0.035R ($+35, n=98, risk $1018) | iv100%: +0.006R ($+6, n=98, risk $1047)
+  fallback iv40%: -0.156R ($-87, n=21, risk $552) | iv45%: -0.171R ($-95, n=21, risk $557) | iv55%: -0.195R ($-110, n=21, risk $564) | iv65%: -0.213R ($-121, n=21, risk $569) | iv75%: -0.227R ($-129, n=21, risk $572)
+  fill stress (half-spread/leg $0.10 RA-style / $0.25 / $0.50 base / $1.00 wide), fallback @55%: $0.10: +0.104R | $0.25: -0.019R | $0.50: -0.195R | $1.00: -0.467R
+  fill stress, open put W10 exit Thu close @65%: $0.10: +0.081R | $0.25: -0.038R | $0.50: -0.208R | $1.00: -0.473R
+  fill stress, open put W10 hold to Fri expiry @65%: $0.10: +0.125R | $0.25: +0.061R | $0.50: -0.031R | $1.00: -0.174R
+
+=== Put debit spreads at the open (day-1 drift bet), by gap condition, natural fills ===
+                                  name  n  maxloss   EV_usd   EV_R      t   win  EV_R_pre16  EV_R_post16  last12_R
+      A|Oct2|put|atm|W10|fri_close|all 98  576.263  -17.942 -0.031 -0.359 0.551      -0.008       -0.062     0.095
+  A|Oct2|put|atm|W10|fri_close|gap<=-3 31  573.816   25.576  0.047  0.292 0.581       0.073        0.011    -0.048
+   A|Oct2|put|atm|W10|fri_close|gap>=3 34  577.634  -76.289 -0.133 -0.879 0.500      -0.136       -0.130    -0.133
+  A|Oct2|put|atm|W10|fri_close||gap|<3 33  577.150    1.294  0.001  0.015 0.576       0.020       -0.037     0.026
+  A|Oct2|put|atm|W10|fri_close||gap|<7 76  576.362  -35.121 -0.061 -0.613 0.539      -0.080       -0.032    -0.114
+ A|Oct2|put|atm|W10|fri_close||gap|>=7 22  575.921   41.403  0.074  0.403 0.591       0.369       -0.130    -0.200
+      A|Oct2|put|atm|W10|thu_close|all 98  576.263 -120.184 -0.208 -4.154 0.378      -0.236       -0.171    -0.066
+  A|Oct2|put|atm|W10|thu_close|gap<=-3 31  573.816  -68.435 -0.117 -1.350 0.484      -0.101       -0.140    -0.130
+   A|Oct2|put|atm|W10|thu_close|gap>=3 34  577.634 -182.930 -0.318 -3.741 0.265      -0.405       -0.241    -0.197
+  A|Oct2|put|atm|W10|thu_close||gap|<3 33  577.150 -104.149 -0.180 -2.075 0.394      -0.224       -0.092    -0.065
+  A|Oct2|put|atm|W10|thu_close||gap|<7 76  576.362 -139.590 -0.242 -4.252 0.342      -0.310       -0.132    -0.131
+ A|Oct2|put|atm|W10|thu_close||gap|>=7 22  575.921  -53.145 -0.090 -0.880 0.500       0.151       -0.256    -0.256
+      A|Oct2|put|atm|W20|fri_close|all 98  988.022   65.461  0.067  0.675 0.551       0.085        0.042     0.162
+  A|Oct2|put|atm|W20|fri_close|gap<=-3 31  978.856  139.157  0.146  0.813 0.581       0.230        0.029    -0.052
+   A|Oct2|put|atm|W20|fri_close|gap>=3 34  994.899  -68.388 -0.070 -0.416 0.500      -0.157        0.007     0.004
+  A|Oct2|put|atm|W20|fri_close||gap|<3 33  989.547  134.136  0.134  0.786 0.576       0.143        0.115     0.132
+  A|Oct2|put|atm|W20|fri_close||gap|<7 76  988.122   29.302  0.029  0.266 0.539      -0.015        0.099    -0.035
+ A|Oct2|put|atm|W20|fri_close||gap|>=7 22  987.677  190.374  0.199  0.922 0.591       0.610       -0.086    -0.177
+      A|Oct2|put|atm|W20|thu_close|all 98  988.022  -45.972 -0.045 -0.792 0.469      -0.073       -0.008     0.106
+  A|Oct2|put|atm|W20|thu_close|gap<=-3 31  978.856   57.097  0.062  0.559 0.548       0.090        0.022     0.036
+   A|Oct2|put|atm|W20|thu_close|gap>=3 34  994.899 -171.189 -0.174 -1.756 0.412      -0.266       -0.092    -0.046
+  A|Oct2|put|atm|W20|thu_close||gap|<3 33  989.547  -13.784 -0.013 -0.136 0.455      -0.066        0.093     0.123
+  A|Oct2|put|atm|W20|thu_close||gap|<7 76  988.122  -85.369 -0.087 -1.301 0.434      -0.164        0.038     0.035
+ A|Oct2|put|atm|W20|thu_close||gap|>=7 22  987.677   90.127  0.097  0.732 0.591       0.399       -0.112    -0.110
+     A|Oct2|put|otm2|W10|fri_close|all 98  440.943   -2.657 -0.007 -0.053 0.439      -0.005       -0.010     0.134
+ A|Oct2|put|otm2|W10|fri_close|gap<=-3 31  437.668   -7.747 -0.015 -0.087 0.419       0.276       -0.417    -0.556
+  A|Oct2|put|otm2|W10|fri_close|gap>=3 34  442.724  -60.371 -0.140 -0.716 0.382      -0.433        0.121     0.114
+ A|Oct2|put|otm2|W10|fri_close||gap|<3 33  442.186   61.589  0.137  0.709 0.515       0.076        0.257     0.152
+ A|Oct2|put|otm2|W10|fri_close||gap|<7 76  441.971  -34.707 -0.081 -0.621 0.408      -0.160        0.046    -0.040
+A|Oct2|put|otm2|W10|fri_close||gap|>=7 22  437.393  108.062  0.249  0.994 0.545       0.803       -0.135    -0.250
+     A|Oct2|put|otm2|W10|thu_close|all 98  440.943 -134.515 -0.305 -4.697 0.316      -0.315       -0.292    -0.202
+ A|Oct2|put|otm2|W10|thu_close|gap<=-3 31  437.668  -86.354 -0.193 -1.688 0.387      -0.135       -0.273    -0.254
+  A|Oct2|put|otm2|W10|thu_close|gap>=3 34  442.724 -195.298 -0.444 -4.148 0.265      -0.497       -0.396    -0.361
+ A|Oct2|put|otm2|W10|thu_close||gap|<3 33  442.186 -117.133 -0.267 -2.330 0.303      -0.330       -0.143    -0.112
+ A|Oct2|put|otm2|W10|thu_close||gap|<7 76  441.971 -153.607 -0.349 -4.799 0.263      -0.419       -0.234    -0.252
+A|Oct2|put|otm2|W10|thu_close||gap|>=7 22  437.393  -68.561 -0.154 -1.088 0.500       0.228       -0.419    -0.412
+     A|Oct2|put|otm2|W20|fri_close|all 98  723.012   80.017  0.110  0.848 0.429       0.142        0.067     0.116
+ A|Oct2|put|otm2|W20|fri_close|gap<=-3 31  712.892   71.810  0.107  0.423 0.419       0.486       -0.416    -0.598
+  A|Oct2|put|otm2|W20|fri_close|gap>=3 34  730.129  -27.660 -0.042 -0.174 0.382      -0.311        0.196     0.188
+ A|Oct2|put|otm2|W20|fri_close||gap|<3 33  725.186  198.666  0.269  1.204 0.485       0.190        0.428     0.309
+ A|Oct2|put|otm2|W20|fri_close||gap|<7 76  724.901   16.640  0.019  0.158 0.395      -0.065        0.154     0.020
+A|Oct2|put|otm2|W20|fri_close||gap|>=7 22  716.486  298.955  0.425  1.429 0.545       1.223       -0.127    -0.285
+     A|Oct2|put|otm2|W20|thu_close|all 98  723.012  -78.035 -0.107 -1.392 0.388      -0.113       -0.099    -0.010
+ A|Oct2|put|otm2|W20|thu_close|gap<=-3 31  712.892   12.812  0.025  0.128 0.516       0.107       -0.088    -0.064
+  A|Oct2|put|otm2|W20|thu_close|gap>=3 34  730.129 -194.181 -0.270 -2.113 0.265      -0.321       -0.224    -0.187
+ A|Oct2|put|otm2|W20|thu_close||gap|<3 33  725.186  -43.709 -0.064 -0.443 0.394      -0.141        0.092     0.124
+ A|Oct2|put|otm2|W20|thu_close||gap|<7 76  724.901 -115.312 -0.161 -1.846 0.355      -0.241       -0.030    -0.058
+A|Oct2|put|otm2|W20|thu_close||gap|>=7 22  716.486   50.743  0.078  0.408 0.500       0.558       -0.254    -0.243
+      A|Oct9|put|atm|W10|fri_close|all 98  592.100 -143.401 -0.242 -6.185 0.316      -0.246       -0.236    -0.200
+  A|Oct9|put|atm|W10|fri_close|gap<=-3 31  590.549 -136.712 -0.231 -3.209 0.323      -0.194       -0.281    -0.314
+   A|Oct9|put|atm|W10|fri_close|gap>=3 34  592.970 -177.980 -0.300 -4.570 0.294      -0.370       -0.238    -0.247
+  A|Oct9|put|atm|W10|fri_close||gap|<3 33  592.661 -114.057 -0.192 -2.886 0.333      -0.199       -0.178    -0.184
+  A|Oct9|put|atm|W10|fri_close||gap|<7 76  592.163 -161.953 -0.273 -6.140 0.276      -0.307       -0.219    -0.272
+ A|Oct9|put|atm|W10|fri_close||gap|>=7 22  591.883  -79.311 -0.133 -1.682 0.455       0.069       -0.272    -0.304
+      A|Oct9|put|atm|W10|thu_close|all 98  592.100 -152.579 -0.257 -8.515 0.204      -0.272       -0.238    -0.199
+  A|Oct9|put|atm|W10|thu_close|gap<=-3 31  590.549 -126.839 -0.214 -3.890 0.226      -0.205       -0.227    -0.221
+   A|Oct9|put|atm|W10|thu_close|gap>=3 34  592.970 -188.063 -0.318 -6.228 0.147      -0.361       -0.279    -0.253
+  A|Oct9|put|atm|W10|thu_close||gap|<3 33  592.661 -140.201 -0.236 -4.621 0.242      -0.264       -0.182    -0.170
+  A|Oct9|put|atm|W10|thu_close||gap|<7 76  592.163 -165.023 -0.279 -8.007 0.184      -0.318       -0.214    -0.219
+ A|Oct9|put|atm|W10|thu_close||gap|>=7 22  591.883 -109.591 -0.184 -3.096 0.273      -0.032       -0.290    -0.290
+      A|Oct9|put|atm|W20|fri_close|all 98 1043.079  -87.585 -0.083 -1.884 0.459      -0.086       -0.079    -0.041
+  A|Oct9|put|atm|W20|fri_close|gap<=-3 31 1037.200  -73.677 -0.069 -0.863 0.484      -0.023       -0.133    -0.171
+   A|Oct9|put|atm|W20|fri_close|gap>=3 34 1047.492 -157.168 -0.150 -2.025 0.382      -0.227       -0.082    -0.092
+  A|Oct9|put|atm|W20|fri_close||gap|<3 33 1044.054  -28.958 -0.027 -0.363 0.515      -0.036       -0.010    -0.017
+  A|Oct9|put|atm|W20|fri_close||gap|<7 76 1043.145 -124.937 -0.120 -2.373 0.434      -0.156       -0.060    -0.119
+ A|Oct9|put|atm|W20|fri_close||gap|>=7 22 1042.852   41.450  0.042  0.432 0.545       0.279       -0.122    -0.158
+      A|Oct9|put|atm|W20|thu_close|all 98 1043.079 -105.929 -0.101 -2.957 0.378      -0.117       -0.080    -0.037
+  A|Oct9|put|atm|W20|thu_close|gap<=-3 31 1037.200  -54.185 -0.051 -0.835 0.484      -0.038       -0.069    -0.063
+   A|Oct9|put|atm|W20|thu_close|gap>=3 34 1047.492 -176.929 -0.170 -2.935 0.265      -0.216       -0.128    -0.099
+  A|Oct9|put|atm|W20|thu_close||gap|<3 33 1044.054  -81.385 -0.078 -1.335 0.394      -0.109       -0.016    -0.003
+  A|Oct9|put|atm|W20|thu_close||gap|<7 76 1043.145 -130.784 -0.125 -3.182 0.342      -0.170       -0.053    -0.059
+ A|Oct9|put|atm|W20|thu_close||gap|>=7 22 1042.852  -20.064 -0.017 -0.281 0.500       0.161       -0.141    -0.140
+     A|Oct9|put|otm2|W10|fri_close|all 98  504.710 -146.201 -0.290 -6.314 0.276      -0.286       -0.295    -0.260
+ A|Oct9|put|otm2|W10|fri_close|gap<=-3 31  502.514 -138.548 -0.274 -3.247 0.290      -0.215       -0.356    -0.395
+  A|Oct9|put|otm2|W10|fri_close|gap>=3 34  505.907 -181.496 -0.360 -4.794 0.206      -0.428       -0.300    -0.311
+ A|Oct9|put|otm2|W10|fri_close||gap|<3 33  505.538 -117.025 -0.233 -2.897 0.333      -0.241       -0.216    -0.224
+ A|Oct9|put|otm2|W10|fri_close||gap|<7 76  505.397 -164.930 -0.327 -6.378 0.237      -0.360       -0.274    -0.331
+A|Oct9|put|otm2|W10|fri_close||gap|>=7 22  502.334  -81.498 -0.161 -1.622 0.409       0.101       -0.342    -0.381
+     A|Oct9|put|otm2|W10|thu_close|all 98  504.710 -155.287 -0.308 -8.787 0.194      -0.318       -0.293    -0.253
+ A|Oct9|put|otm2|W10|thu_close|gap<=-3 31  502.514 -129.519 -0.256 -4.081 0.226      -0.237       -0.283    -0.275
+  A|Oct9|put|otm2|W10|thu_close|gap>=3 34  505.907 -190.508 -0.377 -6.453 0.118      -0.415       -0.344    -0.317
+ A|Oct9|put|otm2|W10|thu_close||gap|<3 33  505.538 -143.206 -0.284 -4.684 0.242      -0.315       -0.223    -0.209
+ A|Oct9|put|otm2|W10|thu_close||gap|<7 76  505.397 -167.325 -0.331 -8.307 0.184      -0.373       -0.264    -0.272
+A|Oct9|put|otm2|W10|thu_close||gap|>=7 22  502.334 -113.702 -0.226 -3.135 0.227      -0.034       -0.358    -0.357
+     A|Oct9|put|otm2|W20|fri_close|all 98  869.117  -94.437 -0.109 -2.053 0.439      -0.103       -0.117    -0.079
+ A|Oct9|put|otm2|W20|fri_close|gap<=-3 31  862.089  -79.027 -0.089 -0.932 0.419      -0.015       -0.190    -0.236
+  A|Oct9|put|otm2|W20|fri_close|gap>=3 34  874.077 -164.609 -0.190 -2.201 0.382      -0.266       -0.123    -0.136
+ A|Oct9|put|otm2|W20|fri_close||gap|<3 33  870.609  -36.614 -0.044 -0.454 0.515      -0.055       -0.021    -0.033
+ A|Oct9|put|otm2|W20|fri_close||gap|<7 76  870.417 -131.747 -0.153 -2.577 0.408      -0.190       -0.092    -0.157
+A|Oct9|put|otm2|W20|fri_close||gap|>=7 22  864.625   34.454  0.043  0.340 0.545       0.354       -0.172    -0.216
+     A|Oct9|put|otm2|W20|thu_close|all 98  869.117 -112.511 -0.129 -3.218 0.357      -0.141       -0.114    -0.070
+ A|Oct9|put|otm2|W20|thu_close|gap<=-3 31  862.089  -61.761 -0.069 -0.987 0.484      -0.045       -0.103    -0.095
+  A|Oct9|put|otm2|W20|thu_close|gap>=3 34  874.077 -181.978 -0.209 -3.118 0.265      -0.250       -0.173    -0.142
+ A|Oct9|put|otm2|W20|thu_close||gap|<3 33  870.609  -88.613 -0.103 -1.458 0.333      -0.139       -0.030    -0.016
+ A|Oct9|put|otm2|W20|thu_close||gap|<7 76  870.417 -136.236 -0.157 -3.424 0.316      -0.204       -0.080    -0.090
+A|Oct9|put|otm2|W20|thu_close||gap|>=7 22  864.625  -30.552 -0.033 -0.423 0.500       0.192       -0.189    -0.188
+
+=== With-gap / against-gap Oct 2 ATM $10-wide verticals at the open, hold to expiry ===
+                                         name  n  maxloss   EV_usd   EV_R        t   win  EV_R_pre16  EV_R_post16  last12_R
+        A|Oct2|with_gap|atm|W10|fri_close|all 98  568.783  -63.526 -0.113   -1.275 0.500      -0.025       -0.230    -0.183
+    A|Oct2|with_gap|atm|W10|fri_close||gap|<3 33  571.052  -80.466 -0.144   -0.924 0.485      -0.043       -0.347    -0.402
+    A|Oct2|with_gap|atm|W10|fri_close||gap|<7 76  569.048 -122.547 -0.217   -2.166 0.447      -0.139       -0.344    -0.251
+   A|Oct2|with_gap|atm|W10|fri_close||gap|>=7 22  567.866  140.368  0.247    1.475 0.682       0.569        0.024    -0.034
+     A|Oct2|with_gap|atm|W10|fri_close|gap>=3 34  561.991 -128.324 -0.229   -1.513 0.441      -0.112       -0.332    -0.295
+    A|Oct2|with_gap|atm|W10|fri_close|gap<=-3 31  573.816   25.576  0.047    0.292 0.581       0.073        0.011    -0.048
+     A|Oct2|with_gap|atm|W10|fri_close|gap>=7 12  563.684   19.649  0.035    0.132 0.583       0.182       -0.014     0.035
+    A|Oct2|with_gap|atm|W10|fri_close|gap<=-7 10  572.884  285.230  0.501    2.883 0.800       0.763        0.109     0.501
+      A|Oct2|with_gap|atm|W10|fri_close|gap>0 48  561.690 -148.244 -0.263   -2.094 0.417      -0.176       -0.350    -0.156
+     A|Oct2|with_gap|atm|W10|fri_close|gap<=0 50  575.592   17.804  0.031    0.259 0.580       0.087       -0.069    -0.030
+     A|Oct2|against_gap|atm|W10|fri_close|all 98  566.670 -131.589 -0.235   -2.644 0.439      -0.257       -0.205    -0.278
+ A|Oct2|against_gap|atm|W10|fri_close||gap|<3 33  564.181 -116.216 -0.210   -1.342 0.455      -0.296       -0.036     0.027
+ A|Oct2|against_gap|atm|W10|fri_close||gap|<7 76  566.312  -71.076 -0.127   -1.246 0.500      -0.152       -0.086    -0.120
+A|Oct2|against_gap|atm|W10|fri_close||gap|>=7 22  567.907 -340.634 -0.608   -3.783 0.227      -0.806       -0.471    -0.427
+  A|Oct2|against_gap|atm|W10|fri_close|gap>=3 34  577.634  -76.289 -0.133   -0.879 0.500      -0.136       -0.130    -0.133
+ A|Oct2|against_gap|atm|W10|fri_close|gap<=-3 31  557.294 -208.604 -0.374   -2.424 0.355      -0.317       -0.453    -0.407
+  A|Oct2|against_gap|atm|W10|fri_close|gap>=7 12  578.452 -161.785 -0.282   -1.091 0.417      -0.419       -0.236    -0.282
+ A|Oct2|against_gap|atm|W10|fri_close|gap<=-7 10  555.252 -555.252 -1.000 -152.228 0.000      -1.000       -1.000    -1.000
+   A|Oct2|against_gap|atm|W10|fri_close|gap>0 48  576.962  -55.176 -0.095   -0.759 0.521      -0.134       -0.057    -0.137
+  A|Oct2|against_gap|atm|W10|fri_close|gap<=0 50  556.789 -204.944 -0.369   -3.051 0.360      -0.350       -0.403    -0.554
+
+=== Fallback (thr7, intact>=50%, with gap, W10, Oct 9, exit Mon close) per-trade, natural fills, IV 55% ===
+    report   gap  thu_cc  thu_to_mon  dir  debit    pnl     R
+2002-12-17 -15.5   -23.0       -0.20  put   5.57 -208.0 -0.37
+2006-10-05  -8.7   -13.7        0.07  put   5.64 -221.0 -0.39
+2010-06-28  -7.8   -13.5       -3.34  put   5.79  -12.0 -0.02
+2011-06-23  -8.4   -14.5        1.94  put   5.82 -326.0 -0.56
+2011-09-29  -7.3   -14.1      -10.32  put   5.64  272.0  0.48
+2013-03-21   7.5    10.7       -1.20 call   5.63 -276.0 -0.49
+2014-01-07  11.4     9.8       -0.67 call   5.67 -243.0 -0.43
+2014-09-25   7.2     6.7        1.27 call   5.53 -130.0 -0.24
+2015-06-25 -15.6   -18.2       -4.17  put   5.76   34.0  0.06
+2016-06-30  -8.6    -9.2       -6.16  put   5.76  133.0  0.23
+2016-12-21  11.3    12.7        0.47 call   5.49 -180.0 -0.33
+2017-03-23  12.2     7.4        0.91 call   5.62 -149.0 -0.26
+2018-12-18  -7.2    -7.9       -3.47  put   5.85   -3.0 -0.01
+2019-06-25   9.8    13.3        4.18 call   5.57   35.0  0.06
+2021-12-20   8.5    10.5        4.12 call   5.57   32.0  0.06
+2023-12-20   8.0     8.6        1.85 call   5.55  -95.0 -0.17
+2024-03-20  17.8    14.1        6.63 call   5.51  147.0  0.27
+2024-09-25  18.1    14.7       -5.62 call   5.56 -499.0 -0.90
+2024-12-18 -13.3   -16.2        3.02  put   5.71 -385.0 -0.67
+2025-12-17  13.8    10.2       11.28 call   5.62  274.0  0.49
+2026-06-24  17.6    15.7       -5.63 call   5.59 -500.0 -0.89
+n=21 mean $-110  meanR -0.194  t=-2.24  win 33%  | bootstrap 95% CI $: (-205, -15) | with-gap drift Thu->Mon: mean +1.92%, t=1.97
+
+Underlying Thu close -> Mon close drift WITH the gap (no options), by |gap| threshold:
+  |gap|>= 0: n=98 mean +0.49% t=1.20 | 2001-15 +0.63% (n=56) | 2016-26 +0.30% (n=42)
+  |gap|>= 3: n=65 mean +0.71% t=1.30 | 2001-15 +1.06% (n=34) | 2016-26 +0.33% (n=31)
+  |gap|>= 5: n=36 mean +1.68% t=2.43 | 2001-15 +1.47% (n=17) | 2016-26 +1.88% (n=19)
+  |gap|>= 7: n=22 mean +2.24% t=2.28 | 2001-15 +1.71% (n=9) | 2016-26 +2.60% (n=13)
+  |gap|>=10: n=10 mean +0.87% t=0.52 | 2001-15 +1.23% (n=3) | 2016-26 +0.72% (n=7)
