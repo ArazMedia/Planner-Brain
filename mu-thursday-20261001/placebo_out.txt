@@ -1,0 +1,6 @@
+all non-earnings days    n= 6146 meanR=-0.060 ret=-0.18% stopped=0.22
+non-earn |gap|>=3%       n=  470 meanR=-0.183 ret=-0.55% stopped=0.42
+non-earn gap>=3%         n=  263 meanR=-0.152 ret=-0.45% stopped=0.38
+non-earn gap<=-3%        n=  207 meanR=-0.223 ret=-0.67% stopped=0.47
+non-earn |gap|>=5%       n=  117 meanR=-0.205 ret=-0.61% stopped=0.49
+earnings day-1           n=   98 meanR=+0.330 ret=+0.99%
