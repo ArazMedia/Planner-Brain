@@ -1,0 +1,110 @@
+/workspace/mu-thursday-20261001/critic_data_checks.py:46: UserWarning: obj.round has no effect with datetime, timedelta, or period dtypes. Use obj.dt.round(...) instead.
+  pl["v1_v0"] = vr; print("day-1 volume < report-day volume on", (pl.v1_v0 < 1).sum(), "rows:", pl[pl.v1_v0 < 1][["report_date", "v1_v0"]].round(2).values.tolist())
+=== 1. SEC 8-K verification of the 99 yfinance earnings rows (2001-12 .. 2026-06) ===
+rows: 99 | 8-K found within [-1,+2]d: 93 | 8-K accepted same day: 93 | accepted same day and >=16:00 ET: 93
+Rows whose 8-K was NOT accepted after the close on the yfinance date (need a look):
+      yf_date  yf_hour sec_report sec_accepted items  same_day after_close
+0  2001-12-18       17       None          NaT   NaN     False        None
+1  2002-03-21       17       None          NaT   NaN     False        None
+2  2002-06-25        7       None          NaT   NaN     False        None
+3  2002-09-24       17       None          NaT   NaN     False        None
+4  2002-12-17       17       None          NaT   NaN     False        None
+5  2003-03-20       18       None          NaT   NaN     False        None
+
+Rows in raw_earnings_dates but NOT in day1_planner.csv: [datetime.date(2002, 6, 25)]
+
+=== 2. day-1 alignment: day1 must be the next trading day after report_date; volume must spike ===
+misaligned rows: 0 | day-1 volume / report-day volume: median 2.45, min 0.83 (2008-12-23)
+day-1 volume < report-day volume on 9 rows: [[Timestamp('2002-03-21 00:00:00'), 0.95], [Timestamp('2003-12-23 00:00:00'), 0.8], [Timestamp('2004-06-23 00:00:00'), 0.64], [Timestamp('2004-12-22 00:00:00'), 0.51], [Timestamp('2007-06-28 00:00:00'), 0.98], [Timestamp('2008-10-01 00:00:00'), 0.86], [Timestamp('2009-04-02 00:00:00'), 0.85], [Timestamp('2010-12-22 00:00:00'), 0.83], [Timestamp('2013-06-19 00:00:00'), 0.9]]
+
+=== 3. Second vendor (Nasdaq.com) vs yfinance, day-1 bars, 2016-10 .. 2026-06 ===
+n compared: 40 | max |diff| %: O 0.006 H 0.010 L 0.004 C 0.000 | vol max 1.1%
+Empty DataFrame
+Columns: [day1, dO, dH, dL, dC, dV]
+Index: []
+June 2026 bars, yfinance vs Nasdaq (Close):
+            yf_close  nq_close  yf_open  nq_open    yf_vol      nq_vol
+Date                                                                  
+2026-06-18   1133.99   1133.99  1108.07  1108.06  64642500  64642540.0
+2026-06-22   1211.38   1211.38  1196.22  1196.21  53140800  53140820.0
+2026-06-23   1051.77   1051.77  1080.00  1080.00  60243300  60243260.0
+2026-06-24   1048.51   1048.51  1082.22  1082.22  68935700  68935710.0
+2026-06-25   1213.56   1213.56  1233.00  1233.00  82143900  83040960.0
+2026-06-26   1132.33   1132.33  1139.08  1139.08  86405300  86405310.0
+2026-06-29   1145.28   1145.28  1128.70  1128.70  60694100  60694110.0
+2026-06-30   1154.29   1154.29  1144.73  1144.73  42152600  42152630.0
+June 2026 pre-print 8-Ks (news check):
+   filingDate                 acc      items
+22 2026-06-24 2026-06-24 20:02:01  2.02,9.01
+
+=== 4. The skipped 2002-06-25 print (yfinance stamp 07:00 -> treated as BMO and dropped) ===
+             Open   High    Low      Close    Volume
+Date                                                
+2002-06-24  18.50  20.40  18.50  19.719999   9003300
+2002-06-25  20.25  20.99  19.68  19.750000  11103500
+2002-06-26  17.10  19.00  16.00  19.000000  18255300
+2002-06-27  20.25  20.75  19.50  20.500000  11033600
+If included as AMC (day1 = 2002-06-26): gap -13.4%, oc 11.1%, R0 short result -3.21% = -1.07R
+R0 mean R: n=98 0.330 -> n=99 incl. this print 0.316
+
+=== 5. Official daily open vs first 1h bar open (fill realism), 11 prints with hourly data ===
+2023-12-21 daily open 85.00  1h-bar open 85.00  diff +0.00%  (gap +8.0%, oc +0.6%)
+2024-03-21 daily open 113.37  1h-bar open 113.20  diff -0.15%  (gap +17.8%, oc -3.1%)
+2024-06-27 daily open 135.79  1h-bar open 135.62  diff -0.13%  (gap -4.6%, oc -2.6%)
+2024-09-26 daily open 113.10  1h-bar open 113.50  diff +0.35%  (gap +18.1%, oc -2.8%)
+2024-12-19 daily open 90.08  1h-bar open 90.13  diff +0.05%  (gap -13.3%, oc -3.3%)
+2025-03-21 daily open 98.20  1h-bar open 98.22  diff +0.03%  (gap -4.7%, oc -3.5%)
+2025-06-26 daily open 129.53  1h-bar open 129.49  diff -0.03%  (gap +1.8%, oc -2.7%)
+2025-09-24 daily open 165.08  1h-bar open 163.00  diff -1.26%  (gap -0.8%, oc -2.0%)
+2025-12-18 daily open 256.53  1h-bar open 256.75  diff +0.08%  (gap +13.8%, oc -3.1%)
+2026-03-19 daily open 424.97  1h-bar open 424.97  diff +0.00%  (gap -8.0%, oc +4.5%)
+2026-06-25 daily open 1233.00  1h-bar open 1233.35  diff +0.03%  (gap +17.6%, oc -1.6%)
+
+=== 6. Is the day-1 open->close drift real? MU raw drift and controls (no costs) ===
+MU day-1 oc: mean -0.99% t=-2.31 n=98 | median -1.11 | share negative 63%
+  gap>0       mean -0.68% t=-1.16 n=48
+  gap<=0      mean -1.29% t=-2.05 n=50
+  |gap|<3     mean -1.37% t=-2.02 n=33
+  3<=|gap|<7  mean -0.18% t=-0.24 n=43
+  |gap|>=7    mean -2.02% t=-2.64 n=22
+  gap>=7      mean -0.57% t=-0.77 n=12
+  gap<=-7     mean -3.77% t=-2.98 n=10
+  2001-15     mean -0.75% t=-1.13 n=56
+  2016-26     mean -1.31% t=-2.81 n=42
+MU all non-earnings days oc: mean -0.037% t=-1.06 n=6147
+MU non-earnings |gap|>=3% days oc: mean +0.29% t=1.77 n=541
+MU non-earnings |gap|>=7% days oc: mean +0.70% t=1.37 n=76
+MU day-2 (second session after print) oc: mean -0.30% t=-0.96 n=98
+MU day-1 open->day2 close (2-session) short drift: mean +1.24%
+
+=== 7. Peer panel: after-close 8-K item 2.02 prints (SEC acceptance >= 16:00 ET, same day), day-1 open->close ===
+       n  mean_oc  t_oc  r0_ret  r0_R  stopped       first
+sym                                                       
+AMD   75    -0.92 -1.37    0.96  0.32     0.40  2005-04-13
+TSLA  63    -0.84 -1.32    0.88  0.29     0.37  2010-11-09
+MSFT  74    -0.56 -2.43    0.26  0.09     0.15  2004-10-21
+NFLX  79    -0.56 -1.06    0.31  0.10     0.38  2004-10-14
+WDC   73    -0.48 -0.80    0.21  0.07     0.47  2004-10-25
+NVDA  82    -0.45 -0.83    0.36  0.12     0.39  2004-11-04
+META  52    -0.37 -1.03   -0.01 -0.00     0.25  2012-07-26
+INTC  82    -0.20 -0.70    0.04  0.01     0.20  2004-10-12
+AAPL  85    -0.17 -0.68   -0.10 -0.03     0.16  2004-10-13
+LRCX  77    -0.15 -0.33   -0.03 -0.01     0.40  2005-01-20
+MRVL  22    -0.14 -0.13    0.38  0.13     0.36  2021-06-07
+KLAC  66    -0.08 -0.21   -0.91 -0.30     0.42  2004-10-21
+MCHP  76    -0.03 -0.07   -0.06 -0.02     0.30  2005-04-27
+QCOM  79    -0.01 -0.02   -0.43 -0.14     0.30  2004-11-03
+TXN   81     0.26  0.89   -0.40 -0.13     0.23  2004-09-08
+STX   62     0.30  0.50   -0.62 -0.21     0.52  2004-10-19
+ON    32     0.41  0.45   -0.24 -0.08     0.53  2005-02-02
+AMAT  81     0.46  1.21   -0.48 -0.16     0.33  2004-11-17
+AMZN  76     0.52  1.19   -0.37 -0.12     0.38  2004-10-21
+SWKS  81     0.58  1.02   -0.09 -0.03     0.46  2005-07-21
+PANEL pooled: n=1398 mean oc -0.13% t=-1.19 | R0-style short (3% stop, costs) -0.03%/trade = -0.009R | share of 19 names with negative mean oc: 14
+  |gap|<3     mean oc -0.30% t=-1.82 n=499 | R0-style +0.17%
+  3<=|gap|<7  mean oc -0.21% t=-1.24 n=506 | R0-style +0.09%
+  |gap|>=7    mean oc +0.20% t=0.90 n=393 | R0-style -0.42%
+  gap>=7      mean oc +0.33% t=1.09 n=218 | R0-style -0.51%
+  gap<=-7     mean oc +0.04% t=0.12 n=175 | R0-style -0.31%
+  2004-15     mean oc +0.01% t=0.06 n=686 | R0-style -0.05%
+  2016-26     mean oc -0.26% t=-1.88 n=712 | R0-style -0.00%
