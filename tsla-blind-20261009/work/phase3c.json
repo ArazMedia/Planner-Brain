@@ -1,0 +1,1031 @@
+{
+ "expanding|framework as run (grade C, daily stops)": {
+  "counts": {
+   "SKIP": 118,
+   "WATCH": 24
+  },
+  "TAKE": null,
+  "WATCH": {
+   "n": 24,
+   "win": 0.2916666666666667,
+   "mean_real": -18.43438774473149,
+   "mean_real_pct": 0.1808128892635944,
+   "mean_ev": 59.03730610095772
+  },
+  "SKIP": {
+   "n": 118,
+   "win": 0.2796610169491525,
+   "mean_real": -30.556022549312164,
+   "mean_real_pct": -0.04871490133294569,
+   "mean_ev": -80.8365393115116
+  },
+  "ALL": {
+   "n": 142,
+   "win": 0.28169014084507044,
+   "mean_real": -28.507295540087263,
+   "mean_real_pct": -0.009921471936347362
+  },
+  "per": {
+   "Oct9 375C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 5,
+     "WATCH": 19
+    },
+    "win": 0.3333333333333333,
+    "mean_real": 8.705074838879254,
+    "mean_pct": 0.1319406581387589,
+    "skip_right": 3,
+    "skip_wrong": 2
+   },
+   "Oct9 370/375C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 24
+    },
+    "win": 0.3333333333333333,
+    "mean_real": 0.658963116313417,
+    "mean_pct": 0.01222614146202631,
+    "skip_right": 16,
+    "skip_wrong": 8
+   },
+   "Oct9 370/380C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 23,
+     "WATCH": 1
+    },
+    "win": 0.3333333333333333,
+    "mean_real": 43.422586414867446,
+    "mean_pct": 0.11488067371430909,
+    "skip_right": 15,
+    "skip_wrong": 8
+   },
+   "Oct9 375/385C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 23,
+     "WATCH": 1
+    },
+    "win": 0.3333333333333333,
+    "mean_real": 18.05516422223775,
+    "mean_pct": 0.14285531714066446,
+    "skip_right": 16,
+    "skip_wrong": 7
+   },
+   "Oct12 370/380C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 21,
+     "WATCH": 3
+    },
+    "win": 0.2916666666666667,
+    "mean_real": -51.137982217236335,
+    "mean_pct": -0.05493157952963663,
+    "skip_right": 14,
+    "skip_wrong": 7
+   },
+   "Oct16 375/385C": {
+    "n": 22,
+    "verdicts": {
+     "SKIP": 22
+    },
+    "win": 0.045454545454545456,
+    "mean_real": -205.49669634972128,
+    "mean_pct": -0.4425526398721935,
+    "skip_right": 21,
+    "skip_wrong": 1
+   }
+  },
+  "skip_right": 85,
+  "skip_wrong": 33,
+  "n_events": 24
+ },
+ "expanding|math-only (grade B assumed), daily stops": {
+  "counts": {
+   "SKIP": 118,
+   "WATCH": 24
+  },
+  "TAKE": null,
+  "WATCH": {
+   "n": 24,
+   "win": 0.2916666666666667,
+   "mean_real": -18.43438774473149,
+   "mean_real_pct": 0.1808128892635944,
+   "mean_ev": 59.03730610095772
+  },
+  "SKIP": {
+   "n": 118,
+   "win": 0.2796610169491525,
+   "mean_real": -30.556022549312164,
+   "mean_real_pct": -0.04871490133294569,
+   "mean_ev": -80.8365393115116
+  },
+  "ALL": {
+   "n": 142,
+   "win": 0.28169014084507044,
+   "mean_real": -28.507295540087263,
+   "mean_real_pct": -0.009921471936347362
+  },
+  "per": {
+   "Oct9 375C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 5,
+     "WATCH": 19
+    },
+    "win": 0.3333333333333333,
+    "mean_real": 8.705074838879254,
+    "mean_pct": 0.1319406581387589,
+    "skip_right": 3,
+    "skip_wrong": 2
+   },
+   "Oct9 370/375C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 24
+    },
+    "win": 0.3333333333333333,
+    "mean_real": 0.658963116313417,
+    "mean_pct": 0.01222614146202631,
+    "skip_right": 16,
+    "skip_wrong": 8
+   },
+   "Oct9 370/380C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 23,
+     "WATCH": 1
+    },
+    "win": 0.3333333333333333,
+    "mean_real": 43.422586414867446,
+    "mean_pct": 0.11488067371430909,
+    "skip_right": 15,
+    "skip_wrong": 8
+   },
+   "Oct9 375/385C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 23,
+     "WATCH": 1
+    },
+    "win": 0.3333333333333333,
+    "mean_real": 18.05516422223775,
+    "mean_pct": 0.14285531714066446,
+    "skip_right": 16,
+    "skip_wrong": 7
+   },
+   "Oct12 370/380C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 21,
+     "WATCH": 3
+    },
+    "win": 0.2916666666666667,
+    "mean_real": -51.137982217236335,
+    "mean_pct": -0.05493157952963663,
+    "skip_right": 14,
+    "skip_wrong": 7
+   },
+   "Oct16 375/385C": {
+    "n": 22,
+    "verdicts": {
+     "SKIP": 22
+    },
+    "win": 0.045454545454545456,
+    "mean_real": -205.49669634972128,
+    "mean_pct": -0.4425526398721935,
+    "skip_right": 21,
+    "skip_wrong": 1
+   }
+  },
+  "skip_right": 85,
+  "skip_wrong": 33,
+  "n_events": 24
+ },
+ "expanding|grade B, intraday stops": {
+  "counts": {
+   "SKIP": 142
+  },
+  "TAKE": null,
+  "WATCH": null,
+  "SKIP": {
+   "n": 142,
+   "win": 0.14084507042253522,
+   "mean_real": -9.846150091849065,
+   "mean_real_pct": -0.012358893280592156,
+   "mean_ev": -23.924891399185938
+  },
+  "ALL": {
+   "n": 142,
+   "win": 0.14084507042253522,
+   "mean_real": -9.846150091849065,
+   "mean_real_pct": -0.012358893280592156
+  },
+  "per": {
+   "Oct9 375C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 24
+    },
+    "win": 0.16666666666666666,
+    "mean_real": -17.809664862155604,
+    "mean_pct": -0.048542715144806826,
+    "skip_right": 20,
+    "skip_wrong": 4
+   },
+   "Oct9 370/375C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 24
+    },
+    "win": 0.16666666666666666,
+    "mean_real": 10.956603980735972,
+    "mean_pct": 0.03449973177129261,
+    "skip_right": 20,
+    "skip_wrong": 4
+   },
+   "Oct9 370/380C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 24
+    },
+    "win": 0.16666666666666666,
+    "mean_real": 36.53413983113926,
+    "mean_pct": 0.08092712335174868,
+    "skip_right": 20,
+    "skip_wrong": 4
+   },
+   "Oct9 375/385C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 24
+    },
+    "win": 0.16666666666666666,
+    "mean_real": 3.680914173028724,
+    "mean_pct": 0.028330281237930348,
+    "skip_right": 20,
+    "skip_wrong": 4
+   },
+   "Oct12 370/380C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 24
+    },
+    "win": 0.16666666666666666,
+    "mean_real": 11.71287004562071,
+    "mean_pct": 0.06094466230153935,
+    "skip_right": 20,
+    "skip_wrong": 4
+   },
+   "Oct16 375/385C": {
+    "n": 22,
+    "verdicts": {
+     "SKIP": 22
+    },
+    "win": 0.0,
+    "mean_real": -112.72500132197383,
+    "mean_pct": -0.2501264022849539,
+    "skip_right": 22,
+    "skip_wrong": 0
+   }
+  },
+  "skip_right": 122,
+  "skip_wrong": 20,
+  "n_events": 24
+ },
+ "expanding|grade B, no cap/min/demotion, daily stops": {
+  "counts": {
+   "SKIP": 115,
+   "WATCH": 21,
+   "TAKE": 6
+  },
+  "TAKE": {
+   "n": 6,
+   "win": 0.0,
+   "mean_real": -233.80509525267186,
+   "mean_real_pct": -0.9340330788897588,
+   "mean_ev": 104.56552019216792
+  },
+  "WATCH": {
+   "n": 21,
+   "win": 0.3333333333333333,
+   "mean_real": 19.491612718807747,
+   "mean_real_pct": 0.3590745847330968,
+   "mean_ev": 51.24005267476524
+  },
+  "SKIP": {
+   "n": 115,
+   "win": 0.28695652173913044,
+   "mean_real": -26.561124019750633,
+   "mean_real_pct": -0.02908884192189396,
+   "mean_ev": -83.25595833847242
+  },
+  "ALL": {
+   "n": 142,
+   "win": 0.28169014084507044,
+   "mean_real": -28.507295540087263,
+   "mean_real_pct": -0.009921471936347362
+  },
+  "per": {
+   "Oct9 375C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 5,
+     "WATCH": 15,
+     "TAKE": 4
+    },
+    "win": 0.3333333333333333,
+    "mean_real": 8.705074838879254,
+    "mean_pct": 0.1319406581387589,
+    "skip_right": 3,
+    "skip_wrong": 2
+   },
+   "Oct9 370/375C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 23,
+     "WATCH": 1
+    },
+    "win": 0.3333333333333333,
+    "mean_real": 0.658963116313417,
+    "mean_pct": 0.01222614146202631,
+    "skip_right": 15,
+    "skip_wrong": 8
+   },
+   "Oct9 370/380C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 23,
+     "WATCH": 1
+    },
+    "win": 0.3333333333333333,
+    "mean_real": 43.422586414867446,
+    "mean_pct": 0.11488067371430909,
+    "skip_right": 15,
+    "skip_wrong": 8
+   },
+   "Oct9 375/385C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 21,
+     "TAKE": 2,
+     "WATCH": 1
+    },
+    "win": 0.3333333333333333,
+    "mean_real": 18.05516422223775,
+    "mean_pct": 0.14285531714066446,
+    "skip_right": 14,
+    "skip_wrong": 7
+   },
+   "Oct12 370/380C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 21,
+     "WATCH": 3
+    },
+    "win": 0.2916666666666667,
+    "mean_real": -51.137982217236335,
+    "mean_pct": -0.05493157952963663,
+    "skip_right": 14,
+    "skip_wrong": 7
+   },
+   "Oct16 375/385C": {
+    "n": 22,
+    "verdicts": {
+     "SKIP": 22
+    },
+    "win": 0.045454545454545456,
+    "mean_real": -205.49669634972128,
+    "mean_pct": -0.4425526398721935,
+    "skip_right": 21,
+    "skip_wrong": 1
+   }
+  },
+  "skip_right": 82,
+  "skip_wrong": 33,
+  "n_events": 24
+ },
+ "expanding|grade B, no cap/min/demotion, intraday stops": {
+  "counts": {
+   "SKIP": 117,
+   "WATCH": 23,
+   "TAKE": 2
+  },
+  "TAKE": {
+   "n": 2,
+   "win": 0.0,
+   "mean_real": -138.34181873465278,
+   "mean_real_pct": -0.678142816070788,
+   "mean_ev": 13.28783897214884
+  },
+  "WATCH": {
+   "n": 23,
+   "win": 0.08695652173913043,
+   "mean_real": -52.919659025013516,
+   "mean_real_pct": -0.12541119802667325,
+   "mean_ev": 38.33957839878093
+  },
+  "SKIP": {
+   "n": 117,
+   "win": 0.15384615384615385,
+   "mean_real": 0.817798991470507,
+   "mean_real_pct": 0.021245985819751918,
+   "mean_ev": -36.521294895286744
+  },
+  "ALL": {
+   "n": 142,
+   "win": 0.14084507042253522,
+   "mean_real": -9.846150091849065,
+   "mean_real_pct": -0.012358893280592156
+  },
+  "per": {
+   "Oct9 375C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 7,
+     "WATCH": 17
+    },
+    "win": 0.16666666666666666,
+    "mean_real": -17.809664862155604,
+    "mean_pct": -0.048542715144806826,
+    "skip_right": 5,
+    "skip_wrong": 2
+   },
+   "Oct9 370/375C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 23,
+     "WATCH": 1
+    },
+    "win": 0.16666666666666666,
+    "mean_real": 10.956603980735972,
+    "mean_pct": 0.03449973177129261,
+    "skip_right": 19,
+    "skip_wrong": 4
+   },
+   "Oct9 370/380C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 23,
+     "WATCH": 1
+    },
+    "win": 0.16666666666666666,
+    "mean_real": 36.53413983113926,
+    "mean_pct": 0.08092712335174868,
+    "skip_right": 19,
+    "skip_wrong": 4
+   },
+   "Oct9 375/385C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 22,
+     "TAKE": 2
+    },
+    "win": 0.16666666666666666,
+    "mean_real": 3.680914173028724,
+    "mean_pct": 0.028330281237930348,
+    "skip_right": 18,
+    "skip_wrong": 4
+   },
+   "Oct12 370/380C": {
+    "n": 24,
+    "verdicts": {
+     "SKIP": 20,
+     "WATCH": 4
+    },
+    "win": 0.16666666666666666,
+    "mean_real": 11.71287004562071,
+    "mean_pct": 0.06094466230153935,
+    "skip_right": 16,
+    "skip_wrong": 4
+   },
+   "Oct16 375/385C": {
+    "n": 22,
+    "verdicts": {
+     "SKIP": 22
+    },
+    "win": 0.0,
+    "mean_real": -112.72500132197383,
+    "mean_pct": -0.2501264022849539,
+    "skip_right": 22,
+    "skip_wrong": 0
+   }
+  },
+  "skip_right": 99,
+  "skip_wrong": 18,
+  "n_events": 24
+ },
+ "loo|framework as run (grade C, daily stops)": {
+  "counts": {
+   "WATCH": 61,
+   "SKIP": 112
+  },
+  "TAKE": null,
+  "WATCH": {
+   "n": 61,
+   "win": 0.19672131147540983,
+   "mean_real": -82.76449732464381,
+   "mean_real_pct": -0.12303689624088415,
+   "mean_ev": 52.74718705910438
+  },
+  "SKIP": {
+   "n": 112,
+   "win": 0.30357142857142855,
+   "mean_real": -9.69416509525859,
+   "mean_real_pct": 0.04336903088023396,
+   "mean_ev": -57.836661483822226
+  },
+  "ALL": {
+   "n": 173,
+   "win": 0.2658959537572254,
+   "mean_real": -35.45884871371234,
+   "mean_real_pct": -0.01530589139946665
+  },
+  "per": {
+   "Oct9 375C": {
+    "n": 29,
+    "verdicts": {
+     "WATCH": 29
+    },
+    "win": 0.3103448275862069,
+    "mean_real": 5.9185213300892325,
+    "mean_pct": 0.15541398503463005,
+    "skip_right": 0,
+    "skip_wrong": 0
+   },
+   "Oct9 370/375C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 28,
+     "WATCH": 1
+    },
+    "win": 0.3103448275862069,
+    "mean_real": -21.1782026905936,
+    "mean_pct": -0.058862954256391604,
+    "skip_right": 19,
+    "skip_wrong": 9
+   },
+   "Oct9 370/380C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 29
+    },
+    "win": 0.3103448275862069,
+    "mean_real": 12.738538633263433,
+    "mean_pct": 0.05611875203284633,
+    "skip_right": 20,
+    "skip_wrong": 9
+   },
+   "Oct9 375/385C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 15,
+     "WATCH": 14
+    },
+    "win": 0.3103448275862069,
+    "mean_real": 17.032993589770086,
+    "mean_pct": 0.1794090441146775,
+    "skip_right": 8,
+    "skip_wrong": 7
+   },
+   "Oct12 370/380C": {
+    "n": 29,
+    "verdicts": {
+     "WATCH": 17,
+     "SKIP": 12
+    },
+    "win": 0.27586206896551724,
+    "mean_real": -58.91847515776456,
+    "mean_pct": -0.06855150580406238,
+    "skip_right": 5,
+    "skip_wrong": 7
+   },
+   "Oct16 375/385C": {
+    "n": 28,
+    "verdicts": {
+     "SKIP": 28
+    },
+    "win": 0.07142857142857142,
+    "mean_real": -173.09245438965743,
+    "mean_pct": -0.3675075544513224,
+    "skip_right": 26,
+    "skip_wrong": 2
+   }
+  },
+  "skip_right": 78,
+  "skip_wrong": 34,
+  "n_events": 29
+ },
+ "loo|math-only (grade B assumed), daily stops": {
+  "counts": {
+   "WATCH": 61,
+   "SKIP": 112
+  },
+  "TAKE": null,
+  "WATCH": {
+   "n": 61,
+   "win": 0.19672131147540983,
+   "mean_real": -82.76449732464381,
+   "mean_real_pct": -0.12303689624088415,
+   "mean_ev": 52.74718705910438
+  },
+  "SKIP": {
+   "n": 112,
+   "win": 0.30357142857142855,
+   "mean_real": -9.69416509525859,
+   "mean_real_pct": 0.04336903088023396,
+   "mean_ev": -57.836661483822226
+  },
+  "ALL": {
+   "n": 173,
+   "win": 0.2658959537572254,
+   "mean_real": -35.45884871371234,
+   "mean_real_pct": -0.01530589139946665
+  },
+  "per": {
+   "Oct9 375C": {
+    "n": 29,
+    "verdicts": {
+     "WATCH": 29
+    },
+    "win": 0.3103448275862069,
+    "mean_real": 5.9185213300892325,
+    "mean_pct": 0.15541398503463005,
+    "skip_right": 0,
+    "skip_wrong": 0
+   },
+   "Oct9 370/375C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 28,
+     "WATCH": 1
+    },
+    "win": 0.3103448275862069,
+    "mean_real": -21.1782026905936,
+    "mean_pct": -0.058862954256391604,
+    "skip_right": 19,
+    "skip_wrong": 9
+   },
+   "Oct9 370/380C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 29
+    },
+    "win": 0.3103448275862069,
+    "mean_real": 12.738538633263433,
+    "mean_pct": 0.05611875203284633,
+    "skip_right": 20,
+    "skip_wrong": 9
+   },
+   "Oct9 375/385C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 15,
+     "WATCH": 14
+    },
+    "win": 0.3103448275862069,
+    "mean_real": 17.032993589770086,
+    "mean_pct": 0.1794090441146775,
+    "skip_right": 8,
+    "skip_wrong": 7
+   },
+   "Oct12 370/380C": {
+    "n": 29,
+    "verdicts": {
+     "WATCH": 17,
+     "SKIP": 12
+    },
+    "win": 0.27586206896551724,
+    "mean_real": -58.91847515776456,
+    "mean_pct": -0.06855150580406238,
+    "skip_right": 5,
+    "skip_wrong": 7
+   },
+   "Oct16 375/385C": {
+    "n": 28,
+    "verdicts": {
+     "SKIP": 28
+    },
+    "win": 0.07142857142857142,
+    "mean_real": -173.09245438965743,
+    "mean_pct": -0.3675075544513224,
+    "skip_right": 26,
+    "skip_wrong": 2
+   }
+  },
+  "skip_right": 78,
+  "skip_wrong": 34,
+  "n_events": 29
+ },
+ "loo|grade B, intraday stops": {
+  "counts": {
+   "SKIP": 169,
+   "WATCH": 4
+  },
+  "TAKE": null,
+  "WATCH": {
+   "n": 4,
+   "win": 0.0,
+   "mean_real": -140.96333323645882,
+   "mean_real_pct": -0.26353598367571224,
+   "mean_ev": 27.255941315011377
+  },
+  "SKIP": {
+   "n": 169,
+   "win": 0.11834319526627218,
+   "mean_real": -27.01068142996276,
+   "mean_real_pct": -0.0765931659751461,
+   "mean_ev": -2.8770666206954925
+  },
+  "ALL": {
+   "n": 173,
+   "win": 0.11560693641618497,
+   "mean_real": -29.645424824332608,
+   "mean_real_pct": -0.08091554326302046
+  },
+  "per": {
+   "Oct9 375C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 29
+    },
+    "win": 0.13793103448275862,
+    "mean_real": -37.67497584617241,
+    "mean_pct": -0.14233619056498767,
+    "skip_right": 25,
+    "skip_wrong": 4
+   },
+   "Oct9 370/375C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 29
+    },
+    "win": 0.13793103448275862,
+    "mean_real": -10.378441649409226,
+    "mean_pct": -0.03998231276324151,
+    "skip_right": 25,
+    "skip_wrong": 4
+   },
+   "Oct9 370/380C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 29
+    },
+    "win": 0.13793103448275862,
+    "mean_real": -2.5855691890724066,
+    "mean_pct": -0.009753882762786829,
+    "skip_right": 25,
+    "skip_wrong": 4
+   },
+   "Oct9 375/385C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 29
+    },
+    "win": 0.13793103448275862,
+    "mean_real": -17.30968717640447,
+    "mean_pct": -0.0782449813961095,
+    "skip_right": 25,
+    "skip_wrong": 4
+   },
+   "Oct12 370/380C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 25,
+     "WATCH": 4
+    },
+    "win": 0.13793103448275862,
+    "mean_real": -10.487653049962733,
+    "mean_pct": 0.008913037318996906,
+    "skip_right": 21,
+    "skip_wrong": 4
+   },
+   "Oct16 375/385C": {
+    "n": 28,
+    "verdicts": {
+     "SKIP": 28
+    },
+    "win": 0.0,
+    "mean_real": -101.92875050678305,
+    "mean_pct": -0.22920226462952895,
+    "skip_right": 28,
+    "skip_wrong": 0
+   }
+  },
+  "skip_right": 149,
+  "skip_wrong": 20,
+  "n_events": 29
+ },
+ "loo|grade B, no cap/min/demotion, daily stops": {
+  "counts": {
+   "WATCH": 47,
+   "TAKE": 14,
+   "SKIP": 112
+  },
+  "TAKE": {
+   "n": 14,
+   "win": 0.0,
+   "mean_real": -202.47242663350005,
+   "mean_real_pct": -0.8204360533282279,
+   "mean_ev": 108.27883919409616
+  },
+  "WATCH": {
+   "n": 47,
+   "win": 0.2553191489361702,
+   "mean_real": -47.106816253920684,
+   "mean_real_pct": 0.08469902289151611,
+   "mean_ev": 43.32223645505105
+  },
+  "SKIP": {
+   "n": 112,
+   "win": 0.30357142857142855,
+   "mean_real": -9.69416509525859,
+   "mean_real_pct": 0.04336903088023396,
+   "mean_ev": -57.836661483822226
+  },
+  "ALL": {
+   "n": 173,
+   "win": 0.2658959537572254,
+   "mean_real": -35.45884871371234,
+   "mean_real_pct": -0.01530589139946665
+  },
+  "per": {
+   "Oct9 375C": {
+    "n": 29,
+    "verdicts": {
+     "WATCH": 15,
+     "TAKE": 14
+    },
+    "win": 0.3103448275862069,
+    "mean_real": 5.9185213300892325,
+    "mean_pct": 0.15541398503463005,
+    "skip_right": 0,
+    "skip_wrong": 0
+   },
+   "Oct9 370/375C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 28,
+     "WATCH": 1
+    },
+    "win": 0.3103448275862069,
+    "mean_real": -21.1782026905936,
+    "mean_pct": -0.058862954256391604,
+    "skip_right": 19,
+    "skip_wrong": 9
+   },
+   "Oct9 370/380C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 29
+    },
+    "win": 0.3103448275862069,
+    "mean_real": 12.738538633263433,
+    "mean_pct": 0.05611875203284633,
+    "skip_right": 20,
+    "skip_wrong": 9
+   },
+   "Oct9 375/385C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 15,
+     "WATCH": 14
+    },
+    "win": 0.3103448275862069,
+    "mean_real": 17.032993589770086,
+    "mean_pct": 0.1794090441146775,
+    "skip_right": 8,
+    "skip_wrong": 7
+   },
+   "Oct12 370/380C": {
+    "n": 29,
+    "verdicts": {
+     "WATCH": 17,
+     "SKIP": 12
+    },
+    "win": 0.27586206896551724,
+    "mean_real": -58.91847515776456,
+    "mean_pct": -0.06855150580406238,
+    "skip_right": 5,
+    "skip_wrong": 7
+   },
+   "Oct16 375/385C": {
+    "n": 28,
+    "verdicts": {
+     "SKIP": 28
+    },
+    "win": 0.07142857142857142,
+    "mean_real": -173.09245438965743,
+    "mean_pct": -0.3675075544513224,
+    "skip_right": 26,
+    "skip_wrong": 2
+   }
+  },
+  "skip_right": 78,
+  "skip_wrong": 34,
+  "n_events": 29
+ },
+ "loo|grade B, no cap/min/demotion, intraday stops": {
+  "counts": {
+   "WATCH": 55,
+   "SKIP": 118
+  },
+  "TAKE": null,
+  "WATCH": {
+   "n": 55,
+   "win": 0.03636363636363636,
+   "mean_real": -96.19817934415084,
+   "mean_real_pct": -0.2376672141626863,
+   "mean_ev": 29.187733348962738
+  },
+  "SKIP": {
+   "n": 118,
+   "win": 0.15254237288135594,
+   "mean_real": 1.3749268586335153,
+   "mean_real_pct": -0.007853323775888075,
+   "mean_ev": -16.80106633754613
+  },
+  "ALL": {
+   "n": 173,
+   "win": 0.11560693641618497,
+   "mean_real": -29.645424824332608,
+   "mean_real_pct": -0.08091554326302046
+  },
+  "per": {
+   "Oct9 375C": {
+    "n": 29,
+    "verdicts": {
+     "WATCH": 24,
+     "SKIP": 5
+    },
+    "win": 0.13793103448275862,
+    "mean_real": -37.67497584617241,
+    "mean_pct": -0.14233619056498767,
+    "skip_right": 3,
+    "skip_wrong": 2
+   },
+   "Oct9 370/375C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 27,
+     "WATCH": 2
+    },
+    "win": 0.13793103448275862,
+    "mean_real": -10.378441649409226,
+    "mean_pct": -0.03998231276324151,
+    "skip_right": 23,
+    "skip_wrong": 4
+   },
+   "Oct9 370/380C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 25,
+     "WATCH": 4
+    },
+    "win": 0.13793103448275862,
+    "mean_real": -2.5855691890724066,
+    "mean_pct": -0.009753882762786829,
+    "skip_right": 21,
+    "skip_wrong": 4
+   },
+   "Oct9 375/385C": {
+    "n": 29,
+    "verdicts": {
+     "SKIP": 29
+    },
+    "win": 0.13793103448275862,
+    "mean_real": -17.30968717640447,
+    "mean_pct": -0.0782449813961095,
+    "skip_right": 25,
+    "skip_wrong": 4
+   },
+   "Oct12 370/380C": {
+    "n": 29,
+    "verdicts": {
+     "WATCH": 25,
+     "SKIP": 4
+    },
+    "win": 0.13793103448275862,
+    "mean_real": -10.487653049962733,
+    "mean_pct": 0.008913037318996906,
+    "skip_right": 0,
+    "skip_wrong": 4
+   },
+   "Oct16 375/385C": {
+    "n": 28,
+    "verdicts": {
+     "SKIP": 28
+    },
+    "win": 0.0,
+    "mean_real": -101.92875050678305,
+    "mean_pct": -0.22920226462952895,
+    "skip_right": 28,
+    "skip_wrong": 0
+   }
+  },
+  "skip_right": 100,
+  "skip_wrong": 18,
+  "n_events": 29
+ }
+}
