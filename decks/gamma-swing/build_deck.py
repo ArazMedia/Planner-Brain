@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the Gamma Swing Trading deck for Dominic.
+"""Build the Gamma Swing Trading deck.
 
     python3 decks/gamma-swing/build_deck.py
 
@@ -207,7 +207,7 @@ def chart_gamma() -> Path:
     r = 0.04
     strikes = [80 + i * 0.1 for i in range(401)]
     g30 = call_gamma(100, 100, 30 / 365, r, 0.20)
-    fig, ax = plt.subplots(figsize=(8.15, 4.70), dpi=160)
+    fig, ax = plt.subplots(figsize=(7.70, 5.35), dpi=160)
     fig.patch.set_facecolor("#0E1218")
     for days, color, label in (
         (30, "#8EBEFF", "30 days"),
@@ -231,7 +231,7 @@ def chart_gamma() -> Path:
 def chart_hedge_shares() -> Path:
     labels = ["1 day", "7 days", "30 days"]
     values = FACTS["shares"]
-    fig, ax = plt.subplots(figsize=(6.4, 4.15), dpi=160)
+    fig, ax = plt.subplots(figsize=(6.20, 5.28), dpi=160)
     fig.patch.set_facecolor("#0E1218")
     ax.bar(labels, values, color=["#FF7676", "#E6B54A", "#8EBEFF"], width=0.62)
     for i, value in enumerate(values):
@@ -249,24 +249,24 @@ def chart_delta() -> Path:
     r = 0.04
     strikes = [85 + i * 0.1 for i in range(301)]
     deltas = [call_delta(100, k, 21 / 365, r, 0.25) for k in strikes]
-    fig, ax = plt.subplots(figsize=(7.5, 4.55), dpi=160)
+    fig, ax = plt.subplots(figsize=(7.35, 5.20), dpi=160)
     fig.patch.set_facecolor("#0E1218")
     ax.axhline(0.40, color="#E6B54A", linewidth=1.1, linestyle=(0, (4, 3)), zorder=2)
     ax.axhline(0.60, color="#E6B54A", linewidth=1.1, linestyle=(0, (4, 3)), zorder=2)
-    ax.text(85.4, 0.625, "mid band  0.40 to 0.60", color="#E6B54A", fontsize=11)
+    ax.text(85.4, 0.625, "Mid Band  0.40 to 0.60", color="#E6B54A", fontsize=11)
     ax.plot(strikes, deltas, color="#8EBEFF", linewidth=2.6, zorder=3)
-    offsets = {95: (8, 10), 100: (10, -26), 106: (8, 10)}
+    offsets = {95: (12, 14), 100: (22, -16), 106: (12, -16)}
     for band in FACTS["bands"]:
         ax.scatter([band["k"]], [band["delta"]], s=42, color="#F4F7FB", zorder=4)
         ax.annotate(
-            f"{band['k']:.0f} strike   {band['delta']:.2f}",
+            f"{band['k']:.0f} Strike   {band['delta']:.2f}",
             (band["k"], band["delta"]),
             textcoords="offset points",
             xytext=offsets[band["k"]],
             color="#F4F7FB",
             fontsize=11,
         )
-    _style_ax(ax, "Call delta", "Strike. Spot is 100")
+    _style_ax(ax, "Call Delta", "Strike. Spot is 100")
     ax.set_xlim(85, 115)
     ax.set_ylim(0, 1.02)
     fig.subplots_adjust(left=0.10, right=0.97, top=0.93, bottom=0.16)
@@ -280,7 +280,7 @@ def chart_decay() -> Path:
     days = [row[0] for row in FACTS["decay"]]
     single = [row[1] for row in FACTS["decay"]]
     spread = [row[2] for row in FACTS["decay"]]
-    fig, ax = plt.subplots(figsize=(7.6, 4.45), dpi=160)
+    fig, ax = plt.subplots(figsize=(7.55, 5.15), dpi=160)
     fig.patch.set_facecolor("#0E1218")
     ax.plot(days, single, color="#8EBEFF", linewidth=2.5, label="Single ATM call")
     ax.plot(days, spread, color="#3DDCB0", linewidth=2.5, label="100 / 105 call spread")
@@ -295,15 +295,15 @@ def chart_decay() -> Path:
 
 
 def chart_crush() -> Path:
-    labels = ["Start\nspot 100\nIV 50%", "Spot flat\nspot 100\nIV 25%", "Spot up 2\nspot 102\nIV 25%"]
+    labels = ["Start\nSpot 100\nIV 50%", "Spot Flat\nSpot 100\nIV 25%", "Spot Up 2\nSpot 102\nIV 25%"]
     values = [FACTS["crush_start"], FACTS["crush_flat"], FACTS["crush_up"]]
     colors = ["#8EBEFF", "#FF7676", "#E6B54A"]
-    fig, ax = plt.subplots(figsize=(6.7, 4.20), dpi=160)
+    fig, ax = plt.subplots(figsize=(7.20, 5.15), dpi=160)
     fig.patch.set_facecolor("#0E1218")
     ax.bar(labels, values, color=colors, width=0.66)
     for i, value in enumerate(values):
         ax.text(i, value + 0.06, money(value), ha="center", va="bottom", color="#F4F7FB", fontsize=14)
-    _style_ax(ax, "Call price", "14-day ATM call. Spot starts at 100")
+    _style_ax(ax, "Call Price", "14-day ATM call. Spot starts at 100")
     ax.set_ylim(0, max(values) * 1.22)
     fig.subplots_adjust(left=0.14, right=0.97, top=0.92, bottom=0.24)
     path = CHART_DIR / "crush.png"
@@ -318,7 +318,7 @@ def chart_payoff() -> Path:
     spots = [90 + i * 0.25 for i in range(101)]
     single = [max(s - 100, 0) - debit_call for s in spots]
     spread = [min(max(s - 100, 0), 5) - debit_spread for s in spots]
-    fig, ax = plt.subplots(figsize=(7.3, 4.35), dpi=160)
+    fig, ax = plt.subplots(figsize=(7.45, 5.20), dpi=160)
     fig.patch.set_facecolor("#0E1218")
     ax.axhline(0, color="#A8B3C2", linewidth=1.0)
     ax.plot(spots, single, color="#8EBEFF", linewidth=2.5, label="Long 100 call")
@@ -352,7 +352,7 @@ class Deck:
         self.prs.slide_height = Emu(6858000)
         self.prs.core_properties.title = "Gamma Swing Trading"
         self.prs.core_properties.subject = "Dealer gamma, walls, and candle-close swings"
-        self.prs.core_properties.author = "For Dominic"
+        self.prs.core_properties.author = "Gamma Swing"
         self.blank = self._blank()
         self.n = 0
         self.titles: list[str] = []
@@ -589,8 +589,7 @@ class Deck:
         self.rect(slide, x, y, thickness, h, color)
 
     def footer(self, slide, cover=False):
-        label = "For Dominic" if cover else "Gamma swing  -  Dominic"
-        self.text(slide, 0.42, 7.16, 8.2, 0.26, label, size=12, color=FOOT, anchor="middle", ml=0.0, mr=0.0, mt=0.0, mb=0.0)
+        self.text(slide, 0.42, 7.16, 8.2, 0.26, "Gamma Swing", size=12, color=FOOT, anchor="middle", ml=0.0, mr=0.0, mt=0.0, mb=0.0)
         self.text(
             slide,
             10.4,
@@ -609,12 +608,14 @@ class Deck:
         )
 
     def chrome(self, kicker: str, title: str):
+        kicker = title_case(kicker)
+        title = title_case(title)
         self.n += 1
         self.titles.append(title)
         slide = self.prs.slides.add_slide(self.blank)
         self.rect(slide, 0, 0, W, H, BG)
         self.rect(slide, 0, 0, W, 0.055, TEAL)
-        self.text(slide, ML, 0.14, 12.4, 0.24, kicker.upper(), size=12, bold=True, color=AMBER, ml=0.0, mr=0.0, mt=0.0, mb=0.0)
+        self.text(slide, ML, 0.14, 12.4, 0.24, kicker, size=12, bold=True, color=AMBER, ml=0.0, mr=0.0, mt=0.0, mb=0.0)
         self.text(slide, ML, 0.36, 12.5, 0.48, title, size=28, bold=True, color=TEXT, ml=0.0, mr=0.0, mt=0.0, mb=0.0, spacing=1.05)
         self.rect(slide, ML, 0.90, 0.50, 0.028, TEAL)
         self.rect(slide, ML + 0.50, 0.906, CONTENT_W - 0.50, 0.012, LINE)
@@ -651,6 +652,21 @@ class Deck:
         slide.shapes.add_picture(str(path), Inches(x), Inches(y), Inches(w), Inches(h))
         return h
 
+    def picture_in(self, slide, path: Path, x, y, w, h):
+        """Scale a diagram to fit a panel and center it in that panel."""
+        image = Image.open(path)
+        aspect = image.width / image.height
+        if w / h > aspect:
+            draw_h = h
+            draw_w = h * aspect
+        else:
+            draw_w = w
+            draw_h = w / aspect
+        px = x + (w - draw_w) / 2
+        py = y + (h - draw_h) / 2
+        slide.shapes.add_picture(str(path), Inches(px), Inches(py), Inches(draw_w), Inches(draw_h))
+        return draw_h
+
     def save(self, path: Path) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         self.prs.save(path)
@@ -661,13 +677,186 @@ def cols(n, gap=0.18, x=ML, width=CONTENT_W):
     return [(x + i * (cw + gap), cw) for i in range(n)]
 
 
+_SMALL = {
+    "a", "an", "the", "and", "or", "but", "nor", "for", "on", "at", "to",
+    "from", "by", "of", "in", "with", "vs", "via", "per", "as",
+}
+_KEEP = {
+    "iv": "IV",
+    "spy": "SPY",
+    "oi": "OI",
+    "opex": "OPEX",
+    "atm": "ATM",
+    "itm": "ITM",
+    "otm": "OTM",
+    "0dte": "0DTE",
+}
+
+
+def _cap_token(token: str, force: bool) -> str:
+    if token == "":
+        return token
+    lead = ""
+    core = token
+    tail = ""
+    while core and core[0] in "\"'(":
+        lead += core[0]
+        core = core[1:]
+    while core and core[-1] in ".,:;\"')":
+        tail = core[-1] + tail
+        core = core[:-1]
+    if core == "":
+        return token
+    if any(ch.isdigit() for ch in core):
+        shown = core
+    elif "-" in core and core.lower() not in _KEEP:
+        parts = core.split("-")
+        shown = "-".join(_cap_token(part, True).strip(".,:;") for part in parts)
+    else:
+        key = core.lower()
+        if key in _KEEP:
+            shown = _KEEP[key]
+        elif key in _SMALL and not force:
+            shown = key
+        else:
+            shown = key[:1].upper() + key[1:]
+    return lead + shown + tail
+
+
+def title_case(text: str) -> str:
+    """Title Case for headings. Leaves numbers, 4h, 15m, IV, SPY, and 0DTE alone."""
+    if text is None:
+        return text
+    lines = []
+    for line in text.split("\n"):
+        words = line.split(" ")
+        useful = [i for i, word in enumerate(words) if word.strip("\"'().,:;") != ""]
+        out = []
+        previous_break = True
+        for i, word in enumerate(words):
+            if word.strip("\"'().,:;") == "":
+                out.append(word)
+                continue
+            is_edge = i == useful[0] or i == useful[-1]
+            shown = _cap_token(word, force=is_edge or previous_break)
+            out.append(shown)
+            previous_break = word.endswith((".", ":"))
+        lines.append(" ".join(out))
+    return "\n".join(lines)
+
+
 # Slides. ASCII only. No absolute-value bars.
 
 
-def block(d, s, x, y, w, h, title, body, accent=None, ts=18, bs=15):
+def _wrap_lines(d, text, width_in, size, bold, ml=0.0, mr=0.0):
+    font = d._font(size, bold)
+    usable = max(12, (width_in - ml - mr) * 72)
+    total = 0
+    for para in text.split("\n"):
+        if para == "":
+            total += 1
+            continue
+        words = para.split(" ")
+        cur = ""
+        total += 1
+        for word in words:
+            trial = word if cur == "" else cur + " " + word
+            if font.getlength(trial) <= usable:
+                cur = trial
+            else:
+                if cur != "":
+                    total += 1
+                cur = word
+    return max(1, total)
+
+
+def bands(y, h, n, gap=0.14):
+    """Equal row bands inside a shared vertical span."""
+    bh = (h - gap * (n - 1)) / n
+    return [(y + i * (bh + gap), bh) for i in range(n)]
+
+
+def in_box(
+    d, s, x, y, w, h, content,
+    size=16, bold=False, color=BODY, align="center",
+    ml=0.08, mr=0.08, lo=1.12, hi=1.46,
+):
+    """The one vertical-alignment helper.
+
+    Text sits in the middle of the box. Line spacing opens just enough to
+    fill a short box, and stops before the lines turn into stripes of empty air.
+    """
+    if content is None or content == "":
+        return
+    pad = 0.06
+    inner_h = max(0.2, h - pad * 2)
+    use = size
+    lines = _wrap_lines(d, content, w, use, bold, ml, mr)
+    fit = (inner_h * 72) / max(1, lines * use)
+    while use > 12 and fit < 1.05:
+        use -= 1
+        lines = _wrap_lines(d, content, w, use, bold, ml, mr)
+        fit = (inner_h * 72) / max(1, lines * use)
+    spacing = max(lo, min(fit, hi))
+    used = lines * use * spacing / 72
+    if used > inner_h:
+        spacing = max(1.0, (inner_h * 72) / max(1, lines * use))
+        used = lines * use * spacing / 72
+    top = y + (h - used) / 2
+    d.text(
+        s, x, top, w, used + 0.04, content,
+        size=use, bold=bold, color=color, align=align, anchor="top",
+        spacing=spacing, ml=ml, mr=mr, mt=0, mb=0,
+    )
+
+
+def stack_box(d, s, x, y, w, h, parts, align="center", gap=0.08, pad_x=0.14):
+    """Center a group of text runs inside one box. parts: (text, size, bold, color)."""
+    inner_w = w - pad_x * 2
+    heights = []
+    for text, size, bold, _color in parts:
+        lines = _wrap_lines(d, text, inner_w, size, bold)
+        heights.append(lines * size * 1.16 / 72)
+    total = sum(heights) + gap * (len(parts) - 1)
+    top = y + max(0.04, (h - total) / 2)
+    for (text, size, bold, color), ph in zip(parts, heights):
+        d.text(
+            s, x + pad_x, top, inner_w, ph + 0.03, text,
+            size=size, bold=bold, color=color, align=align, anchor="top",
+            spacing=1.16, ml=0, mr=0, mt=0, mb=0,
+        )
+        top += ph + gap
+
+
+def block(d, s, x, y, w, h, title, body, accent=None, ts=18, bs=16, align="left"):
+    """Card. Title stays under the accent. Body uses in_box so the copy is centered in what remains."""
+    title = title_case(title)
+    pad_x = 0.22
+    inner_w = w - pad_x * 2
+    if h >= 4.6 and inner_w >= 4.2:
+        ts = max(ts, 20)
+    elif h >= 3.2:
+        ts = max(ts, 18)
+    title_lines = _wrap_lines(d, title, inner_w, ts, True)
+    title_h = max(0.38, title_lines * ts * 1.08 / 72 + 0.04)
+    body_top = 0.14 + title_h + 0.04
+    body_h = h - body_top - 0.14
+    chosen = bs
+    ceiling = 22 if inner_w >= 4.0 else 18
+    for candidate in range(ceiling, 13, -1):
+        lines = _wrap_lines(d, body, inner_w, candidate, False)
+        if lines * candidate * 1.12 / 72 <= body_h:
+            chosen = candidate
+            break
     d.panel(s, x, y, w, h, accent=accent)
-    d.text(s, x + 0.18, y + 0.12, w - 0.36, 0.38, title, size=ts, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, x + 0.18, y + 0.52, w - 0.36, h - 0.66, body, size=bs, color=BODY, ml=0, mr=0, mt=0, mb=0, spacing=1.16)
+    d.text(
+        s, x + pad_x, y + 0.14, inner_w, title_h, title,
+        size=ts, bold=True, color=TEXT, align=align, ml=0, mr=0, mt=0, mb=0, spacing=1.05,
+    )
+    in_box(
+        d, s, x + pad_x, y + body_top, inner_w, body_h, body,
+        size=chosen, color=BODY, align=align, ml=0, mr=0,
+    )
 
 
 def ymap(price, pmin, pmax, top, bot):
@@ -676,54 +865,59 @@ def ymap(price, pmin, pmax, top, bot):
 
 def slide_cover(d: Deck) -> None:
     d.n += 1
-    d.titles.append("Gamma swing trading")
+    d.titles.append("Gamma Swing Trading")
     s = d.prs.slides.add_slide(d.blank)
     d.rect(s, 0, 0, W, H, BG)
     d.rect(s, 0, 0, W, 0.055, TEAL)
-    d.text(s, 0.55, 1.05, 7.2, 0.26, "FOR DOMINIC", size=14, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 0.52, 1.32, 7.4, 0.92, "Gamma", size=58, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0, spacing=1.0)
-    d.text(s, 0.52, 2.22, 7.5, 0.66, "swing trading", size=36, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0, spacing=1.0)
-    d.rect(s, 0.55, 2.98, 2.05, 0.032, TEAL)
+    d.text(s, 0.55, 1.35, 7.2, 0.28, "Cash Account", size=14, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, 0.52, 1.70, 7.4, 0.92, "Gamma", size=58, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0, spacing=1.0)
+    d.text(s, 0.52, 2.58, 7.5, 0.66, "Swing Trading", size=36, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0, spacing=1.0)
+    d.rect(s, 0.55, 3.36, 2.05, 0.032, TEAL)
     d.text(
-        s, 0.55, 3.16, 7.15, 1.25,
-        "Dealer hedging, the walls, and the candle close.\nCash account. Long calls, long puts, debit spreads.\nSwings, earnings, and an occasional 0DTE.",
+        s, 0.55, 3.55, 7.15, 1.20,
+        "Dealer hedging, the walls, and the candle close.\nLong calls, long puts, and debit spreads.\nSwings, earnings, and an occasional 0DTE.",
         size=18, color=BODY, ml=0, mr=0, mt=0, mb=0, spacing=1.18,
     )
-    row1 = [
-        (0.55, "4h and 15m", 1.48),
-        (2.15, "20 / 50 / 200", 1.72),
-        (3.99, "Unusual Whales", 1.88),
-        (5.99, "TradingView", 1.52),
-    ]
-    row2 = [(0.55, "Swings", 1.12), (1.79, "Earnings", 1.28), (3.19, "Occasional 0DTE", 2.08)]
-    for x, label, w in row1:
-        d.chip(s, x, 4.85, w, 0.36, label, NEST, BODY, size=12)
-    for x, label, w in row2:
-        d.chip(s, x, 5.35, w, 0.36, label, NEST, BODY, size=12)
-    d.text(s, 0.55, 6.05, 4.5, 0.30, "October 2026", size=14, color=DIM, ml=0, mr=0, mt=0, mb=0)
+    row_w = 7.15
+    gap = 0.12
+    chip_h = 0.40
+    row1 = ["4h and 15m", "20 / 50 / 200", "Unusual Whales", "TradingView"]
+    cw = (row_w - gap * (len(row1) - 1)) / len(row1)
+    for i, label in enumerate(row1):
+        d.chip(s, 0.55 + i * (cw + gap), 5.00, cw, chip_h, label, NEST, BODY, size=12)
+    row2 = ["Swings", "Earnings", "Occasional 0DTE"]
+    cw2 = cw
+    row2_w = cw2 * len(row2) + gap * (len(row2) - 1)
+    x0 = 0.55 + (row_w - row2_w) / 2
+    for i, label in enumerate(row2):
+        d.chip(s, x0 + i * (cw2 + gap), 5.52, cw2, chip_h, label, NEST, BODY, size=12)
+    d.text(s, 0.55, 6.12, row_w, 0.32, "October 2026", size=14, color=DIM, align="left", ml=0, mr=0, mt=0, mb=0)
 
-    # Regime card
-    d.rect(s, 8.22, 0.85, 4.66, 2.42, TEAL_DIM)
-    d.text(s, 8.42, 0.98, 4.3, 0.26, "POSITIVE GAMMA", size=13, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 8.42, 1.28, 4.3, 0.30, "Sell rallies. Buy dips.", size=16, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    d.arrow(s, 9.15, 1.72, 0.32, 0.40, TEAL, "down")
-    d.arrow(s, 10.85, 1.72, 0.32, 0.40, TEAL, "up")
-    d.text(s, 8.85, 2.16, 0.95, 0.26, "sell", size=12, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 10.55, 2.16, 0.95, 0.26, "buy", size=12, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 8.42, 2.55, 4.2, 0.50, "Price ranges and pins.", size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
+    px, py, pw, ph = 8.22, 0.72, 4.66, 6.05
+    band = 0.52
+    half = (ph - band) / 2
+    d.rect(s, px, py, pw, half, TEAL_DIM)
+    d.text(s, px, py + 0.16, pw, 0.28, "Positive Gamma", size=14, bold=True, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.text(s, px + 0.3, py + 0.48, pw - 0.6, 0.36, "Sell rallies. Buy dips.", size=16, color=TEXT, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.arrow(s, px + 1.35, py + 1.05, 0.34, 0.42, TEAL, "down")
+    d.arrow(s, px + 2.85, py + 1.05, 0.34, 0.42, TEAL, "up")
+    d.text(s, px + 1.05, py + 1.52, 0.95, 0.26, "Sell", size=13, bold=True, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.text(s, px + 2.55, py + 1.52, 0.95, 0.26, "Buy", size=13, bold=True, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.text(s, px + 0.3, py + half - 0.48, pw - 0.6, 0.32, "Price ranges and pins.", size=15, color=BODY, align="center", ml=0, mr=0, mt=0, mb=0)
 
-    d.rect(s, 8.22, 3.27, 4.66, 0.50, AMBER_DIM)
-    d.text(s, 8.22, 3.27, 4.66, 0.50, "THE FLIP    behavior changes here", size=13, bold=True, color=AMBER, align="center", anchor="middle", ml=0.1, mr=0.1, mt=0, mb=0)
+    d.rect(s, px, py + half, pw, band, AMBER_DIM)
+    d.text(s, px, py + half, pw, band, "The Flip: Behavior Changes Here", size=13, bold=True, color=AMBER, align="center", anchor="middle", ml=0.12, mr=0.12, mt=0, mb=0)
 
-    d.rect(s, 8.22, 3.77, 4.66, 2.55, CORAL_DIM)
-    d.text(s, 8.42, 3.90, 4.3, 0.26, "NEGATIVE GAMMA", size=13, bold=True, color=CORAL, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 8.42, 4.20, 4.3, 0.30, "Buy rallies. Sell dips.", size=16, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    d.arrow(s, 9.15, 4.64, 0.32, 0.40, CORAL, "up")
-    d.arrow(s, 10.85, 4.64, 0.32, 0.40, CORAL, "down")
-    d.text(s, 8.85, 5.08, 0.95, 0.26, "buy", size=12, color=CORAL, align="center", ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 10.55, 5.08, 0.95, 0.26, "sell", size=12, color=CORAL, align="center", ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 8.42, 5.55, 4.2, 0.55, "Price trends and accelerates.", size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.rect(s, 8.22, 0.85, 4.66, 5.47, None, line=LINE, line_w=1.25)
+    ny = py + half + band
+    d.rect(s, px, ny, pw, half, CORAL_DIM)
+    d.text(s, px, ny + 0.16, pw, 0.28, "Negative Gamma", size=14, bold=True, color=CORAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.text(s, px + 0.3, ny + 0.48, pw - 0.6, 0.36, "Buy rallies. Sell dips.", size=16, color=TEXT, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.arrow(s, px + 1.35, ny + 1.05, 0.34, 0.42, CORAL, "up")
+    d.arrow(s, px + 2.85, ny + 1.05, 0.34, 0.42, CORAL, "down")
+    d.text(s, px + 1.05, ny + 1.52, 0.95, 0.26, "Buy", size=13, bold=True, color=CORAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.text(s, px + 2.55, ny + 1.52, 0.95, 0.26, "Sell", size=13, bold=True, color=CORAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.text(s, px + 0.3, ny + half - 0.48, pw - 0.6, 0.32, "Price trends and accelerates.", size=15, color=BODY, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.rect(s, px, py, pw, ph, None, line=LINE, line_w=1.25)
     d.footer(s, cover=True)
 
 
@@ -736,14 +930,17 @@ def slide_map(d: Deck) -> None:
     ]
     for (x, w), (accent, title, body) in zip(cols(3), items):
         block(d, s, x, 1.18, w, 3.15, title, body, accent=accent, ts=18, bs=15)
-    steps = [("1", "Regime"), ("2", "Walls"), ("3", "Close"), ("4", "Contract"), ("5", "Your dollars")]
+    steps = [("1", "Regime"), ("2", "Walls"), ("3", "Close"), ("4", "Contract"), ("5", "Your Dollars")]
     xs = cols(5, gap=0.28)
     for i, ((x, w), (num, label)) in enumerate(zip(xs, steps)):
         d.panel(s, x, 4.52, w, 1.15, accent=TEAL)
-        d.text(s, x + 0.12, 4.64, w - 0.24, 0.28, num, size=12, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-        d.text(s, x + 0.12, 4.96, w - 0.24, 0.50, label, size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+        stack_box(
+            d, s, x, 4.52, w, 1.15,
+            [(num, 13, True, TEAL), (label, 16, True, TEXT)],
+            gap=0.04,
+        )
         if i < 4:
-            d.arrow(s, x + w + 0.02, 4.92, 0.24, 0.22, TEAL, "right")
+            d.arrow(s, x + w + 0.02, 4.96, 0.24, 0.24, TEAL, "right")
     d.panel(s, ML, 5.86, CONTENT_W, 0.98, accent=BLUE)
     d.text(
         s, ML + 0.22, 6.00, CONTENT_W - 0.4, 0.72,
@@ -754,6 +951,10 @@ def slide_map(d: Deck) -> None:
 
 def slide_tools(d: Deck) -> None:
     s = d.chrome("The account", "The tools this deck assumes")
+    top, height = 1.16, 5.76
+    left_w, gap = 8.10, 0.18
+    right_x = ML + left_w + gap
+    right_w = CONTENT_W - left_w - gap
     rows = [
         ("Chart", "TradingView. The 4h and the 15m."),
         ("Averages", "The 20, the 50, and the 200, on both."),
@@ -762,18 +963,21 @@ def slide_tools(d: Deck) -> None:
         ("Work", "Swings, earnings, and an occasional 0DTE."),
         ("Account", "Cash. You pay the debit. No naked shorts."),
     ]
+    row_gap = 0.10
+    row_h = (height - row_gap * (len(rows) - 1)) / len(rows)
     for i, (label, line) in enumerate(rows):
-        y = 1.18 + i * 0.90
-        d.panel(s, ML, y, 8.05, 0.78)
-        d.rect(s, ML, y, 1.55, 0.78, NEST)
-        d.text(s, ML, y, 1.55, 0.78, label, size=14, bold=True, color=AMBER, align="center", anchor="middle", ml=0.04, mr=0.04, mt=0, mb=0)
-        d.text(s, ML + 1.70, y, 6.15, 0.78, line, size=16, color=TEXT, anchor="middle", ml=0.08, mr=0.08, mt=0, mb=0)
-    d.panel(s, 8.68, 1.18, 4.23, 5.40, accent=TEAL)
-    d.text(s, 8.88, 1.38, 3.85, 0.36, "Allowed", size=16, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 8.88, 1.80, 3.85, 1.70, "Long call\nLong put\nCall debit spread\nPut debit spread", size=16, color=TEXT, ml=0, mr=0, mt=0, mb=0, spacing=1.2)
-    d.hline(s, 8.88, 3.70, 3.85, LINE, 0.015)
-    d.text(s, 8.88, 3.88, 3.85, 0.36, "Not this account", size=16, bold=True, color=CORAL, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 8.88, 4.32, 3.85, 1.90, "Naked short call\nNaked short put\nMargin\nShort stock as a hedge", size=16, color=BODY, ml=0, mr=0, mt=0, mb=0, spacing=1.2)
+        y = top + i * (row_h + row_gap)
+        d.panel(s, ML, y, left_w, row_h)
+        d.rect(s, ML, y, 1.70, row_h, NEST)
+        d.text(s, ML, y, 1.70, row_h, label, size=14, bold=True, color=AMBER, align="center", anchor="middle", ml=0.06, mr=0.06, mt=0, mb=0)
+        d.text(s, ML + 1.86, y, left_w - 2.02, row_h, line, size=16, color=TEXT, anchor="middle", ml=0.1, mr=0.1, mt=0, mb=0)
+    d.panel(s, right_x, top, right_w, height, accent=TEAL)
+    mid = top + height / 2
+    d.text(s, right_x + 0.2, top + 0.22, right_w - 0.4, 0.34, "Allowed", size=16, bold=True, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.text(s, right_x + 0.2, top + 0.62, right_w - 0.4, 1.85, "Long call\nLong put\nCall debit spread\nPut debit spread", size=16, color=TEXT, align="center", anchor="middle", ml=0, mr=0, mt=0, mb=0, spacing=1.25)
+    d.hline(s, right_x + 0.28, mid, right_w - 0.56, LINE, 0.015)
+    d.text(s, right_x + 0.2, mid + 0.16, right_w - 0.4, 0.34, "Not This Account", size=16, bold=True, color=CORAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.text(s, right_x + 0.2, mid + 0.54, right_w - 0.4, 1.90, "Naked short call\nNaked short put\nMargin\nShort stock as a hedge", size=16, color=BODY, align="center", anchor="middle", ml=0, mr=0, mt=0, mb=0, spacing=1.25)
 
 
 def slide_core(d: Deck) -> None:
@@ -787,10 +991,13 @@ def slide_core(d: Deck) -> None:
     xs = cols(4, gap=0.36)
     for i, ((x, w), (num, label)) in enumerate(zip(xs, steps)):
         d.panel(s, x, 1.28, w, 1.95, accent=TEAL)
-        d.text(s, x + 0.16, 1.44, w - 0.32, 0.30, num, size=14, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-        d.text(s, x + 0.16, 1.84, w - 0.32, 1.10, label, size=16, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+        stack_box(
+            d, s, x, 1.28, w, 1.95,
+            [(num, 14, True, TEAL), (label, 16, False, TEXT)],
+            gap=0.08,
+        )
         if i < 3:
-            d.arrow(s, x + w + 0.04, 2.05, 0.28, 0.26, TEAL, "right")
+            d.arrow(s, x + w + 0.04, 2.10, 0.28, 0.26, TEAL, "right")
     d.panel(s, ML, 3.46, CONTENT_W, 1.05, accent=AMBER)
     d.text(
         s, ML + 0.24, 3.58, CONTENT_W - 0.48, 0.80,
@@ -805,7 +1012,7 @@ def slide_core(d: Deck) -> None:
     for (x, w), (accent, line) in zip(cols(3), notes):
         d.panel(s, x, 4.72, w, 1.55)
         d.rect(s, x, 4.72, 0.08, 1.55, accent)
-        d.text(s, x + 0.24, 4.90, w - 0.42, 1.20, line, size=16, color=BODY, ml=0, mr=0, mt=0, mb=0)
+        in_box(d, s, x + 0.22, 4.72, w - 0.40, 1.55, line, size=16, color=BODY, align="left", ml=0.06, mr=0.08)
 
 
 def slide_dealers(d: Deck) -> None:
@@ -836,7 +1043,7 @@ def slide_delta(d: Deck) -> None:
     s = d.chrome("Delta", "Delta is their share count")
     d.panel(s, ML, 1.18, 7.55, 4.05, accent=BLUE)
     d.text(s, 0.64, 1.38, 7.1, 0.70, "One contract stands for 100 shares.\nExposure is delta times those 100 shares.", size=18, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    rows = [("Call delta 0.20", "about 20 shares"), ("Call delta 0.50", "about 50 shares"), ("Call delta 0.80", "about 80 shares")]
+    rows = [("Call Delta 0.20", "About 20 Shares"), ("Call Delta 0.50", "About 50 Shares"), ("Call Delta 0.80", "About 80 Shares")]
     for i, (left, right) in enumerate(rows):
         y = 2.30 + i * 0.85
         d.rect(s, 0.68, y, 3.15, 0.70, NEST)
@@ -845,11 +1052,11 @@ def slide_delta(d: Deck) -> None:
         d.arrow(s, 3.68, y + 0.20, 0.22, 0.28, BLUE, "right")
         d.text(s, 3.95, y, 3.55, 0.70, right, size=16, bold=True, color=TEXT, align="center", anchor="middle", ml=0.08, mr=0.08, mt=0, mb=0)
     d.panel(s, 8.15, 1.18, 4.76, 4.05, accent=CORAL)
-    d.text(s, 8.35, 1.40, 4.4, 0.40, "You are not the dealer", size=18, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    d.text(
-        s, 8.35, 1.95, 4.35, 2.95,
+    d.text(s, 8.35, 1.40, 4.36, 0.42, "You Are Not the Dealer", size=18, bold=True, color=TEXT, align="center", ml=0, mr=0, mt=0, mb=0)
+    in_box(
+        d, s, 8.35, 1.90, 4.36, 3.10,
         "You do not hedge with stock.\nYou do not short shares.\n\nYou read their hedge so you know the push.\nThen you buy a call, a put, or a debit spread.",
-        size=16, color=BODY, ml=0, mr=0, mt=0, mb=0,
+        size=17, color=BODY, align="center", ml=0.08, mr=0.08,
     )
     d.panel(s, ML, 5.40, CONTENT_W, 1.42, accent=AMBER)
     d.text(
@@ -886,7 +1093,11 @@ def slide_gamma_def(d: Deck) -> None:
 
 def slide_gamma_chart(d: Deck) -> None:
     s = d.chrome("Black-Scholes", "Gamma peaks at the strike, near expiry")
-    h = d.picture(s, d.charts["gamma"], ML, 1.12, 7.55)
+    top, height = 1.14, 5.28
+    left_w, gap = 7.55, 0.18
+    right_x = ML + left_w + gap
+    right_w = CONTENT_W - left_w - gap
+    d.picture_in(s, d.charts["gamma"], ML, top, left_w, height)
     r1 = f"{FACTS['g_ratio_1']:.1f}"
     r7 = f"{FACTS['g_ratio_7']:.1f}"
     notes = [
@@ -895,118 +1106,143 @@ def slide_gamma_chart(d: Deck) -> None:
         (AMBER, f"7-day gamma at the peak is about {r7} times the 30-day peak."),
         (BLUE, "Far from the strike the line is flat. Little re-hedging."),
     ]
-    for i, (accent, line) in enumerate(notes):
-        y = 1.18 + i * 1.22
-        d.panel(s, 8.15, y, 4.76, 1.10)
-        d.rect(s, 8.15, y, 0.08, 1.10, accent)
-        d.text(s, 8.40, y + 0.14, 4.30, 0.82, line, size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
+    for (y, bh), (accent, line) in zip(bands(top, height, 4, gap=0.12), notes):
+        d.panel(s, right_x, y, right_w, bh)
+        d.rect(s, right_x, y, 0.08, bh, accent)
+        in_box(d, s, right_x + 0.20, y, right_w - 0.34, bh, line, size=16, color=BODY, align="left", ml=0.04, mr=0.08)
     d.text(
-        s, ML, 6.55, 7.6, 0.42,
-        "Scaled so the 30-day peak is 1.",
+        s, ML, 6.52, CONTENT_W, 0.48,
+        "Scaled so the 30-day peak is 1.\nEXAMPLE. Black-Scholes, European, no dividend. Spot 100, IV 20%, rate 4%. Not a forecast.",
         size=13, color=DIM, ml=0, mr=0, mt=0, mb=0,
-    )
-    # h is used only to keep the picture return honest
-    _ = h
-    d.text(
-        s, ML, 6.78, CONTENT_W, 0.28,
-        "EXAMPLE. Black-Scholes, European, no dividend. Spot 100, IV 20%, rate 4%. Not a forecast.",
-        size=12, color=DIM, ml=0, mr=0, mt=0, mb=0,
     )
 
 
 def slide_hedge_chart(d: Deck) -> None:
     s = d.chrome("Re-hedge", "One point of price, three hedges")
-    d.picture(s, d.charts["hedge"], 0.55, 1.25, 6.90)
+    top, height = 1.14, 5.28
+    (lx, lw), (rx, rw) = cols(2, gap=0.18)
+    d.picture_in(s, d.charts["hedge"], lx, top, lw, height)
     sh = FACTS["shares"]
+    upper, lower = bands(top, height, 2, gap=0.14)
     block(
-        d, s, 7.70, 1.20, 5.20, 3.55, "What the bars are",
-        "EXAMPLE. The dealer is short one\nATM call. Strike 100.\n\nSpot goes from 100 to 101.\n\nThe bars are the shares they must\nbuy to get back to neutral.\n\n"
+        d, s, rx, upper[0], rw, upper[1], "What the Bars Are",
+        "EXAMPLE. The dealer is short one ATM call. Strike 100.\n\n"
+        "Spot goes from 100 to 101.\n\n"
+        "The bars are the shares they must buy to get back to neutral.\n\n"
         + f"{sh[0]:.1f}, {sh[1]:.1f}, and {sh[2]:.1f} shares.",
-        accent=CORAL, ts=18, bs=15,
+        accent=CORAL, ts=18, bs=16,
     )
-    d.panel(s, 7.70, 4.90, 5.20, 1.85, accent=TEAL)
-    d.text(
-        s, 7.90, 5.08, 4.85, 1.50,
+    d.panel(s, rx, lower[0], rw, lower[1], accent=TEAL)
+    in_box(
+        d, s, rx + 0.22, lower[0], rw - 0.44, lower[1],
         "Flip the book. If the dealer is long that call, the same sizes are shares they sell. Same gamma. Opposite trade.",
-        size=15, color=BODY, ml=0, mr=0, mt=0, mb=0,
+        size=16, color=BODY, align="left", ml=0.04, mr=0.06,
     )
     d.text(
-        s, ML, 6.78, CONTENT_W, 0.28,
+        s, ML, 6.52, CONTENT_W, 0.42,
         "EXAMPLE. Black-Scholes, European, no dividend. IV 20%, rate 4%. Share counts match the bars. Not a forecast.",
-        size=12, color=DIM, ml=0, mr=0, mt=0, mb=0,
+        size=13, color=DIM, ml=0, mr=0, mt=0, mb=0,
     )
+
+
+def _regime_panel(d, s, x, y, w, h, fill, accent, title, lead, left_word, right_word, left_dir, right_dir, foot):
+    d.rect(s, x, y, w, h, fill, line=LINE)
+    head, mid, tail = bands(y + 0.16, h - 0.32, 3, gap=0.08)
+    d.text(s, x, head[0], w, 0.34, title, size=15, bold=True, color=accent, align="center", ml=0, mr=0, mt=0, mb=0)
+    in_box(d, s, x + 0.28, head[0] + 0.36, w - 0.56, head[1] - 0.40, lead, size=18, color=TEXT, align="center", ml=0.04, mr=0.04)
+    pair = 2.4
+    ax = x + (w - pair) / 2
+    d.arrow(s, ax + 0.15, mid[0] + 0.08, 0.42, 0.52, accent, left_dir)
+    d.arrow(s, ax + 1.55, mid[0] + 0.08, 0.42, 0.52, accent, right_dir)
+    d.text(s, ax, mid[0] + mid[1] - 0.36, 0.85, 0.30, left_word, size=14, bold=True, color=accent, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.text(s, ax + 1.35, mid[0] + mid[1] - 0.36, 0.95, 0.30, right_word, size=14, bold=True, color=accent, align="center", ml=0, mr=0, mt=0, mb=0)
+    in_box(d, s, x + 0.28, tail[0], w - 0.56, tail[1], foot, size=16, color=BODY, align="center", ml=0.04, mr=0.04)
 
 
 def slide_regimes(d: Deck) -> None:
     s = d.chrome("Regimes", "Two ways the hedge can push")
-    d.rect(s, ML, 1.22, 6.05, 4.55, TEAL_DIM, line=LINE)
-    d.text(s, 0.66, 1.40, 5.6, 0.32, "POSITIVE GAMMA", size=14, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 0.66, 1.85, 5.6, 1.15, "Above the flip.\nDealers sell rallies and buy dips.", size=20, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    d.arrow(s, 1.15, 3.30, 0.40, 0.50, TEAL, "down")
-    d.arrow(s, 2.55, 3.30, 0.40, 0.50, TEAL, "up")
-    d.text(s, 0.85, 3.88, 1.05, 0.28, "sell", size=14, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 2.25, 3.88, 1.05, 0.28, "buy", size=14, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 0.66, 4.40, 5.5, 1.05, "Price ranges, and it can pin.\nPin means price sticks near a heavy strike.", size=16, color=BODY, ml=0, mr=0, mt=0, mb=0)
-
-    d.rect(s, 6.87, 1.22, 6.04, 4.55, CORAL_DIM, line=LINE)
-    d.text(s, 7.11, 1.40, 5.6, 0.32, "NEGATIVE GAMMA", size=14, bold=True, color=CORAL, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 7.11, 1.85, 5.6, 1.15, "Below the flip.\nDealers chase the move.", size=20, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    d.arrow(s, 7.60, 3.30, 0.40, 0.50, CORAL, "up")
-    d.arrow(s, 9.00, 3.30, 0.40, 0.50, CORAL, "down")
-    d.text(s, 7.30, 3.88, 1.05, 0.28, "buy", size=14, color=CORAL, align="center", ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 8.70, 3.88, 1.05, 0.28, "sell", size=14, color=CORAL, align="center", ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 7.11, 4.40, 5.5, 1.05, "Price can trend, and it can accelerate.\nFades get run over.", size=16, color=BODY, ml=0, mr=0, mt=0, mb=0)
-
-    d.panel(s, ML, 5.95, CONTENT_W, 0.90, accent=AMBER)
-    d.text(
-        s, ML + 0.22, 6.08, CONTENT_W - 0.4, 0.64,
+    top, height = 1.16, 4.62
+    (lx, lw), (rx, rw) = cols(2)
+    _regime_panel(
+        d, s, lx, top, lw, height, TEAL_DIM, TEAL,
+        "Positive Gamma", "Above the flip.\nDealers sell rallies and buy dips.",
+        "Sell", "Buy", "down", "up",
+        "Price ranges, and it can pin.\nPin means price sticks near a heavy strike.",
+    )
+    _regime_panel(
+        d, s, rx, top, rw, height, CORAL_DIM, CORAL,
+        "Negative Gamma", "Below the flip.\nDealers chase the move.",
+        "Buy", "Sell", "up", "down",
+        "Price can trend, and it can accelerate.\nFades get run over.",
+    )
+    d.panel(s, ML, 5.94, CONTENT_W, 0.92, accent=AMBER)
+    in_box(
+        d, s, ML + 0.22, 5.94, CONTENT_W - 0.44, 0.92,
         "This deck reads dealer gamma. Above the flip is positive. Below the flip is negative.",
-        size=16, color=TEXT, anchor="middle", ml=0, mr=0, mt=0, mb=0,
+        size=16, color=TEXT, align="center", ml=0.08, mr=0.08,
     )
 
 
 def slide_positive(d: Deck) -> None:
     s = d.chrome("Positive gamma", "They sell the rally and buy the dip")
-    d.panel(s, ML, 1.18, 8.15, 5.55)
-    d.stamp(s, 0.62, 1.36, "ILLUSTRATIVE")
-    # range
-    d.hline(s, 1.15, 2.35, 6.6, CYAN, 0.03)
-    d.hline(s, 1.15, 5.55, 6.6, PURPLE, 0.03)
-    d.text(s, 1.15, 1.95, 3.2, 0.32, "Call wall", size=14, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 1.15, 5.68, 3.2, 0.32, "Put wall", size=14, bold=True, color=PURPLE, ml=0, mr=0, mt=0, mb=0)
-    d.arrow(s, 3.55, 2.55, 0.42, 0.55, TEAL, "down")
-    d.text(s, 4.15, 2.60, 3.3, 0.70, "Rally into the call wall.\nDealers sell stock.", size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.arrow(s, 3.55, 4.70, 0.42, 0.55, TEAL, "up")
-    d.text(s, 4.15, 4.65, 3.3, 0.70, "Dip into the put wall.\nDealers buy stock.", size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 1.20, 3.55, 2.3, 0.70, "Price stays\nin the range.", size=15, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    # chop marks
-    for i, yy in enumerate((3.15, 3.55, 3.95, 4.35)):
-        xx = 2.55 + (i % 2) * 0.35
+    top, height = 1.16, 5.70
+    (lx, lw), (rx, rw) = cols(2, gap=0.18, width=CONTENT_W)
+    # keep the diagram wider than the note: 8.05 / 4.26 on the same edges
+    lw, rw = 8.05, CONTENT_W - 8.05 - 0.18
+    rx = ML + lw + 0.18
+    d.panel(s, ML, top, lw, height)
+    d.stamp(s, ML + 0.18, top + 0.16, "ILLUSTRATIVE")
+    line_x = ML + 0.85
+    line_w = lw - 1.70
+    call_y = top + 1.20
+    put_y = top + height - 1.15
+    d.hline(s, line_x, call_y, line_w, CYAN, 0.03)
+    d.hline(s, line_x, put_y, line_w, PURPLE, 0.03)
+    d.text(s, line_x, call_y - 0.40, 2.4, 0.32, "Call Wall", size=14, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, line_x, put_y + 0.16, 2.4, 0.32, "Put Wall", size=14, bold=True, color=PURPLE, ml=0, mr=0, mt=0, mb=0)
+    mid = (call_y + put_y) / 2
+    ax = line_x + line_w * 0.42
+    d.arrow(s, ax, call_y + 0.18, 0.42, 0.52, TEAL, "down")
+    in_box(d, s, ax + 0.55, call_y + 0.08, 3.15, 0.85, "Rally into the call wall.\nDealers sell stock.", size=15, color=BODY, align="left", ml=0, mr=0)
+    d.arrow(s, ax, put_y - 0.78, 0.42, 0.52, TEAL, "up")
+    in_box(d, s, ax + 0.55, put_y - 0.88, 3.15, 0.85, "Dip into the put wall.\nDealers buy stock.", size=15, color=BODY, align="left", ml=0, mr=0)
+    in_box(d, s, line_x, mid - 0.45, 2.15, 0.90, "Price stays\nin the range.", size=15, color=TEXT, align="center", ml=0, mr=0)
+    for i, yy in enumerate((mid - 0.55, mid - 0.18, mid + 0.18, mid + 0.55)):
+        xx = line_x + 2.35 + (i % 2) * 0.38
         d.oval(s, xx, yy, 0.14, 0.14, TEAL)
     block(
-        d, s, 8.75, 1.18, 4.16, 5.55, "What you do",
-        "Fade the edges.\n\nOnly after a rejection\ncandle closes back\ninside.\n\nDo not trade the\nbreakout.\n\nThe playbook is\na later slide.",
-        accent=TEAL, ts=18, bs=16,
+        d, s, rx, top, rw, height, "What you do",
+        "Fade the edges.\n\nOnly after a rejection candle closes back inside.\n\nDo not trade the breakout.\n\nThe playbook is a later slide.",
+        accent=TEAL, ts=18, bs=16, align="center",
     )
 
 
 def slide_negative(d: Deck) -> None:
     s = d.chrome("Negative gamma", "They chase, so the move can run")
-    d.panel(s, ML, 1.18, 8.15, 5.55)
-    d.stamp(s, 0.62, 1.36, "ILLUSTRATIVE")
-    d.hline(s, 1.15, 2.55, 6.6, CYAN, 0.03)
-    d.hline(s, 1.15, 5.15, 6.6, PURPLE, 0.03)
-    d.text(s, 1.15, 2.15, 2.4, 0.32, "Call wall", size=14, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 1.15, 5.28, 2.4, 0.32, "Put wall", size=14, bold=True, color=PURPLE, ml=0, mr=0, mt=0, mb=0)
-    d.arrow(s, 3.70, 1.50, 0.40, 0.52, CORAL, "up")
-    d.text(s, 4.25, 1.48, 3.5, 0.70, "Rally. Dealers buy.\nThe rally gets fuel.", size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.arrow(s, 3.70, 5.45, 0.40, 0.52, CORAL, "down")
-    d.text(s, 4.25, 5.40, 3.5, 0.85, "Drop. Dealers sell.\nThe drop gets fuel.", size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 1.20, 3.45, 2.5, 0.80, "A break can\nrun.", size=16, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+    top, height = 1.16, 5.70
+    lw = 8.05
+    rw = CONTENT_W - lw - 0.18
+    rx = ML + lw + 0.18
+    d.panel(s, ML, top, lw, height)
+    d.stamp(s, ML + 0.18, top + 0.16, "ILLUSTRATIVE")
+    line_x = ML + 0.85
+    line_w = lw - 1.70
+    call_y = top + 1.35
+    put_y = top + height - 1.15
+    d.hline(s, line_x, call_y, line_w, CYAN, 0.03)
+    d.hline(s, line_x, put_y, line_w, PURPLE, 0.03)
+    d.text(s, line_x, call_y - 0.38, 2.4, 0.32, "Call Wall", size=14, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, line_x, put_y + 0.10, 2.4, 0.32, "Put Wall", size=14, bold=True, color=PURPLE, ml=0, mr=0, mt=0, mb=0)
+    ax = line_x + line_w * 0.38
+    d.arrow(s, ax, top + 0.42, 0.42, 0.52, CORAL, "up")
+    in_box(d, s, ax + 0.58, top + 0.28, 3.3, 0.85, "Rally. Dealers buy.\nThe rally gets fuel.", size=15, color=BODY, align="left", ml=0, mr=0)
+    d.arrow(s, ax, put_y + 0.22, 0.42, 0.52, CORAL, "down")
+    in_box(d, s, ax + 0.58, put_y + 0.16, 3.3, 0.85, "Drop. Dealers sell.\nThe drop gets fuel.", size=15, color=BODY, align="left", ml=0, mr=0)
+    in_box(d, s, line_x, (call_y + put_y) / 2 - 0.45, 2.4, 0.90, "A break can\nrun.", size=16, color=TEXT, align="center", ml=0, mr=0)
     block(
-        d, s, 8.75, 1.18, 4.16, 5.55, "What you do",
-        "Do not fade the\nfirst touch.\n\nTrade the break\non a 4h close.\n\nGo with it.\n\nThe playbook is\na later slide.",
-        accent=CORAL, ts=18, bs=16,
+        d, s, rx, top, rw, height, "What you do",
+        "Do not fade the first touch.\n\nTrade the break on a 4h close.\n\nGo with it.\n\nThe playbook is a later slide.",
+        accent=CORAL, ts=18, bs=16, align="center",
     )
 
 
@@ -1017,46 +1253,58 @@ def slide_hedge_sign(d: Deck) -> None:
         "EXAMPLE. 10 contracts. Deltas are chosen so the share count is obvious. This is one call book, not every book.",
         size=15, color=DIM, ml=0, mr=0, mt=0, mb=0,
     )
-    # positive
-    d.panel(s, ML, 1.75, 6.15, 4.95, accent=TEAL)
-    d.text(s, 0.64, 1.92, 5.7, 0.72, "Positive book\nDealer is long the calls", size=18, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-    d.text(
-        s, 0.64, 2.72, 5.7, 3.70,
+    (lx, lw), (rx, rw) = cols(2)
+    card_y, card_h = 1.72, 5.05
+    d.panel(s, lx, card_y, lw, card_h, accent=TEAL)
+    d.text(s, lx, card_y + 0.16, lw, 0.70, "Positive Book\nDealer Is Long the Calls", size=18, bold=True, color=TEAL, align="center", ml=0.2, mr=0.2, mt=0, mb=0)
+    in_box(
+        d, s, lx + 0.28, card_y + 0.95, lw - 0.56, card_h - 1.15,
         "Start. Delta +0.50.\nHedge: short 500 shares.\n\nLater. Delta +0.60.\nHedge: short 600 shares.\n\nThey sell 100 shares\ninto the rally.",
-        size=16, color=BODY, ml=0, mr=0, mt=0, mb=0,
+        size=18, color=BODY, align="center", ml=0.06, mr=0.06,
     )
-    d.panel(s, 6.76, 1.75, 6.15, 4.95, accent=CORAL)
-    d.text(s, 7.00, 1.92, 5.7, 0.72, "Negative book\nDealer is short the calls", size=18, bold=True, color=CORAL, ml=0, mr=0, mt=0, mb=0)
-    d.text(
-        s, 7.00, 2.72, 5.7, 3.70,
+    d.panel(s, rx, card_y, rw, card_h, accent=CORAL)
+    d.text(s, rx, card_y + 0.16, rw, 0.70, "Negative Book\nDealer Is Short the Calls", size=18, bold=True, color=CORAL, align="center", ml=0.2, mr=0.2, mt=0, mb=0)
+    in_box(
+        d, s, rx + 0.28, card_y + 0.95, rw - 0.56, card_h - 1.15,
         "Start. Delta -0.50.\nHedge: long 500 shares.\n\nLater. Delta -0.60.\nHedge: long 600 shares.\n\nThey buy 100 shares\ninto the rally.",
-        size=16, color=BODY, ml=0, mr=0, mt=0, mb=0,
+        size=18, color=BODY, align="center", ml=0.06, mr=0.06,
     )
 
 
 def slide_flip(d: Deck) -> None:
     s = d.chrome("The flip", "The flip is a change in behavior")
-    d.panel(s, ML, 1.18, 7.35, 5.55)
-    d.text(s, 0.64, 1.36, 4.0, 0.30, "Price", size=13, bold=True, color=DIM, ml=0, mr=0, mt=0, mb=0)
-    d.rect(s, 1.55, 1.85, 4.3, 1.85, TEAL_DIM)
-    d.text(s, 1.75, 2.05, 3.95, 0.70, "Above the flip\nPositive gamma. Fade.", size=16, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    d.arrow(s, 5.95, 2.15, 0.36, 0.42, TEAL, "down")
-    d.arrow(s, 5.95, 2.85, 0.36, 0.42, TEAL, "up")
-    d.rect(s, 0.70, 3.70, 6.55, 0.08, AMBER)
-    d.text(s, 0.70, 3.85, 6.55, 0.36, "FLIP    net gamma changes sign", size=14, bold=True, color=AMBER, align="center", ml=0, mr=0, mt=0, mb=0)
-    d.rect(s, 1.55, 4.35, 4.3, 1.95, CORAL_DIM)
-    d.text(s, 1.75, 4.55, 3.95, 0.80, "Below the flip\nNegative gamma. Chase.", size=16, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    d.arrow(s, 5.95, 4.50, 0.36, 0.42, CORAL, "up")
-    d.arrow(s, 5.95, 5.20, 0.36, 0.42, CORAL, "down")
+    top, height = 1.16, 5.70
+    lw, rw = 7.35, CONTENT_W - 7.35 - 0.18
+    rx = ML + lw + 0.18
+    d.panel(s, ML, top, lw, height)
+    d.text(s, ML, top + 0.12, lw, 0.28, "Price", size=13, bold=True, color=DIM, align="center", ml=0, mr=0, mt=0, mb=0)
+    inner_top = top + 0.50
+    inner_h = height - 0.70
+    box_h = (inner_h - 0.70) / 2
+    box_w = 4.55
+    box_x = ML + 0.45
+    d.rect(s, box_x, inner_top, box_w, box_h, TEAL_DIM)
+    in_box(d, s, box_x, inner_top, box_w - 0.7, box_h, "Above the flip\nPositive gamma. Fade.", size=16, color=TEXT, align="center", ml=0.12, mr=0.08)
+    d.arrow(s, box_x + box_w - 0.55, inner_top + box_h * 0.22, 0.36, 0.40, TEAL, "down")
+    d.arrow(s, box_x + box_w - 0.55, inner_top + box_h * 0.58, 0.36, 0.40, TEAL, "up")
+    flip_y = inner_top + box_h + 0.16
+    d.rect(s, ML + 0.28, flip_y, lw - 0.56, 0.08, AMBER)
+    d.text(s, ML + 0.28, flip_y + 0.12, lw - 0.56, 0.32, "Flip: Net Gamma Changes Sign", size=14, bold=True, color=AMBER, align="center", ml=0, mr=0, mt=0, mb=0)
+    low_y = flip_y + 0.50
+    d.rect(s, box_x, low_y, box_w, box_h, CORAL_DIM)
+    in_box(d, s, box_x, low_y, box_w - 0.7, box_h, "Below the flip\nNegative gamma. Chase.", size=16, color=TEXT, align="center", ml=0.12, mr=0.08)
+    d.arrow(s, box_x + box_w - 0.55, low_y + box_h * 0.22, 0.36, 0.40, CORAL, "up")
+    d.arrow(s, box_x + box_w - 0.55, low_y + box_h * 0.58, 0.36, 0.40, CORAL, "down")
+    upper, lower = bands(top, height, 2, gap=0.16)
     block(
-        d, s, 7.95, 1.18, 4.96, 2.55, "Not a level to lean on",
-        "The flip marks a change\nin behavior.\n\nSupport and resistance\nare the walls.",
-        accent=AMBER, ts=16, bs=16,
+        d, s, rx, upper[0], rw, upper[1], "Not a Level to Lean On",
+        "The flip marks a change in behavior.\n\nSupport and resistance are the walls.",
+        accent=AMBER, ts=16, bs=16, align="center",
     )
     block(
-        d, s, 7.95, 3.90, 4.96, 2.83, "It can sit on a wall",
-        "The flip can fall between\ntwo strikes.\n\nIf it sits on a wall, that\nedge is the regime line\nand the level, together.",
-        accent=BLUE, ts=16, bs=16,
+        d, s, rx, lower[0], rw, lower[1], "It Can Sit on a Wall",
+        "The flip can fall between two strikes.\n\nIf it sits on a wall, that edge is the regime line and the level, together.",
+        accent=BLUE, ts=16, bs=16, align="center",
     )
 
 
@@ -1077,30 +1325,37 @@ def slide_flip_quiet(d: Deck) -> None:
         block(d, s, x, 3.95, w, 2.75, title, body, accent=accent, ts=18, bs=16)
 
 
+def _candle_case(d, s, x, y, w, h, tone, title, note, high, low, open_, close):
+    d.panel(s, x, y, w, h)
+    d.stamp(s, x + 0.16, y + 0.14, "ILLUSTRATIVE")
+    flip_y = y + h * 0.46
+    d.hline(s, x + 0.30, flip_y, w * 0.40, AMBER, 0.028)
+    d.text(s, x + 0.36, flip_y - 0.34, 1.2, 0.28, "Flip", size=13, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
+    cx = x + w * 0.32
+    d.candle(s, cx, y + high, y + low, y + open_, y + close, tone, body=0.28)
+    in_box(d, s, x + w * 0.50, y + 0.58, w * 0.46, h - 1.25, note, size=16, color=BODY, align="left", ml=0.08, mr=0.1)
+    d.text(s, x + 0.2, y + h - 0.58, w - 0.4, 0.40, title, size=16, bold=True, color=TEXT, align="center", ml=0, mr=0, mt=0, mb=0)
+
+
 def slide_flip_close(d: Deck) -> None:
     s = d.chrome("The flip", "A wick is not a new side")
-    # two candle panels
-    d.panel(s, ML, 1.18, 6.15, 4.35)
-    d.stamp(s, 0.60, 1.34, "ILLUSTRATIVE")
-    d.hline(s, 0.70, 2.85, 5.55, AMBER, 0.028)
-    d.text(s, 0.75, 2.48, 1.6, 0.30, "Flip", size=13, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
-    d.candle(s, 3.15, 1.85, 4.55, 3.55, 3.85, DIM)
-    d.text(s, 3.55, 3.15, 2.6, 1.15, "Wick through.\nClose back on\nthe old side.", size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 0.70, 4.85, 5.5, 0.45, "Still the old regime.", size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-
-    d.panel(s, 6.76, 1.18, 6.15, 4.35)
-    d.stamp(s, 6.94, 1.34, "ILLUSTRATIVE")
-    d.hline(s, 7.05, 2.85, 1.35, AMBER, 0.028)
-    d.text(s, 7.10, 2.48, 1.2, 0.30, "Flip", size=13, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
-    d.candle(s, 7.85, 1.70, 4.15, 2.15, 2.45, TEAL)
-    d.text(s, 8.55, 2.15, 3.9, 1.20, "The close is through\nthe flip. It still\nhas to hold.", size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 7.05, 4.85, 5.5, 0.45, "Possible new side.", size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-
-    d.panel(s, ML, 5.70, CONTENT_W, 1.12, accent=BLUE)
-    d.text(
-        s, ML + 0.24, 5.86, CONTENT_W - 0.45, 0.82,
+    top, height = 1.16, 4.40
+    (lx, lw), (rx, rw) = cols(2)
+    _candle_case(
+        d, s, lx, top, lw, height, DIM, "Still the Old Regime.",
+        "Wick through.\nClose back on\nthe old side.",
+        0.70, 3.55, 2.55, 2.85,
+    )
+    _candle_case(
+        d, s, rx, top, rw, height, TEAL, "Possible New Side.",
+        "The close is through\nthe flip. It still\nhas to hold.",
+        0.55, 3.35, 1.15, 1.45,
+    )
+    d.panel(s, ML, 5.72, CONTENT_W, 1.12, accent=BLUE)
+    in_box(
+        d, s, ML + 0.24, 5.72, CONTENT_W - 0.48, 1.12,
         "Use the 4h close, or the daily close. Do not change the plan on a touch.\nIf later candles hold on the new side, treat the regime as changed and read the book again.",
-        size=16, color=BODY, ml=0, mr=0, mt=0, mb=0,
+        size=16, color=BODY, align="left", ml=0.04, mr=0.06,
     )
 
 
@@ -1110,10 +1365,10 @@ def slide_walls(d: Deck) -> None:
     d.stamp(s, 0.60, 1.34, "ILLUSTRATIVE")
     # schematic ladder, not to a real ticker
     levels = [
-        (1.85, CYAN, "115   call wall    resistance"),
-        (2.85, AMBER, "108   flip    behavior, not a wall"),
-        (4.05, TEXT, "100   spot"),
-        (5.35, PURPLE, "90    put wall    support"),
+        (1.95, CYAN, "115    Call Wall    Resistance"),
+        (3.15, AMBER, "108    Flip    Behavior, Not a Wall"),
+        (4.35, TEXT, "100    Spot"),
+        (5.55, PURPLE, "90    Put Wall    Support"),
     ]
     d.vline(s, 1.55, 1.70, 4.55, LINE, 0.02)
     for y, color, label in levels:
@@ -1147,17 +1402,17 @@ def slide_walls_regime(d: Deck) -> None:
 def slide_opex(d: Deck) -> None:
     s = d.chrome("Levels", "Walls move. Big expiries reset them")
     d.panel(s, ML, 1.18, 6.15, 5.55, accent=BLUE)
-    d.text(s, 0.64, 1.40, 5.7, 0.40, "The wall is this book", size=20, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, 0.64, 1.40, 5.7, 0.40, "The Wall Is This Book", size=20, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
     # moving wall diagram
     d.text(s, 0.70, 2.05, 2.2, 0.30, "Earlier", size=13, bold=True, color=DIM, ml=0, mr=0, mt=0, mb=0)
-    d.hline(s, 0.70, 2.55, 2.4, CYAN, 0.03)
-    d.text(s, 3.20, 2.35, 1.5, 0.36, "call wall", size=14, color=CYAN, ml=0, mr=0, mt=0, mb=0)
-    d.arrow(s, 2.55, 3.15, 0.36, 0.46, AMBER, "down")
-    d.text(s, 3.05, 3.20, 2.6, 0.40, "open interest shifts", size=14, color=AMBER, ml=0, mr=0, mt=0, mb=0)
+    d.hline(s, 0.70, 2.55, 2.6, CYAN, 0.03)
+    d.text(s, 3.45, 2.35, 2.2, 0.36, "Call Wall", size=14, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
+    d.arrow(s, 2.70, 3.15, 0.36, 0.46, AMBER, "down")
+    d.text(s, 3.20, 3.20, 2.6, 0.40, "Open Interest Shifts", size=14, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
     d.text(s, 0.70, 3.90, 2.2, 0.30, "Later", size=13, bold=True, color=DIM, ml=0, mr=0, mt=0, mb=0)
-    d.hline(s, 0.70, 4.45, 2.4, CYAN, 0.03)
-    d.text(s, 3.20, 4.25, 2.4, 0.36, "new call wall", size=14, color=CYAN, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 0.70, 5.15, 5.5, 1.25, "Read them again.\nYesterday's line can be dead.", size=18, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+    d.hline(s, 0.70, 4.45, 2.6, CYAN, 0.03)
+    d.text(s, 3.45, 4.25, 2.4, 0.36, "New Call Wall", size=14, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
+    in_box(d, s, 0.70, 5.00, 5.5, 1.45, "Read them again.\nYesterday's line can be dead.", size=18, color=TEXT, align="left", ml=0, mr=0)
     block(
         d, s, 6.76, 1.18, 6.15, 5.55, "OPEX",
         "Open interest is what\nbuilds the wall.\n\nWhen that expiry passes,\nthose contracts are gone.\n\nThe monthly expiry is\nthe big reset.\n\nSPY also expires through\nthe week. After a large\none, rebuild the map\nbefore you trust the\nold levels.",
@@ -1200,7 +1455,7 @@ def slide_uw_rules(d: Deck) -> None:
         y = 1.18 + row * 2.35
         d.panel(s, x, y, 6.15, 2.18, accent=PURPLE)
         d.text(s, x + 0.2, y + 0.16, 1.0, 0.36, num, size=14, bold=True, color=PURPLE, ml=0, mr=0, mt=0, mb=0)
-        d.text(s, x + 0.2, y + 0.52, 5.75, 0.45, title, size=18, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+        d.text(s, x + 0.2, y + 0.52, 5.75, 0.45, title_case(title), size=18, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
         d.text(s, x + 0.2, y + 1.10, 5.75, 0.85, body, size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
     d.text(
         s, ML, 5.95, CONTENT_W, 0.85,
@@ -1213,7 +1468,7 @@ def slide_heatmap(d: Deck) -> None:
     s = d.chrome("Heatmap", "The color is net gamma")
     d.stamp(s, ML, 1.12, "ILLUSTRATIVE")
     d.text(s, 2.50, 1.14, 8.5, 0.30, "Stand-in colors. Not the Unusual Whales palette.", size=14, color=AMBER, ml=0, mr=0, mt=0, mb=0)
-    headers = ["0DTE", "+2d", "+7d", "+14d", "month", "+2mo"]
+    headers = ["0DTE", "+2d", "+7d", "+14d", "Month", "+2mo"]
     pos = [800, 790, 780, 770]
     neg = [760, 750, 740, 730]
     gx = 1.35
@@ -1231,18 +1486,18 @@ def slide_heatmap(d: Deck) -> None:
     for strike in pos:
         draw_row(y, strike, "1C6B58", "+")
         y += cell_h + gap
-    d.rect(s, gx, y + 0.02, 6 * cell_w + 5 * gap, 0.045, AMBER)
-    d.text(s, gx, y + 0.08, 5.8, 0.28, "FLIP  =  where the color changes", size=13, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
-    y += 0.42
+    d.rect(s, gx, y + 0.04, 6 * cell_w + 5 * gap, 0.040, AMBER)
+    d.text(s, gx, y + 0.14, 5.8, 0.28, "Flip = Where the Color Changes", size=13, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
+    y += 0.50
     for strike in neg:
         draw_row(y, strike, "7A3038", "-")
         y += cell_h + gap
     d.panel(s, 8.55, 1.58, 4.35, 5.05, accent=PURPLE)
-    d.text(s, 8.75, 1.80, 4.0, 0.70, "Read it this way", size=18, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    d.text(
-        s, 8.75, 2.55, 3.95, 3.80,
-        "Plus cells: positive\nnet gamma.\n\nMinus cells: negative\nnet gamma.\n\nThe sign is the lesson.\nThe shade is not live data.\n\nOn the real page, match\nthe color to the legend.\nDo not memorize a hue.",
-        size=15, color=BODY, ml=0, mr=0, mt=0, mb=0,
+    d.text(s, 8.75, 1.78, 3.95, 0.42, "Read It This Way", size=18, bold=True, color=TEXT, align="center", ml=0, mr=0, mt=0, mb=0)
+    in_box(
+        d, s, 8.75, 2.28, 3.95, 4.10,
+        "Plus cells: positive net gamma.\n\nMinus cells: negative net gamma.\n\nThe sign is the lesson. The shade is not live data.\n\nOn the real page, match the color to the legend. Do not memorize a hue.",
+        size=16, color=BODY, align="center", ml=0.06, mr=0.06,
     )
 
 
@@ -1269,12 +1524,12 @@ def slide_bystrike(d: Deck) -> None:
     y760 = top + 6 * pitch + 0.18
     spot_y = (y765 + y760) / 2
     d.hline(s, bar_x, spot_y, max_w, WHITE, 0.022)
-    d.text(s, bar_x + max_w - 0.85, spot_y - 0.30, 0.80, 0.26, "spot", size=12, bold=True, color=WHITE, align="right", ml=0, mr=0, mt=0, mb=0)
+    d.text(s, bar_x + max_w - 0.85, spot_y - 0.30, 0.80, 0.26, "Spot", size=12, bold=True, color=WHITE, align="right", ml=0, mr=0, mt=0, mb=0)
     # call wall marker starts after the 775 bar, so the label is not on the bar
     call_y = top + 3 * pitch + 0.18
     bar_end = bar_x + 84 * scale
     d.hline(s, bar_end + 0.10, call_y, max_w - (84 * scale) - 0.10, CYAN, 0.028)
-    d.text(s, bar_end + 0.12, call_y - 0.30, 1.45, 0.26, "call wall", size=12, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, bar_end + 0.12, call_y - 0.30, 1.45, 0.26, "Call Wall", size=12, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
 
     notes = [
         (CYAN, "Drawn for you", "Spot, and the call wall. Those two lines are on the chart."),
@@ -1286,7 +1541,7 @@ def slide_bystrike(d: Deck) -> None:
         y = 1.18 + i * 1.38
         d.panel(s, 6.78, y, 6.13, 1.26)
         d.rect(s, 6.78, y, 0.08, 1.26, accent)
-        d.text(s, 7.04, y + 0.08, 5.7, 0.32, title, size=15, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+        d.text(s, 7.04, y + 0.08, 5.7, 0.32, title_case(title), size=15, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
         d.text(s, 7.04, y + 0.42, 5.7, 0.74, body, size=14, color=BODY, ml=0, mr=0, mt=0, mb=0)
 
 
@@ -1313,12 +1568,12 @@ def slide_oi_volume(d: Deck) -> None:
 def slide_crosscheck(d: Deck) -> None:
     s = d.chrome("Check", "Check the three levels in public")
     d.panel(s, ML, 1.18, 5.9, 5.55, accent=BLUE)
-    d.text(s, 0.66, 1.40, 5.4, 0.40, "Write these down", size=20, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    for i, (name, gloss) in enumerate((("Put wall", "Support. From open interest."), ("Call wall", "Resistance. From open interest."), ("Flip", "Where net gamma changes sign."))):
+    d.text(s, 0.66, 1.40, 5.4, 0.40, "Write These Down", size=20, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+    for i, (name, gloss) in enumerate((("Put Wall", "Support. From open interest."), ("Call Wall", "Resistance. From open interest."), ("Flip", "Where net gamma changes sign."))):
         y = 2.05 + i * 1.35
         d.rect(s, 0.70, y, 0.56, 0.56, BLUE_DIM, line=BLUE, line_w=1.25)
         d.text(s, 0.70, y, 0.56, 0.56, str(i + 1), size=18, bold=True, color=BLUE, align="center", anchor="middle", ml=0, mr=0, mt=0, mb=0)
-        d.text(s, 1.45, y, 4.4, 0.36, name, size=18, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+        d.text(s, 1.45, y, 4.4, 0.36, title_case(name), size=18, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
         d.text(s, 1.45, y + 0.40, 4.4, 0.40, gloss, size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
     block(
         d, s, 6.52, 1.18, 6.39, 5.55, "If the second source disagrees",
@@ -1355,16 +1610,19 @@ def slide_clocks(d: Deck) -> None:
         ("3", "4h close", "The range, and the trigger.", BLUE),
         ("4", "15m", "Entry timing. The 20, 50, and 200.", PURPLE),
     ]
-    for i, (num, title, body, accent) in enumerate(clocks):
-        y = 1.18 + i * 1.20
-        d.panel(s, ML, y, 8.05, 1.08, accent=accent)
-        d.text(s, 0.62, y + 0.16, 0.55, 0.70, num, size=20, bold=True, color=accent, anchor="middle", ml=0, mr=0, mt=0, mb=0)
-        d.text(s, 1.30, y + 0.12, 6.8, 0.36, title, size=18, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-        d.text(s, 1.30, y + 0.52, 6.8, 0.42, body, size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
+    top, height = 1.16, 5.70
+    left_w = 8.05
+    right_x = ML + left_w + 0.18
+    right_w = CONTENT_W - left_w - 0.18
+    for i, ((y, bh), (num, title, body, accent)) in enumerate(zip(bands(top, height, 4, gap=0.12), clocks)):
+        d.panel(s, ML, y, left_w, bh, accent=accent)
+        d.text(s, ML, y + 0.18, 0.70, 0.40, num, size=20, bold=True, color=accent, align="center", anchor="middle", ml=0, mr=0, mt=0, mb=0)
+        d.text(s, ML + 0.78, y + 0.18, left_w - 0.98, 0.40, title_case(title), size=18, bold=True, color=TEXT, anchor="middle", ml=0.04, mr=0.08, mt=0, mb=0)
+        in_box(d, s, ML + 0.78, y + 0.62, left_w - 0.98, bh - 0.74, body, size=16, color=BODY, align="left", ml=0.04, mr=0.08)
     block(
-        d, s, 8.65, 1.18, 4.26, 5.55, "Two extras",
-        "A daily close is the\none to add when the\nlevel is a major wall,\nor the flip.\n\nThe averages do not\nreplace the walls.\nThey confirm them.\n\nThe 15m does not\noverrule the 4h.",
-        accent=BLUE, ts=18, bs=16,
+        d, s, right_x, top, right_w, height, "Two extras",
+        "A daily close is the one to add when the level is a major wall, or the flip.\n\nThe averages do not replace the walls. They confirm them.\n\nThe 15m does not overrule the 4h.",
+        accent=BLUE, ts=18, bs=16, align="center",
     )
 
 
@@ -1373,19 +1631,19 @@ def slide_align(d: Deck) -> None:
     # aligned
     d.panel(s, ML, 1.18, 6.15, 4.20)
     d.stamp(s, 0.58, 1.32, "ILLUSTRATIVE")
-    d.text(s, 0.62, 1.72, 3.0, 0.32, "They line up", size=18, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-    d.rect(s, 1.10, 2.30, 3.3, 2.55, "1A2836", line=TEAL, line_w=1.5)
-    d.text(s, 4.55, 2.25, 1.8, 0.55, "Call wall\n= box top", size=14, color=CYAN, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 4.55, 4.25, 1.8, 0.55, "Put wall\n= box bottom", size=14, color=PURPLE, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, 0.62, 1.72, 5.6, 0.32, "They Line Up", size=18, bold=True, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.rect(s, 1.35, 2.35, 2.55, 2.45, "1A2836", line=TEAL, line_w=1.5)
+    in_box(d, s, 4.10, 2.25, 2.15, 0.85, "Call Wall\n= Box Top", size=15, color=CYAN, align="center", ml=0, mr=0)
+    in_box(d, s, 4.10, 4.05, 2.15, 0.85, "Put Wall\n= Box Bottom", size=15, color=PURPLE, align="center", ml=0, mr=0)
     # conflict
     d.panel(s, 6.76, 1.18, 6.15, 4.20)
     d.stamp(s, 6.92, 1.32, "ILLUSTRATIVE")
-    d.text(s, 6.96, 1.72, 4.0, 0.32, "They do not", size=18, bold=True, color=CORAL, ml=0, mr=0, mt=0, mb=0)
-    d.hline(s, 7.3, 2.35, 2.3, CYAN, 0.03)
-    d.rect(s, 7.55, 2.85, 1.8, 1.35, "1A2836", line=AMBER, line_w=1.5)
-    d.hline(s, 7.3, 4.70, 2.3, PURPLE, 0.03)
-    d.text(s, 9.7, 2.15, 2.8, 0.45, "Walls outside", size=14, color=CYAN, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 9.7, 3.25, 2.8, 0.70, "4h box is\nonly the middle", size=14, color=AMBER, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, 6.96, 1.72, 5.6, 0.32, "They Do Not", size=18, bold=True, color=CORAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.hline(s, 7.15, 2.40, 2.15, CYAN, 0.03)
+    d.rect(s, 7.35, 2.95, 1.75, 1.20, "1A2836", line=AMBER, line_w=1.5)
+    d.hline(s, 7.15, 4.65, 2.15, PURPLE, 0.03)
+    in_box(d, s, 9.30, 2.15, 3.2, 0.55, "Walls Outside", size=15, color=CYAN, align="center", ml=0, mr=0)
+    in_box(d, s, 9.30, 3.15, 3.2, 0.80, "4h Box Is\nOnly the Middle", size=15, color=AMBER, align="center", ml=0, mr=0)
     d.panel(s, ML, 5.55, CONTENT_W, 1.25, accent=TEAL)
     d.text(
         s, ML + 0.24, 5.72, CONTENT_W - 0.48, 0.95,
@@ -1404,31 +1662,31 @@ def slide_disagree(d: Deck) -> None:
     for i, (accent, title, body) in enumerate(items):
         y = 1.18 + i * 1.85
         d.panel(s, ML, y, CONTENT_W, 1.72, accent=accent)
-        d.text(s, ML + 0.24, y + 0.16, CONTENT_W - 0.5, 0.40, title, size=20, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+        d.text(s, ML + 0.24, y + 0.16, CONTENT_W - 0.5, 0.40, title_case(title), size=20, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
         d.text(s, ML + 0.24, y + 0.68, CONTENT_W - 0.5, 0.85, body, size=16, color=BODY, ml=0, mr=0, mt=0, mb=0)
 
 
 def slide_spy_numbers(d: Deck) -> None:
     s = d.chrome("October 16, 2026", "The SPY book from that close")
     cards = [
-        (PURPLE, "Put wall", "760", "Support. Bottom of the box."),
-        (CYAN, "Call wall", "775", "Resistance. Top of the box."),
+        (PURPLE, "Put Wall", "760", "Support. Bottom of the box."),
+        (CYAN, "Call Wall", "775", "Resistance. Top of the box."),
         (AMBER, "Flip", "about 774.5", "Behavior change. On the ceiling."),
         (TEXT, "Spot", "about 763.2", "Under the flip. Inside the walls."),
     ]
     for (x, w), (accent, name, value, gloss) in zip(cols(4, gap=0.16), cards):
-        d.panel(s, x, 1.22, w, 3.15, accent=accent)
-        d.text(s, x + 0.16, 1.40, w - 0.32, 0.32, name, size=14, bold=True, color=accent, ml=0, mr=0, mt=0, mb=0)
-        d.text(s, x + 0.16, 1.85, w - 0.32, 0.85, value, size=28, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-        d.text(s, x + 0.16, 2.90, w - 0.32, 1.15, gloss, size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.rect(s, ML, 4.55, CONTENT_W, 1.05, CORAL_DIM, line=CORAL, line_w=1.25)
+        d.panel(s, x, 1.16, w, 3.55, accent=accent)
+        d.text(s, x + 0.12, 1.40, w - 0.24, 0.36, title_case(name), size=15, bold=True, color=accent, align="center", ml=0, mr=0, mt=0, mb=0)
+        d.text(s, x + 0.12, 1.90, w - 0.24, 1.15, value, size=32, bold=True, color=TEXT, align="center", anchor="middle", ml=0, mr=0, mt=0, mb=0)
+        d.text(s, x + 0.16, 3.20, w - 0.32, 1.20, gloss, size=16, color=BODY, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.rect(s, ML, 4.90, CONTENT_W, 1.05, CORAL_DIM, line=CORAL, line_w=1.25)
     d.text(
-        s, ML + 0.24, 4.68, CONTENT_W - 0.48, 0.80,
+        s, ML + 0.24, 5.02, CONTENT_W - 0.48, 0.80,
         "Regime: negative gamma. Spot is under the flip. Most of 760 to 775 is under it too.",
-        size=18, color=TEXT, anchor="middle", ml=0, mr=0, mt=0, mb=0,
+        size=18, color=TEXT, align="center", anchor="middle", ml=0, mr=0, mt=0, mb=0,
     )
     d.text(
-        s, ML, 5.80, CONTENT_W, 0.95,
+        s, ML, 6.12, CONTENT_W, 0.80,
         "These are the open-interest levels from the October 16, 2026 SPY close, as used for this example.\n775 minus 760 is 15 points. On spot about 763, that box is about 2% wide.",
         size=15, color=DIM, ml=0, mr=0, mt=0, mb=0,
     )
@@ -1447,18 +1705,18 @@ def slide_spy_box(d: Deck) -> None:
     y_flip = ymap(774.5, pmin, pmax, top, bot)
     y_spot = ymap(763.2, pmin, pmax, top, bot)
     d.rect(s, 2.45, y_call, 3.55, y_put - y_call, "243044")
-    d.text(s, 2.60, (y_call + y_put) / 2 - 0.28, 3.2, 0.55, "4h range\n760 to 775", size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+    in_box(d, s, 2.45, y_call, 3.55, y_put - y_call, "4h Range\n760 to 775", size=16, bold=True, color=TEXT, align="center", ml=0.1, mr=0.1)
     d.hline(s, 1.85, y_call, 4.35, CYAN, 0.03)
     d.dashed_h(s, 1.85, y_flip, 4.35, AMBER, 0.018, 0.10, 0.07)
     d.hline(s, 1.85, y_put, 4.35, PURPLE, 0.03)
-    d.oval(s, 2.85, y_spot - 0.09, 0.18, 0.18, WHITE)
-    d.text(s, 6.30, y_call - 0.18, 1.75, 0.32, "775 call wall", size=13, bold=True, color=CYAN, anchor="middle", ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 0.55, y_flip - 0.16, 1.20, 0.32, "flip", size=13, bold=True, color=AMBER, anchor="middle", ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 6.30, y_spot - 0.16, 1.75, 0.32, "763.2 spot", size=13, bold=True, color=WHITE, anchor="middle", ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 6.30, y_put - 0.16, 1.75, 0.32, "760 put", size=13, bold=True, color=PURPLE, anchor="middle", ml=0, mr=0, mt=0, mb=0)
+    d.oval(s, 2.45 + 1.68, y_spot - 0.09, 0.18, 0.18, WHITE)
+    d.text(s, 6.40, y_call - 0.16, 1.70, 0.32, "775 Call Wall", size=13, bold=True, color=CYAN, anchor="middle", ml=0, mr=0, mt=0, mb=0)
+    d.text(s, 0.50, y_flip - 0.16, 1.25, 0.32, "Flip", size=13, bold=True, color=AMBER, anchor="middle", align="right", ml=0, mr=0.06, mt=0, mb=0)
+    d.text(s, 6.40, y_spot - 0.16, 1.70, 0.32, "763.2 Spot", size=13, bold=True, color=WHITE, anchor="middle", ml=0, mr=0, mt=0, mb=0)
+    d.text(s, 6.40, y_put - 0.16, 1.70, 0.32, "760 Put Wall", size=13, bold=True, color=PURPLE, anchor="middle", ml=0, mr=0, mt=0, mb=0)
     # zoom
     d.panel(s, 8.45, 1.16, 4.46, 2.55, accent=AMBER)
-    d.text(s, 8.65, 1.32, 4.1, 0.30, "Top of the box, opened up", size=14, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, 8.65, 1.32, 4.1, 0.30, "Top of the Box, Opened Up", size=14, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
     ztop, zbot = 1.80, 3.40
     zy_call = ymap(775, 773.5, 776.2, ztop, zbot)
     zy_flip = ymap(774.5, 773.5, 776.2, ztop, zbot)
@@ -1468,7 +1726,7 @@ def slide_spy_box(d: Deck) -> None:
     d.text(s, 11.15, zy_flip - 0.16, 1.55, 0.32, "774.5", size=14, bold=True, color=AMBER, anchor="middle", ml=0, mr=0, mt=0, mb=0)
     d.text(s, 8.65, 3.22, 4.05, 0.36, "Half a point apart. Linear scale.", size=12, color=DIM, ml=0, mr=0, mt=0, mb=0)
     block(
-        d, s, 8.45, 3.88, 4.46, 2.88, "What the picture says",
+        d, s, 8.45, 3.88, 4.46, 2.88, "What the Picture Says",
         "The box and the walls\nare the same prices.\n\nThe flip is glued to\nthe call wall.\n\nAlmost the whole box\nis negative gamma.",
         accent=CORAL, ts=16, bs=15,
     )
@@ -1501,42 +1759,52 @@ def slide_pos_play(d: Deck) -> None:
         "6   You exit if a later candle closes past that extreme.",
         "7   Do not trade the breakout while this regime holds.",
     ]
-    d.panel(s, ML, 1.18, 8.05, 5.55, accent=TEAL)
-    d.text(s, 0.64, 1.36, 7.6, 0.36, "The rules", size=18, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 0.64, 1.85, 7.6, 4.55, "\n".join(rules), size=16, color=BODY, ml=0, mr=0, mt=0, mb=0, spacing=1.22)
+    d.panel(s, ML, 1.16, 8.05, 5.70, accent=TEAL)
+    d.text(s, ML, 1.28, 8.05, 0.36, "The Rules", size=18, bold=True, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    for (y, bh), line in zip(bands(1.72, 4.95, len(rules), gap=0.08), rules):
+        in_box(d, s, ML + 0.18, y, 7.70, bh, line, size=15, color=BODY, align="left", ml=0.08, mr=0.08)
+    right_x = ML + 8.05 + 0.18
+    right_w = CONTENT_W - 8.05 - 0.18
+    upper, lower = bands(1.16, 5.70, 2, gap=0.14)
     block(
-        d, s, 8.65, 1.18, 4.26, 2.55, "Which contract",
-        "Fade the call wall\nwith a put.\n\nFade the put wall\nwith a call.",
-        accent=TEAL, ts=16, bs=16,
+        d, s, right_x, upper[0], right_w, upper[1], "Which contract",
+        "Fade the call wall with a put.\n\nFade the put wall with a call.",
+        accent=TEAL, ts=16, bs=16, align="center",
     )
     block(
-        d, s, 8.65, 3.90, 4.26, 2.83, "If it holds outside",
-        "A close outside is not\nyour entry here.\n\nIf that close holds,\nthe regime likely\nchanged. Rebuild.\nDo not chase it\non this plan.",
-        accent=AMBER, ts=16, bs=15,
+        d, s, right_x, lower[0], right_w, lower[1], "If it holds outside",
+        "A close outside is not your entry here.\n\nIf that close holds, the regime likely changed. Rebuild. Do not chase it on this plan.",
+        accent=AMBER, ts=16, bs=15, align="center",
     )
 
 
 def slide_pos_candle(d: Deck) -> None:
     s = d.chrome("Playbook", "What the rejection has to look like")
-    d.panel(s, ML, 1.16, 8.35, 5.60)
-    d.stamp(s, 6.15, 1.30, "ILLUSTRATIVE")
-    # call wall near top, put wall near bottom
-    d.hline(s, 0.70, 2.15, 5.3, CYAN, 0.03)
-    d.hline(s, 0.70, 5.55, 5.3, PURPLE, 0.03)
-    d.text(s, 0.75, 1.78, 2.2, 0.30, "Call wall", size=13, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 0.75, 5.68, 2.2, 0.30, "Put wall", size=13, bold=True, color=PURPLE, ml=0, mr=0, mt=0, mb=0)
-    # rejection at call wall: wick above line, close below line
-    d.candle(s, 2.15, 1.70, 3.55, 2.85, 3.15, TEAL)
-    d.text(s, 2.50, 1.58, 2.7, 0.30, "Stop beyond this high", size=12, color=CORAL, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 2.55, 2.95, 2.6, 0.55, "Enter on this\nclose, inside", size=13, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-    # rejection at put wall
-    d.candle(s, 4.55, 4.15, 6.15, 4.85, 5.15, TEAL)
-    d.text(s, 4.95, 4.72, 2.7, 0.60, "Enter on this\nclose, inside", size=13, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 4.95, 6.20, 3.0, 0.30, "Stop beyond this low", size=12, color=CORAL, ml=0, mr=0, mt=0, mb=0)
+    top, height = 1.16, 5.70
+    lw = 8.20
+    rw = CONTENT_W - lw - 0.18
+    rx = ML + lw + 0.18
+    d.panel(s, ML, top, lw, height)
+    d.stamp(s, ML + lw - 2.15, top + 0.14, "ILLUSTRATIVE")
+    line_x = ML + 0.40
+    line_w = 5.15
+    call_y = top + 0.95
+    put_y = top + height - 0.85
+    d.hline(s, line_x, call_y, line_w, CYAN, 0.03)
+    d.hline(s, line_x, put_y, line_w, PURPLE, 0.03)
+    d.text(s, line_x, call_y - 0.34, 2.2, 0.30, "Call Wall", size=13, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, line_x, put_y - 0.36, 2.2, 0.30, "Put Wall", size=13, bold=True, color=PURPLE, ml=0, mr=0, mt=0, mb=0)
+    cx = line_x + line_w * 0.42
+    d.candle(s, cx, call_y - 0.42, call_y + 1.20, call_y + 0.42, call_y + 0.78, TEAL, body=0.26)
+    d.text(s, cx + 0.40, call_y - 0.52, 2.8, 0.28, "Stop Beyond This High", size=12, bold=True, color=CORAL, ml=0, mr=0, mt=0, mb=0)
+    in_box(d, s, cx + 0.45, call_y + 0.28, 2.50, 0.75, "Enter on This\nClose, Inside", size=14, color=TEAL, align="left", ml=0, mr=0)
+    d.candle(s, cx, put_y - 1.35, put_y + 0.36, put_y - 0.78, put_y - 0.42, TEAL, body=0.26)
+    in_box(d, s, cx + 0.45, put_y - 1.05, 2.50, 0.70, "Enter on This\nClose, Inside", size=14, color=TEAL, align="left", ml=0, mr=0)
+    d.text(s, cx + 0.40, put_y + 0.42, 2.8, 0.28, "Stop Beyond This Low", size=12, bold=True, color=CORAL, ml=0, mr=0, mt=0, mb=0)
     block(
-        d, s, 8.95, 1.16, 3.96, 5.60, "The close decides",
-        "The wick can leave\nthe range.\n\nThe body has to finish\nback inside.\n\nA close outside is not\na fade.\n\nThe stop sits beyond\nthe rejection extreme.\nA wick through the stop\nis not the exit.\nA later close through\nit is.",
-        accent=TEAL, ts=16, bs=14,
+        d, s, rx, top, rw, height, "The close decides",
+        "The wick can leave the range.\n\nThe body has to finish back inside.\n\nA close outside is not a fade.\n\nThe stop sits beyond the rejection extreme. A wick through the stop is not the exit. A later close through it is.",
+        accent=TEAL, ts=16, bs=15, align="center",
     )
 
 
@@ -1551,40 +1819,51 @@ def slide_neg_play(d: Deck) -> None:
         "6   You exit if a later 4h close comes back inside.",
         "7   Do not fade the first touch.",
     ]
-    d.panel(s, ML, 1.18, 8.05, 5.55, accent=CORAL)
-    d.text(s, 0.64, 1.36, 7.6, 0.36, "The rules", size=18, bold=True, color=CORAL, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 0.64, 1.85, 7.6, 4.55, "\n".join(rules), size=16, color=BODY, ml=0, mr=0, mt=0, mb=0, spacing=1.22)
+    d.panel(s, ML, 1.16, 8.05, 5.70, accent=CORAL)
+    d.text(s, ML, 1.28, 8.05, 0.36, "The Rules", size=18, bold=True, color=CORAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    for (y, bh), line in zip(bands(1.72, 4.95, len(rules), gap=0.08), rules):
+        in_box(d, s, ML + 0.18, y, 7.70, bh, line, size=15, color=BODY, align="left", ml=0.06, mr=0.08)
+    right_x = ML + 8.05 + 0.18
+    right_w = CONTENT_W - 8.05 - 0.18
+    upper, lower = bands(1.16, 5.70, 2, gap=0.14)
     block(
-        d, s, 8.65, 1.18, 4.26, 2.55, "Which contract",
-        "Break up: long call,\nor a call debit spread.\n\nBreak down: long put,\nor a put debit spread.",
-        accent=CORAL, ts=16, bs=16,
+        d, s, right_x, upper[0], right_w, upper[1], "Which contract",
+        "Break up: long call, or a call debit spread.\n\nBreak down: long put, or a put debit spread.",
+        accent=CORAL, ts=16, bs=16, align="center",
     )
     block(
-        d, s, 8.65, 3.90, 4.26, 2.83, "If the break is the flip",
-        "A normal negative break\nstays under the flip.\n\nIf the close also crosses\nthe flip, a hold means\nthe regime likely changed.\nRe-read before the\nnext trade.",
-        accent=AMBER, ts=16, bs=15,
+        d, s, right_x, lower[0], right_w, lower[1], "If the break is the flip",
+        "A normal negative break stays under the flip.\n\nIf the close also crosses the flip, a hold means the regime likely changed. Re-read before the next trade.",
+        accent=AMBER, ts=16, bs=15, align="center",
     )
 
 
 def slide_neg_candle(d: Deck) -> None:
     s = d.chrome("Playbook", "What the break has to look like")
-    d.panel(s, ML, 1.16, 8.35, 5.60)
-    d.stamp(s, 6.15, 1.32, "ILLUSTRATIVE")
-    d.hline(s, 0.75, 2.55, 5.4, CYAN, 0.03)
-    d.hline(s, 0.75, 5.15, 5.4, PURPLE, 0.03)
-    d.text(s, 0.80, 2.18, 2.2, 0.30, "Call wall", size=13, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 0.80, 5.28, 2.2, 0.30, "Put wall", size=13, bold=True, color=PURPLE, ml=0, mr=0, mt=0, mb=0)
-    # upside break candle closes above the call wall
-    d.candle(s, 2.35, 1.55, 3.35, 1.80, 2.15, CORAL)
-    d.text(s, 2.75, 1.48, 2.8, 0.70, "4h close\nthrough. Enter.", size=14, color=CORAL, ml=0, mr=0, mt=0, mb=0)
-    # downside break
-    d.candle(s, 5.15, 4.35, 6.25, 5.55, 5.90, CORAL)
-    d.text(s, 5.50, 5.35, 2.6, 0.70, "4h close\nthrough. Enter.", size=14, color=CORAL, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 0.85, 3.45, 4.3, 0.70, "Inside the range:\nno trade.", size=15, color=DIM, ml=0, mr=0, mt=0, mb=0)
+    top, height = 1.16, 5.70
+    lw = 8.20
+    rw = CONTENT_W - lw - 0.18
+    rx = ML + lw + 0.18
+    d.panel(s, ML, top, lw, height)
+    d.stamp(s, ML + lw - 2.15, top + 0.14, "ILLUSTRATIVE")
+    line_x = ML + 0.40
+    line_w = 5.15
+    call_y = top + 1.25
+    put_y = top + height - 1.15
+    d.hline(s, line_x, call_y, line_w, CYAN, 0.03)
+    d.hline(s, line_x, put_y, line_w, PURPLE, 0.03)
+    d.text(s, line_x, call_y - 0.34, 2.2, 0.30, "Call Wall", size=13, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, line_x, put_y + 0.08, 2.2, 0.30, "Put Wall", size=13, bold=True, color=PURPLE, ml=0, mr=0, mt=0, mb=0)
+    cx = line_x + line_w * 0.42
+    d.candle(s, cx, call_y - 0.85, call_y + 0.85, call_y - 0.62, call_y - 0.28, CORAL, body=0.26)
+    in_box(d, s, cx + 0.40, call_y - 0.85, 2.6, 0.80, "4h Close\nThrough. Enter.", size=14, color=CORAL, align="left", ml=0, mr=0)
+    d.candle(s, cx, put_y - 0.85, put_y + 0.70, put_y + 0.22, put_y + 0.52, CORAL, body=0.26)
+    in_box(d, s, cx + 0.40, put_y + 0.05, 2.6, 0.80, "4h Close\nThrough. Enter.", size=14, color=CORAL, align="left", ml=0, mr=0)
+    in_box(d, s, line_x, (call_y + put_y) / 2 - 0.40, 2.3, 0.80, "Inside the Range:\nNo Trade.", size=15, color=DIM, align="center", ml=0, mr=0)
     block(
-        d, s, 8.95, 1.16, 3.96, 5.60, "The failed break",
-        "You are wrong if a\nlater 4h candle closes\nback inside the range.\n\nThat is the stop.\n\nA wick back inside\nis not the exit.\nThe close is.\n\nHard loss is still\nthe debit, if the\noption goes to zero.",
-        accent=CORAL, ts=16, bs=14,
+        d, s, rx, top, rw, height, "The failed break",
+        "You are wrong if a later 4h candle closes back inside the range.\n\nThat is the stop.\n\nA wick back inside is not the exit. The close is.\n\nHard loss is still the debit, if the option goes to zero.",
+        accent=CORAL, ts=16, bs=15, align="center",
     )
 
 
@@ -1598,7 +1877,7 @@ def slide_poke(d: Deck) -> None:
     d.candle(s, 2.35, 2.15, 4.15, 3.15, 3.45, DIM)
     d.candle(s, 3.55, 3.05, 4.35, 3.35, 3.85, DIM)
     d.text(s, 4.15, 3.20, 2.1, 1.15, "Pushes out.\nCloses back in.\nNext bar stays in.", size=14, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 0.70, 4.75, 5.5, 0.50, "Old plan stands. No chase.", size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, 0.70, 4.75, 5.5, 0.50, "Old Plan Stands. No Chase.", size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
 
     d.panel(s, 6.76, 1.18, 6.15, 4.35)
     d.stamp(s, 6.94, 1.32, "ILLUSTRATIVE")
@@ -1608,7 +1887,7 @@ def slide_poke(d: Deck) -> None:
     d.candle(s, 8.35, 1.95, 3.85, 2.25, 2.65, TEAL)
     d.candle(s, 9.70, 1.85, 3.15, 2.15, 2.55, TEAL)
     d.text(s, 10.15, 3.55, 2.4, 1.05, "Closes out.\nThe next close\nstays out.", size=14, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 7.05, 4.75, 5.5, 0.50, "Regime likely changed.", size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, 7.05, 4.75, 5.5, 0.50, "Regime Likely Changed.", size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
 
     d.panel(s, ML, 5.70, CONTENT_W, 1.10, accent=AMBER)
     d.text(
@@ -1629,8 +1908,8 @@ def slide_rebuild(d: Deck) -> None:
     for i, (num, title, body) in enumerate(steps):
         x = ML + (i % 4) * 3.15
         d.panel(s, x, 1.22, 3.00, 3.15, accent=AMBER)
-        d.text(s, x + 0.16, 1.40, 2.7, 0.40, num, size=20, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
-        d.text(s, x + 0.16, 1.90, 2.7, 0.45, title, size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+        d.text(s, x, 1.40, 2.7, 0.40, num, size=20, bold=True, color=AMBER, align="center", ml=0.1, mr=0.1, mt=0, mb=0)
+        d.text(s, x + 0.12, 1.86, 2.46, 0.50, title_case(title), size=16, bold=True, color=TEXT, align="center", ml=0, mr=0, mt=0, mb=0)
         d.text(s, x + 0.16, 2.45, 2.7, 1.65, body, size=14, color=BODY, ml=0, mr=0, mt=0, mb=0)
     d.panel(s, ML, 4.58, CONTENT_W, 2.18, accent=CORAL)
     d.text(
@@ -1642,43 +1921,50 @@ def slide_rebuild(d: Deck) -> None:
 
 def slide_alerts(d: Deck) -> None:
     s = d.chrome("Entries", "Alerts fire on the close")
-    d.panel(s, ML, 1.18, 6.15, 4.15)
-    d.text(s, 0.64, 1.36, 5.6, 0.36, "Touch. No alert.", size=18, bold=True, color=CORAL, ml=0, mr=0, mt=0, mb=0)
-    d.hline(s, 0.80, 2.55, 3.4, AMBER, 0.028)
-    d.text(s, 0.85, 2.18, 1.4, 0.30, "Level", size=13, color=AMBER, ml=0, mr=0, mt=0, mb=0)
-    d.candle(s, 2.35, 1.90, 4.15, 3.05, 3.45, DIM)
-    d.text(s, 2.85, 2.85, 3.3, 1.15, "The wick tags\nthe level.\nThe close is back.\nYou do nothing.", size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
+    top, height = 1.16, 4.38
+    (lx, lw), (rx, rw) = cols(2)
+    d.panel(s, lx, top, lw, height)
+    d.text(s, lx, top + 0.14, lw, 0.36, "Touch. No Alert.", size=18, bold=True, color=CORAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    level = top + height * 0.48
+    d.hline(s, lx + 0.35, level, lw * 0.46, AMBER, 0.028)
+    d.text(s, lx + 0.40, level - 0.34, 1.3, 0.28, "Level", size=13, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
+    d.candle(s, lx + lw * 0.32, level - 0.85, level + 1.15, level + 0.35, level + 0.70, DIM, body=0.26)
+    in_box(d, s, lx + lw * 0.50, top + 0.62, lw * 0.46, height - 0.90, "The wick tags the level.\nThe close is back.\nYou do nothing.", size=16, color=BODY, align="left", ml=0.08, mr=0.1)
 
-    d.panel(s, 6.76, 1.18, 6.15, 4.15)
-    d.text(s, 7.00, 1.36, 5.6, 0.36, "Close. Alert.", size=18, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-    d.hline(s, 7.10, 3.05, 1.25, AMBER, 0.028)
-    d.text(s, 7.15, 2.68, 1.2, 0.30, "Level", size=13, color=AMBER, ml=0, mr=0, mt=0, mb=0)
-    d.candle(s, 7.85, 1.75, 4.05, 2.15, 2.55, TEAL)
-    d.text(s, 8.55, 2.35, 3.9, 1.35, "The candle finishes\nthrough the level.\nThen you check\nthe rest.", size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
+    d.panel(s, rx, top, rw, height)
+    d.text(s, rx, top + 0.14, rw, 0.36, "Close. Alert.", size=18, bold=True, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.hline(s, rx + 0.35, level, rw * 0.46, AMBER, 0.028)
+    d.text(s, rx + 0.40, level - 0.34, 1.3, 0.28, "Level", size=13, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
+    d.candle(s, rx + rw * 0.32, level - 1.15, level + 0.85, level - 0.85, level - 0.48, TEAL, body=0.26)
+    in_box(d, s, rx + rw * 0.50, top + 0.62, rw * 0.46, height - 0.90, "The candle finishes through the level.\nThen you check the rest.", size=16, color=BODY, align="left", ml=0.08, mr=0.1)
 
-    d.panel(s, ML, 5.52, CONTENT_W, 1.28, accent=BLUE)
-    d.text(
-        s, ML + 0.24, 5.68, CONTENT_W - 0.48, 0.98,
+    d.panel(s, ML, 5.70, CONTENT_W, 1.14, accent=BLUE)
+    in_box(
+        d, s, ML + 0.24, 5.70, CONTENT_W - 0.48, 1.14,
         "4h or daily. Those are the swing closes. Never an intraday touch.\nIn TradingView, fire the alert on the bar close. A crossing alert can fire mid-candle. That is a touch.",
-        size=16, color=BODY, ml=0, mr=0, mt=0, mb=0,
+        size=16, color=BODY, align="left", ml=0.04, mr=0.06,
     )
 
 
 def slide_watch(d: Deck) -> None:
     s = d.chrome("Entries", "A watch alert, then an entry alert")
-    d.panel(s, ML, 1.18, CONTENT_W, 3.15)
-    d.stamp(s, 0.58, 1.32, "ILLUSTRATIVE")
-    d.text(s, 2.55, 1.32, 6.0, 0.30, "A level at 100. Not the SPY book.", size=14, color=DIM, ml=0, mr=0, mt=0, mb=0)
-    # price line
-    d.hline(s, 1.3, 2.85, 10.5, LINE, 0.02)
-    # zone band
-    d.rect(s, 7.55, 2.55, 1.55, 0.62, AMBER_DIM, line=AMBER, line_w=1.15)
-    d.text(s, 7.55, 2.15, 1.55, 0.32, "Band", size=13, bold=True, color=AMBER, align="center", ml=0, mr=0, mt=0, mb=0)
-    d.oval(s, 9.55, 2.74, 0.22, 0.22, TEAL)
-    d.text(s, 8.85, 3.30, 2.3, 0.55, "Entry alert\non the close", size=14, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-    d.oval(s, 4.40, 2.74, 0.22, 0.22, BLUE)
-    d.text(s, 2.55, 3.30, 3.3, 0.70, "Watch alert\n1% to 2% before", size=14, color=BLUE, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 1.15, 2.15, 2.2, 0.32, "You are here", size=13, color=DIM, ml=0, mr=0, mt=0, mb=0)
+    d.panel(s, ML, 1.16, CONTENT_W, 3.15)
+    d.stamp(s, ML + 0.16, 1.28, "ILLUSTRATIVE")
+    d.text(s, ML + 2.2, 1.30, 8.2, 0.30, "A Level at 100. Not the SPY Book.", size=14, color=DIM, align="center", ml=0, mr=0, mt=0, mb=0)
+    line_y = 2.35
+    d.hline(s, 1.15, line_y, 11.05, LINE, 0.02)
+    marks = [
+        (2.15, DIM, "You Are Here", ""),
+        (5.55, BLUE, "Watch Alert", "1% to 2% Before"),
+        (8.70, AMBER, "Band", ""),
+        (11.05, TEAL, "Entry Alert", "On the Close"),
+    ]
+    d.rect(s, 8.15, line_y - 0.28, 1.15, 0.56, AMBER_DIM, line=AMBER, line_w=1.15)
+    for x, color, title, sub in marks:
+        if title != "Band":
+            d.oval(s, x - 0.11, line_y - 0.11, 0.22, 0.22, color)
+        label = title if sub == "" else title + "\n" + sub
+        in_box(d, s, x - 1.15, line_y + 0.28, 2.30, 0.85, label, size=14, bold=True, color=color, align="center", ml=0.02, mr=0.02)
     block(
         d, s, ML, 4.48, 6.15, 2.32, "Watch means look",
         "You do not buy it.\nYou open the chart.\nThe entry alert is the\n4h or daily close,\nin the direction of\nthe playbook.",
@@ -1694,12 +1980,12 @@ def slide_watch(d: Deck) -> None:
 def slide_bands(d: Deck) -> None:
     s = d.chrome("Entries", "The zone is a band. Stay quiet inside it")
     d.panel(s, ML, 1.18, 6.15, 3.35)
-    d.text(s, 0.64, 1.36, 5.6, 0.34, "A hairline gets wicked", size=16, bold=True, color=CORAL, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, 0.64, 1.36, 5.6, 0.34, "A Hairline Gets Wicked", size=16, bold=True, color=CORAL, ml=0, mr=0, mt=0, mb=0)
     d.hline(s, 1.4, 2.55, 4.4, CORAL, 0.02)
     d.candle(s, 3.4, 1.90, 3.55, 2.85, 3.15, DIM)
     d.text(s, 0.70, 3.35, 5.5, 0.85, "One tick through the strike looks\nlike a break. The close decides.", size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
     d.panel(s, 6.76, 1.18, 6.15, 3.35)
-    d.text(s, 7.00, 1.36, 5.6, 0.34, "A band covers the chop", size=16, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, 7.00, 1.36, 5.6, 0.34, "A Band Covers the Chop", size=16, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
     d.rect(s, 8.15, 2.15, 2.6, 0.85, TEAL_DIM, line=TEAL, line_w=1.25)
     d.candle(s, 9.35, 2.25, 2.90, 2.40, 2.70, TEAL)
     d.text(s, 7.00, 3.20, 5.6, 1.05, "Inside the band: no entry,\nand no stop-out on a wick.", size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
@@ -1723,16 +2009,10 @@ def slide_confirm(d: Deck) -> None:
         "Use it to time the entry\nonce the 4h idea is set.\n\nA 15m break against the\n4h plan is not a trade.\nThe 4h decides the idea.",
         accent=BLUE, ts=18, bs=16,
     )
-    d.text(s, ML, 3.78, CONTENT_W, 0.36, "Convergence. These should lean the same way.", size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    chips = [
-        (ML, "Price action"),
-        (2.85, "20 / 50 / 200"),
-        (5.35, "Gamma level"),
-        (8.05, "News"),
-        (10.15, "Flow"),
-    ]
-    for x, label in chips:
-        d.chip(s, x, 4.25, 2.15 if label != "20 / 50 / 200" else 2.30, 0.42, label, NEST, TEXT, size=14)
+    d.text(s, ML, 3.78, CONTENT_W, 0.36, "Convergence. These Should Lean the Same Way.", size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+    chips = ["Price Action", "20 / 50 / 200", "Gamma Level", "News", "Flow"]
+    for (x, w), label in zip(cols(5, gap=0.16), chips):
+        d.chip(s, x, 4.22, w, 0.46, label, NEST, TEXT, size=14)
     d.panel(s, ML, 4.90, CONTENT_W, 1.85, accent=AMBER)
     d.text(
         s, ML + 0.24, 5.08, CONTENT_W - 0.48, 1.50,
@@ -1743,21 +2023,23 @@ def slide_confirm(d: Deck) -> None:
 
 def slide_mas(d: Deck) -> None:
     s = d.chrome("Averages", "The 20, the 50, and the 200")
-    d.panel(s, ML, 1.18, 7.55, 5.55)
-    d.stamp(s, 0.58, 1.34, "ILLUSTRATIVE")
-    d.text(s, 0.62, 1.74, 6.8, 0.36, "Not a real ticker. Three averages, and one wall.", size=14, color=DIM, ml=0, mr=0, mt=0, mb=0)
-    # three gently separated horizontal lines
-    d.hline(s, 0.85, 2.55, 6.3, "6E7C90", 0.02)
-    d.text(s, 0.90, 2.20, 1.3, 0.28, "200", size=14, bold=True, color="A8B3C2", ml=0, mr=0, mt=0, mb=0)
-    d.hline(s, 0.85, 3.55, 6.3, BLUE, 0.025)
-    d.text(s, 0.90, 3.20, 1.3, 0.28, "50", size=14, bold=True, color=BLUE, ml=0, mr=0, mt=0, mb=0)
-    d.hline(s, 0.85, 4.55, 6.3, TEAL, 0.028)
-    d.text(s, 0.90, 4.20, 1.3, 0.28, "20", size=14, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-    d.hline(s, 0.85, 4.55, 6.3, CYAN, 0.012)
-    d.text(s, 4.4, 4.70, 2.6, 0.40, "Wall on the 20", size=14, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
-    d.oval(s, 4.05, 4.46, 0.20, 0.20, CYAN)
+    top, height = 1.16, 5.70
+    lw = 7.55
+    d.panel(s, ML, top, lw, height)
+    d.stamp(s, ML + 0.16, top + 0.14, "ILLUSTRATIVE")
+    d.text(s, ML + 0.2, top + 0.52, lw - 0.4, 0.32, "Not a Real Ticker. Three Averages, and One Wall.", size=14, color=DIM, align="center", ml=0, mr=0, mt=0, mb=0)
+    rows_ma = [
+        (top + 1.55, "6E7C90", "200", "A8B3C2"),
+        (top + 2.85, BLUE, "50", BLUE),
+        (top + 4.15, TEAL, "20", TEAL),
+    ]
+    for y, color, label, fg in rows_ma:
+        d.hline(s, ML + 0.45, y, lw - 0.90, color, 0.026)
+        d.text(s, ML + 0.50, y - 0.34, 1.2, 0.28, label, size=14, bold=True, color=fg, ml=0, mr=0, mt=0, mb=0)
+    d.oval(s, ML + lw * 0.48, rows_ma[2][0] - 0.10, 0.20, 0.20, CYAN)
+    d.text(s, ML + lw * 0.48 + 0.32, rows_ma[2][0] + 0.18, 2.8, 0.30, "Wall on the 20", size=14, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
     block(
-        d, s, 8.15, 1.18, 4.76, 5.55, "What each one is",
+        d, s, ML + 7.55 + 0.18, 1.16, CONTENT_W - 7.55 - 0.18, 5.70, "What each one is",
         "200: the tide. On the\n4h it is the larger swing.\n\n50: the swing itself.\n\n20: the short push.\n\nSame three on the 15m,\nfor the entry only.\n\nBest lineup: the wall and\none average in the same\nplace, and the close agrees.\n\nAn average is not a wall.\nA wall is not an average.",
         accent=BLUE, ts=16, bs=15,
     )
@@ -1779,17 +2061,19 @@ def slide_side(d: Deck) -> None:
 
 def slide_fork(d: Deck) -> None:
     s = d.chrome("Contract", "Single contract, or a debit spread")
-    d.panel(s, ML, 1.18, 4.00, 5.55, accent=AMBER)
-    d.text(s, 0.64, 1.42, 3.6, 1.15, "Ask three\nthings", size=26, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 0.64, 2.85, 3.6, 3.3, "How fast is\nthe move?\n\nIs IV cheap\nor rich?\n\nCan you\nwatch it?", size=18, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.arrow(s, 4.55, 3.55, 0.40, 0.32, TEAL, "right")
+    d.panel(s, ML, 1.16, 4.00, 5.70, accent=AMBER)
+    d.text(s, ML, 1.32, 4.00, 0.90, "Ask Three\nThings", size=26, bold=True, color=TEXT, align="center", ml=0.16, mr=0.16, mt=0, mb=0)
+    questions = ["How fast is\nthe move?", "Is IV cheap\nor rich?", "Can you\nwatch it?"]
+    for (y, bh), line in zip(bands(2.40, 4.20, 3, gap=0.12), questions):
+        in_box(d, s, ML + 0.2, y, 3.60, bh, line, size=18, color=BODY, align="center", ml=0.06, mr=0.06)
+    d.arrow(s, 4.48, 3.70, 0.36, 0.28, TEAL, "right")
     block(
-        d, s, 5.15, 1.18, 7.76, 2.55, "Single long call or put",
+        d, s, 5.02, 1.16, CONTENT_W - (5.02 - ML), 2.68, "Single long call or put",
         "Fast or large move. IV is cheap. You can manage the trade.\nRisk is the premium. The working exit is a candle close.",
         accent=TEAL, ts=20, bs=16,
     )
     block(
-        d, s, 5.15, 3.95, 7.76, 2.78, "Debit spread",
+        d, s, 5.02, 4.00, CONTENT_W - (5.02 - ML), 2.86, "Debit spread",
         "Slower move. IV is rich. Or you cannot watch it.\nYou pay a smaller debit. You cap the gain at the short strike.\nThe short leg is covered by the long leg. Not a naked short.",
         accent=BLUE, ts=20, bs=16,
     )
@@ -1798,15 +2082,15 @@ def slide_fork(d: Deck) -> None:
 def slide_single(d: Deck) -> None:
     s = d.chrome("Contract", "When the single contract fits")
     points = [
-        (TEAL, "Fast or large", "You need the option to keep paying if price runs past a wall."),
-        (BLUE, "IV is cheap", "You are not paying a rich premium for a move that may be slow."),
-        (AMBER, "You can manage it", "You can take the candle-close exit. If you cannot watch, use the spread."),
+        (TEAL, "Fast or Large", "You need the option to keep paying if price runs past a wall."),
+        (BLUE, "IV Is Cheap", "You are not paying a rich premium for a move that may be slow."),
+        (AMBER, "You Can Manage It", "You can take the candle-close exit. If you cannot watch, use the spread."),
     ]
     for i, (accent, title, body) in enumerate(points):
         y = 1.18 + i * 1.45
         d.panel(s, ML, y, CONTENT_W, 1.32, accent=accent)
-        d.text(s, ML + 0.22, y + 0.14, 3.3, 1.00, title, size=18, bold=True, color=accent, anchor="middle", ml=0, mr=0, mt=0, mb=0)
-        d.text(s, ML + 3.6, y + 0.22, 8.5, 0.90, body, size=16, color=BODY, anchor="middle", ml=0, mr=0, mt=0, mb=0)
+        in_box(d, s, ML + 0.16, y, 3.45, 1.32, title, size=18, bold=True, color=accent, align="center", ml=0.06, mr=0.06)
+        in_box(d, s, ML + 3.7, y, CONTENT_W - 3.9, 1.32, body, size=16, color=BODY, align="left", ml=0.08, mr=0.1)
     d.panel(s, ML, 5.55, CONTENT_W, 1.22, accent=CORAL)
     d.text(
         s, ML + 0.24, 5.70, CONTENT_W - 0.48, 0.95,
@@ -1839,7 +2123,7 @@ def slide_spread(d: Deck) -> None:
 
 def slide_payoff(d: Deck) -> None:
     s = d.chrome("Example", "Payoff at expiry, single versus spread")
-    d.picture(s, d.charts["payoff"], 0.35, 1.15, 7.35)
+    d.picture_in(s, d.charts["payoff"], ML, 1.14, 7.25, 5.20)
     call = money(FACTS["call_25"])
     spr = money(FACTS["spread_25"])
     gain = money(FACTS["max_gain_25"])
@@ -1869,17 +2153,16 @@ def slide_rich_iv(d: Deck) -> None:
         ("IV 40%", high, CORAL),
     ]
     # header row labels
-    labels = [("ATM call", "call"), ("Spread debit", "spread"), ("Spread max gain", "max_gain")]
-    d.text(s, ML, 1.70, 3.1, 0.40, "", size=14, color=DIM, ml=0, mr=0, mt=0, mb=0)
+    labels = [("ATM Call", "call"), ("Spread Debit", "spread"), ("Spread Max Gain", "max_gain")]
     for i, (name, key) in enumerate(labels):
-        y = 2.25 + i * 1.35
-        d.text(s, ML, y, 3.3, 1.05, name, size=18, bold=True, color=TEXT, anchor="middle", ml=0, mr=0, mt=0, mb=0)
+        y = 2.20 + i * 1.40
+        in_box(d, s, ML, y, 3.15, 1.22, name, size=16, bold=True, color=TEXT, align="center", ml=0.04, mr=0.06)
         for j, (title, data, accent) in enumerate(cols_iv):
-            x = 3.9 + j * 4.45
+            x = 3.75 + j * 4.55
             if i == 0:
-                d.text(s, x, 1.65, 4.1, 0.36, title, size=16, bold=True, color=accent, ml=0, mr=0, mt=0, mb=0)
-            d.panel(s, x, y, 4.15, 1.15, accent=accent)
-            d.text(s, x + 0.2, y, 3.75, 1.15, money(data[key]), size=28, bold=True, color=TEXT, anchor="middle", ml=0, mr=0, mt=0, mb=0)
+                d.text(s, x, 1.62, 4.35, 0.40, title, size=16, bold=True, color=accent, align="center", ml=0, mr=0, mt=0, mb=0)
+            d.panel(s, x, y, 4.35, 1.22, accent=accent)
+            in_box(d, s, x, y, 4.35, 1.22, money(data[key]), size=28, bold=True, color=TEXT, align="center", ml=0.08, mr=0.08)
     d.text(
         s, ML, 6.40, CONTENT_W, 0.60,
         "The single call more than doubles. The spread debit rises less. Rich IV is why the spread is the fit when the move is not a fast one you must keep open.",
@@ -1909,28 +2192,26 @@ def slide_place(d: Deck) -> None:
 
 def slide_delta_bands(d: Deck) -> None:
     s = d.chrome("Delta", "High delta, mid delta, low delta")
-    d.picture(s, d.charts["delta"], 0.30, 1.10, 7.15)
-    bands = FACTS["bands"]
-    # bands order is 106, 100, 95. Present high, mid, low by strike descending delta.
-    ordered = sorted(bands, key=lambda b: -b["delta"])
+    d.picture_in(s, d.charts["delta"], ML, 1.16, 6.95, 5.14)
+    band_rows = FACTS["bands"]
+    # band order is 106, 100, 95. Present high, mid, low by strike descending delta.
+    ordered = sorted(band_rows, key=lambda b: -b["delta"])
     names = ["High", "Mid", "Low"]
     gloss = [
         "Costs more. Moves like the stock.",
         "0.40 to 0.60. Reacts fast.",
         "Cheap. Needs a big move. Often expires worthless.",
     ]
-    for i, (band, name, line) in enumerate(zip(ordered, names, gloss)):
-        y = 1.18 + i * 1.75
-        d.panel(s, 7.55, y, 5.35, 1.62)
-        d.text(
-            s, 7.73, y + 0.10, 5.05, 0.36,
-            f"{name}    {band['delta']:.2f}    strike {band['k']:.0f}",
-            size=15, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0,
-        )
-        d.text(
-            s, 7.73, y + 0.50, 5.05, 0.95,
-            f"{line}\nAbout {band['price']:.2f} a share. About {band['shares']:.0f} shares of exposure.",
-            size=14, color=BODY, ml=0, mr=0, mt=0, mb=0,
+    for i, ((y, bh), band, name, line) in enumerate(zip(bands(1.16, 5.14, 3, gap=0.14), ordered, names, gloss)):
+        d.panel(s, 7.55, y, 5.36, bh)
+        stack_box(
+            d, s, 7.55, y, 5.36, bh,
+            [
+                (f"{name}    {band['delta']:.2f}    Strike {band['k']:.0f}", 15, True, TEXT),
+                (f"{line}\nAbout {band['price']:.2f} a share. About {band['shares']:.0f} shares of exposure.", 14, False, BODY),
+            ],
+            align="center",
+            gap=0.06,
         )
     d.text(
         s, ML, 6.62, CONTENT_W, 0.40,
@@ -1947,12 +2228,19 @@ def slide_itm(d: Deck) -> None:
         "Delta (ignoring the sign) is roughly the chance the option finishes in the money.",
         size=22, bold=True, color=TEXT, anchor="middle", ml=0, mr=0, mt=0, mb=0,
     )
-    d.panel(s, ML, 2.72, 6.15, 2.35, accent=TEAL)
-    d.text(s, 0.66, 2.90, 5.7, 0.40, "Call delta +0.45", size=20, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 0.66, 3.45, 5.7, 1.20, "Ignore the plus.\nRead it as about a 45 percent chance.", size=18, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.panel(s, 6.76, 2.72, 6.15, 2.35, accent=CORAL)
-    d.text(s, 7.00, 2.90, 5.7, 0.40, "Put delta -0.45", size=20, bold=True, color=CORAL, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 7.00, 3.45, 5.7, 1.20, "Ignore the minus.\nSame read. About 45 percent.", size=18, color=BODY, ml=0, mr=0, mt=0, mb=0)
+    (lx, lw), (rx, rw) = cols(2)
+    d.panel(s, lx, 2.68, lw, 2.45, accent=TEAL)
+    stack_box(
+        d, s, lx, 2.68, lw, 2.45,
+        [("Call Delta +0.45", 20, True, TEAL), ("Ignore the plus.\nRead it as about a 45 percent chance.", 18, False, BODY)],
+        gap=0.12,
+    )
+    d.panel(s, rx, 2.68, rw, 2.45, accent=CORAL)
+    stack_box(
+        d, s, rx, 2.68, rw, 2.45,
+        [("Put Delta -0.45", 20, True, CORAL), ("Ignore the minus.\nSame read. About 45 percent.", 18, False, BODY)],
+        gap=0.12,
+    )
     d.panel(s, ML, 5.25, CONTENT_W, 1.52, accent=BLUE)
     d.text(
         s, ML + 0.24, 5.42, CONTENT_W - 0.48, 1.20,
@@ -1963,11 +2251,11 @@ def slide_itm(d: Deck) -> None:
 
 def slide_theta(d: Deck) -> None:
     s = d.chrome("Theta", "Theta is decay")
-    d.picture(s, d.charts["decay"], 0.30, 1.12, 7.45)
+    d.picture_in(s, d.charts["decay"], ML, 1.16, 7.45, 5.20)
     start = FACTS["decay"][0]
     end = FACTS["decay"][-1]
     block(
-        d, s, 7.90, 1.18, 5.00, 5.15, "What the curves say",
+        d, s, 8.05, 1.16, CONTENT_W - (8.05 - ML), 5.20, "What the curves say",
         f"Spot held at 100.\nIV 25%. EXAMPLE.\n\nSingle call, 45 days\nto 1 day: {money(start[1])}\nto {money(end[1])}.\n\n100/105 spread:\n{money(start[2])} to\n{money(end[2])}.\n\nThe single gives up\nmore dollars. The curve\nsteepens into expiry.\n\nWith a day left, the 105\ncall is nearly worthless,\nso the two meet.",
         accent=BLUE, ts=16, bs=14,
     )
@@ -1980,12 +2268,12 @@ def slide_theta(d: Deck) -> None:
 
 def slide_crush(d: Deck) -> None:
     s = d.chrome("IV", "IV crush is a fast drop in IV")
-    d.picture(s, d.charts["crush"], 0.40, 1.20, 7.15)
+    d.picture_in(s, d.charts["crush"], ML, 1.16, 7.15, 5.20)
     a = money(FACTS["crush_start"])
     b = money(FACTS["crush_flat"])
     c = money(FACTS["crush_up"])
     block(
-        d, s, 7.75, 1.20, 5.15, 5.15, "The three bars",
+        d, s, 7.75, 1.16, CONTENT_W - (7.75 - ML), 5.20, "The three bars",
         f"14-day ATM call.\nEXAMPLE.\n\nStart, IV 50%:\n{a}\n\nSpot stays 100,\nIV falls to 25%:\n{b}\n\nSpot rises to 102,\nIV falls to 25%:\n{c}\n\nThe stock rose.\nThe call still fell.",
         accent=CORAL, ts=16, bs=15,
     )
@@ -2038,15 +2326,19 @@ def slide_risk(d: Deck) -> None:
         "Every trade, you write the dollars you are willing to lose.\nThis deck will not give you a percent of the account. It will not give you a dollar amount.",
         size=18, color=TEXT, ml=0, mr=0, mt=0, mb=0,
     )
-    d.panel(s, ML, 2.90, 7.7, 2.55, accent=BLUE)
-    d.text(s, 0.66, 3.08, 7.3, 0.40, "The only math", size=16, bold=True, color=BLUE, ml=0, mr=0, mt=0, mb=0)
-    d.text(
-        s, 0.66, 3.55, 7.3, 1.60,
-        "Your dollars\n  /  (option price  x  100)\n  =  contracts",
-        size=22, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0,
+    (lx, lw), (rx, rw) = cols(2, gap=0.18)
+    # The formula needs the wider card. Split 7.7 / 4.6 on the same row edges.
+    lw, rw = 7.55, CONTENT_W - 7.55 - 0.18
+    rx = ML + lw + 0.18
+    d.panel(s, ML, 2.90, lw, 2.55, accent=BLUE)
+    d.text(s, ML, 3.04, lw, 0.34, "The Only Math", size=16, bold=True, color=BLUE, align="center", ml=0, mr=0, mt=0, mb=0)
+    in_box(
+        d, s, ML + 0.2, 3.40, lw - 0.4, 1.85,
+        "Your dollars  /  (option price x 100)  =  contracts",
+        size=20, bold=True, color=TEXT, align="center", ml=0.06, mr=0.06,
     )
     block(
-        d, s, 8.30, 2.90, 4.61, 2.55, "EXAMPLE arithmetic",
+        d, s, rx, 2.90, rw, 2.55, "EXAMPLE arithmetic",
         "You wrote 400.\nDebit is 2.00.\n2.00 x 100 = 200.\n400 / 200 = 2 contracts.\nReplace 400. It is not\na suggestion.",
         accent=AMBER, ts=16, bs=15,
     )
@@ -2059,23 +2351,15 @@ def slide_risk(d: Deck) -> None:
 
 def slide_flow(d: Deck) -> None:
     s = d.chrome("Flow", "Flow, dark pool, and the dollars")
-    block(
-        d, s, ML, 1.18, 4.05, 3.55, "Options flow",
-        "Large prints at a wall\ncarry more weight than\nprints in the middle.\n\nWeight. Not the entry.\nThe close is the entry.",
-        accent=PURPLE, ts=18, bs=16,
-    )
-    block(
-        d, s, 4.65, 1.18, 4.05, 3.55, "Dark pool",
-        "Large stock prints near\na wall add weight to\nthat wall.\n\nSame rule.\nWeight, not a trigger.",
-        accent=BLUE, ts=18, bs=16,
-    )
-    block(
-        d, s, 9.12, 1.18, 3.79, 3.55, "Not a close",
-        "A print does not\nreplace the 4h close,\nthe regime, or the\nwall you already\nmarked.",
-        accent=AMBER, ts=18, bs=16,
-    )
+    flow_cards = [
+        (PURPLE, "Options flow", "Large prints at a wall carry more weight than prints in the middle.\n\nWeight. Not the entry. The close is the entry."),
+        (BLUE, "Dark pool", "Large stock prints near a wall add weight to that wall.\n\nSame rule. Weight, not a trigger."),
+        (AMBER, "Not a close", "A print does not replace the 4h close, the regime, or the wall you already marked."),
+    ]
+    for (x, w), (accent, title, body) in zip(cols(3), flow_cards):
+        block(d, s, x, 1.16, w, 3.55, title, body, accent=accent, ts=18, bs=16, align="center")
     d.panel(s, ML, 4.90, CONTENT_W, 1.85, accent=TEAL)
-    d.text(s, ML + 0.22, 5.05, CONTENT_W - 0.44, 0.36, "Always the dollar premium. Price x contracts x 100.", size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, ML + 0.22, 5.05, CONTENT_W - 0.44, 0.36, "Always the Dollar Premium. Price x contracts x 100.", size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
     d.text(
         s, ML + 0.22, 5.48, CONTENT_W - 0.44, 1.05,
         "EXAMPLE.  2.00 x 500 x 100 = 100,000 dollars.    12.00 x 80 x 100 = 96,000 dollars.\nSimilar money. Very different if you only count contracts. Read the dollars.",
@@ -2135,11 +2419,10 @@ def slide_check(d: Deck) -> None:
         x = ML + col * 6.34
         y = 1.16 + row * 2.85
         d.panel(s, x, y, 6.16, 2.72, accent=TEAL)
-        d.text(s, x + 0.18, y + 0.10, 5.8, 0.34, title, size=16, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-        for j, line in enumerate(items):
-            yy = y + 0.50 + j * 0.40
-            d.rect(s, x + 0.20, yy + 0.06, 0.16, 0.16, None, line=TEAL, line_w=1.25)
-            d.text(s, x + 0.46, yy, 5.5, 0.36, line, size=13, color=BODY, anchor="middle", ml=0, mr=0, mt=0, mb=0)
+        d.text(s, x + 0.16, y + 0.10, 5.84, 0.34, title_case(title), size=16, bold=True, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
+        for (yy, bh), line in zip(bands(y + 0.50, 2.10, len(items), gap=0.04), items):
+            d.rect(s, x + 0.22, yy + (bh - 0.16) / 2, 0.16, 0.16, None, line=TEAL, line_w=1.25)
+            in_box(d, s, x + 0.46, yy, 5.50, bh, line, size=14, color=BODY, align="left", ml=0.04, mr=0.08)
 
 
 def slide_mistakes(d: Deck) -> None:
@@ -2186,15 +2469,15 @@ def slide_gloss_a(d: Deck) -> None:
     for i, (term, line) in enumerate(terms):
         y = 1.16 + i * 0.70
         d.rect(s, ML, y, 2.15, 0.62, NEST)
-        d.text(s, ML, y, 2.15, 0.62, term, size=15, bold=True, color=AMBER, align="center", anchor="middle", ml=0.06, mr=0.06, mt=0, mb=0)
+        d.text(s, ML, y, 2.15, 0.62, title_case(term), size=15, bold=True, color=AMBER, align="center", anchor="middle", ml=0.06, mr=0.06, mt=0, mb=0)
         d.text(s, ML + 2.35, y, 10.0, 0.62, line, size=16, color=BODY, anchor="middle", ml=0.08, mr=0.08, mt=0, mb=0)
 
 
 def slide_gloss_b(d: Deck) -> None:
     s = d.chrome("Glossary", "The levels and the orders")
     terms = [
-        ("Call wall", "Heavy call open interest above spot. Resistance."),
-        ("Put wall", "Heavy put open interest below spot. Support. Longest purple bar under spot."),
+        ("Call Wall", "Heavy call open interest above spot. Resistance."),
+        ("Put Wall", "Heavy put open interest below spot. Support. Longest purple bar under spot."),
         ("Flip", "Where net gamma changes sign. A behavior change. Not support."),
         ("Positive gamma", "Above the flip. Dealers fade the move. Price can range and pin."),
         ("Negative gamma", "Below the flip. Dealers chase. Price can trend and accelerate."),
@@ -2207,14 +2490,25 @@ def slide_gloss_b(d: Deck) -> None:
         ("0DTE", "Expires the same day. Extreme gamma. Extreme theta. Occasional only."),
         ("Candle close", "The bar has finished. The only alert that counts in this deck."),
     ]
-    for i, (term, line) in enumerate(terms):
-        col = 0 if i < 7 else 1
-        row = i if i < 7 else i - 7
-        x = ML + col * 6.30
-        y = 1.14 + row * 0.78
-        d.rect(s, x, y, 6.14, 0.70, CARD, line=LINE, line_w=1.0)
-        d.text(s, x + 0.12, y + 0.04, 5.9, 0.28, term, size=13, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
-        d.text(s, x + 0.12, y + 0.32, 5.9, 0.34, line, size=12, color=BODY, ml=0, mr=0, mt=0, mb=0)
+    left_terms = terms[:6]
+    right_terms = terms[6:12]
+    last = terms[12]
+    pairs = list(zip(left_terms, right_terms))
+    row_top, row_h = 1.14, 0.72
+    gap = 0.08
+    for i, (left, right) in enumerate(pairs):
+        y = row_top + i * (row_h + gap)
+        for col, (term, line) in enumerate((left, right)):
+            x = ML + col * 6.33
+            d.rect(s, x, y, 6.16, row_h, CARD, line=LINE, line_w=1.0)
+            d.text(s, x + 0.14, y + 0.04, 5.88, 0.26, title_case(term), size=13, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
+            d.text(s, x + 0.14, y + 0.30, 5.88, 0.40, line, size=12, color=BODY, anchor="middle", ml=0, mr=0, mt=0, mb=0)
+    if last:
+        y = row_top + len(pairs) * (row_h + gap)
+        term, line = last
+        d.rect(s, ML, y, CONTENT_W, row_h, CARD, line=LINE, line_w=1.0)
+        d.text(s, ML + 0.18, y + 0.04, 3.2, 0.62, title_case(term), size=14, bold=True, color=AMBER, anchor="middle", ml=0, mr=0, mt=0, mb=0)
+        d.text(s, ML + 3.5, y, CONTENT_W - 3.7, row_h, line, size=14, color=BODY, anchor="middle", ml=0.08, mr=0.1, mt=0, mb=0)
 
 
 def slide_one(d: Deck) -> None:
@@ -2243,12 +2537,15 @@ def slide_one(d: Deck) -> None:
         "15m times the entry. 4h decides.",
         "Cash only. No naked short.",
     ]
-    d.panel(s, ML, 1.14, 6.15, 5.20, accent=TEAL)
-    d.text(s, 0.62, 1.26, 5.7, 0.34, "Do it in this order", size=16, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 0.62, 1.68, 5.75, 4.45, "\n".join(left), size=15, color=BODY, ml=0, mr=0, mt=0, mb=0, spacing=1.18)
-    d.panel(s, 6.76, 1.14, 6.15, 5.20, accent=AMBER)
-    d.text(s, 6.96, 1.26, 5.7, 0.34, "Keep these straight", size=16, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 6.96, 1.68, 5.75, 4.45, "\n".join(right), size=15, color=BODY, ml=0, mr=0, mt=0, mb=0, spacing=1.15)
+    (lx, lw), (rx, rw) = cols(2)
+    d.panel(s, lx, 1.14, lw, 5.20, accent=TEAL)
+    d.text(s, lx, 1.26, lw, 0.34, "Do It in This Order", size=16, bold=True, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    for (y, bh), line in zip(bands(1.68, 4.48, len(left), gap=0.04), left):
+        in_box(d, s, lx + 0.16, y, lw - 0.32, bh, line, size=15, color=BODY, align="left", ml=0.06, mr=0.06)
+    d.panel(s, rx, 1.14, rw, 5.20, accent=AMBER)
+    d.text(s, rx, 1.26, rw, 0.34, "Keep These Straight", size=16, bold=True, color=AMBER, align="center", ml=0, mr=0, mt=0, mb=0)
+    for (y, bh), line in zip(bands(1.68, 4.48, len(right), gap=0.02), right):
+        in_box(d, s, rx + 0.16, y, rw - 0.32, bh, line, size=14, color=BODY, align="left", ml=0.06, mr=0.06)
     d.panel(s, ML, 6.48, CONTENT_W, 0.50, accent=None)
     d.text(
         s, ML, 6.48, CONTENT_W, 0.50,
