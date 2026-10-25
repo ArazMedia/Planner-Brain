@@ -690,6 +690,9 @@ _KEEP = {
     "itm": "ITM",
     "otm": "OTM",
     "0dte": "0DTE",
+    "gex": "GEX",
+    "vix": "VIX",
+    "spx": "SPX",
 }
 
 
@@ -869,23 +872,23 @@ def slide_cover(d: Deck) -> None:
     s = d.prs.slides.add_slide(d.blank)
     d.rect(s, 0, 0, W, H, BG)
     d.rect(s, 0, 0, W, 0.055, TEAL)
-    d.text(s, 0.55, 1.35, 7.2, 0.28, "Cash Account", size=14, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, 0.55, 1.35, 7.2, 0.28, "Dealer Gamma", size=14, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
     d.text(s, 0.52, 1.70, 7.4, 0.92, "Gamma", size=58, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0, spacing=1.0)
     d.text(s, 0.52, 2.58, 7.5, 0.66, "Swing Trading", size=36, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0, spacing=1.0)
     d.rect(s, 0.55, 3.36, 2.05, 0.032, TEAL)
     d.text(
         s, 0.55, 3.55, 7.15, 1.20,
-        "Dealer hedging, the walls, and the candle close.\nLong calls, long puts, and debit spreads.\nSwings, earnings, and an occasional 0DTE.",
+        "How the hedge pushes price.\nLong premium, short premium, and defined-risk spreads.\nThe walls, the flip, and the limits of the model.",
         size=18, color=BODY, ml=0, mr=0, mt=0, mb=0, spacing=1.18,
     )
     row_w = 7.15
     gap = 0.12
     chip_h = 0.40
-    row1 = ["4h and 15m", "20 / 50 / 200", "Unusual Whales", "TradingView"]
+    row1 = ["Open Interest", "Call Wall", "Put Wall", "The Flip"]
     cw = (row_w - gap * (len(row1) - 1)) / len(row1)
     for i, label in enumerate(row1):
         d.chip(s, 0.55 + i * (cw + gap), 5.00, cw, chip_h, label, NEST, BODY, size=12)
-    row2 = ["Swings", "Earnings", "Occasional 0DTE"]
+    row2 = ["Long Gamma", "Short Gamma", "Spreads"]
     cw2 = cw
     row2_w = cw2 * len(row2) + gap * (len(row2) - 1)
     x0 = 0.55 + (row_w - row2_w) / 2
@@ -924,13 +927,13 @@ def slide_cover(d: Deck) -> None:
 def slide_map(d: Deck) -> None:
     s = d.chrome("Start here", "Read it as a map")
     items = [
-        (TEAL, "What you get", "A way to read the regime,\nmark the levels, and pick\nthe contract.\n\nThe trigger is a candle close."),
-        (AMBER, "What this is not", "No win rate. No backtest.\nNo fixed dollar risk.\n\nYou choose the dollars\non every trade."),
-        (CORAL, "What stays true", "Cash only. No margin.\nNo naked short options.\n\nLong calls, long puts,\nand debit spreads."),
+        (TEAL, "What you get", "The dealer hedge, the flip,\nand the walls.\n\nHow long gamma and short\ngamma differ.\n\nWhere the model stops."),
+        (AMBER, "What this is not", "No win rate.\nNo backtest.\n\nNo invented track record.\nExample numbers are marked."),
+        (CORAL, "What stays true", "Dealers hedge with the stock.\nGamma is how fast delta changes.\n\nA wick and a close\nare different prints."),
     ]
     for (x, w), (accent, title, body) in zip(cols(3), items):
         block(d, s, x, 1.18, w, 3.15, title, body, accent=accent, ts=18, bs=15)
-    steps = [("1", "Regime"), ("2", "Walls"), ("3", "Close"), ("4", "Contract"), ("5", "Your Dollars")]
+    steps = [("1", "Regime"), ("2", "Walls"), ("3", "Flip"), ("4", "Structure"), ("5", "The Model")]
     xs = cols(5, gap=0.28)
     for i, ((x, w), (num, label)) in enumerate(zip(xs, steps)):
         d.panel(s, x, 4.52, w, 1.15, accent=TEAL)
@@ -950,18 +953,18 @@ def slide_map(d: Deck) -> None:
 
 
 def slide_tools(d: Deck) -> None:
-    s = d.chrome("The account", "The tools this deck assumes")
+    s = d.chrome("The read", "What a gamma read uses")
     top, height = 1.16, 5.76
     left_w, gap = 8.10, 0.18
     right_x = ML + left_w + gap
     right_w = CONTENT_W - left_w - gap
     rows = [
-        ("Chart", "TradingView. The 4h and the 15m."),
-        ("Averages", "The 20, the 50, and the 200, on both."),
-        ("Levels", "Unusual Whales. Open interest for the swing."),
-        ("Check", "A second public gamma source, before a swing."),
-        ("Work", "Swings, earnings, and an occasional 0DTE."),
-        ("Account", "Cash. You pay the debit. No naked shorts."),
+        ("Book", "Open interest by strike. That is the swing map."),
+        ("Spot", "Where price sits against that book."),
+        ("Flip", "Where net gamma changes sign."),
+        ("Walls", "The heavy call strike above. The heavy put strike below."),
+        ("Check", "A second public source, when you have one."),
+        ("Chart", "Price, so a close can be told from a wick."),
     ]
     row_gap = 0.10
     row_h = (height - row_gap * (len(rows) - 1)) / len(rows)
@@ -973,11 +976,11 @@ def slide_tools(d: Deck) -> None:
         d.text(s, ML + 1.86, y, left_w - 2.02, row_h, line, size=16, color=TEXT, anchor="middle", ml=0.1, mr=0.1, mt=0, mb=0)
     d.panel(s, right_x, top, right_w, height, accent=TEAL)
     mid = top + height / 2
-    d.text(s, right_x + 0.2, top + 0.22, right_w - 0.4, 0.34, "Allowed", size=16, bold=True, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
-    d.text(s, right_x + 0.2, top + 0.62, right_w - 0.4, 1.85, "Long call\nLong put\nCall debit spread\nPut debit spread", size=16, color=TEXT, align="center", anchor="middle", ml=0, mr=0, mt=0, mb=0, spacing=1.25)
+    d.text(s, right_x + 0.2, top + 0.22, right_w - 0.4, 0.34, "Dealer Gamma", size=16, bold=True, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.text(s, right_x + 0.2, top + 0.62, right_w - 0.4, 1.85, "Their hedge\nin the stock.\n\nPositive: they fade.\nNegative: they chase.", size=16, color=TEXT, align="center", anchor="middle", ml=0, mr=0, mt=0, mb=0, spacing=1.2)
     d.hline(s, right_x + 0.28, mid, right_w - 0.56, LINE, 0.015)
-    d.text(s, right_x + 0.2, mid + 0.16, right_w - 0.4, 0.34, "Not This Account", size=16, bold=True, color=CORAL, align="center", ml=0, mr=0, mt=0, mb=0)
-    d.text(s, right_x + 0.2, mid + 0.54, right_w - 0.4, 1.90, "Naked short call\nNaked short put\nMargin\nShort stock as a hedge", size=16, color=BODY, align="center", anchor="middle", ml=0, mr=0, mt=0, mb=0, spacing=1.25)
+    d.text(s, right_x + 0.2, mid + 0.16, right_w - 0.4, 0.34, "Your Gamma", size=16, bold=True, color=AMBER, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.text(s, right_x + 0.2, mid + 0.54, right_w - 0.4, 1.90, "Long options: long gamma.\nShort options: short gamma.\n\nThe two books can match,\nor they can oppose.", size=16, color=BODY, align="center", anchor="middle", ml=0.08, mr=0.08, mt=0, mb=0, spacing=1.2)
 
 
 def slide_core(d: Deck) -> None:
@@ -1006,8 +1009,8 @@ def slide_core(d: Deck) -> None:
     )
     notes = [
         (TEAL, "The push is pressure from the hedge. It is not a promise."),
-        (AMBER, "You still need the price action, and a candle close."),
-        (CORAL, "Direction comes from the break, or from the rejection."),
+        (AMBER, "A wick through a level and a close beyond it are different prints."),
+        (CORAL, "Your long or short gamma is a separate fact from the dealer book."),
     ]
     for (x, w), (accent, line) in zip(cols(3), notes):
         d.panel(s, x, 4.72, w, 1.55)
@@ -1055,7 +1058,7 @@ def slide_delta(d: Deck) -> None:
     d.text(s, 8.35, 1.40, 4.36, 0.42, "You Are Not the Dealer", size=18, bold=True, color=TEXT, align="center", ml=0, mr=0, mt=0, mb=0)
     in_box(
         d, s, 8.35, 1.90, 4.36, 3.10,
-        "You do not hedge with stock.\nYou do not short shares.\n\nYou read their hedge so you know the push.\nThen you buy a call, a put, or a debit spread.",
+        "The dealer hedge is in the stock.\nYour position is the option.\n\nOne contract is exposure to 100 shares, times delta.\nThat exposure is not the same as holding the shares.",
         size=17, color=BODY, align="center", ml=0.08, mr=0.08,
     )
     d.panel(s, ML, 5.40, CONTENT_W, 1.42, accent=AMBER)
@@ -1211,8 +1214,8 @@ def slide_positive(d: Deck) -> None:
         xx = line_x + 2.35 + (i % 2) * 0.38
         d.oval(s, xx, yy, 0.14, 0.14, TEAL)
     block(
-        d, s, rx, top, rw, height, "What you do",
-        "Fade the edges.\n\nOnly after a rejection candle closes back inside.\n\nDo not trade the breakout.\n\nThe playbook is a later slide.",
+        d, s, rx, top, rw, height, "Two different books",
+        "Price tends to range, and it can pin near a heavy strike.\n\nA long option is long gamma. A credit spread, condor, or butterfly is short gamma.\n\nThose structures are later slides. They are not the dealer hedge.",
         accent=TEAL, ts=18, bs=16, align="center",
     )
 
@@ -1240,8 +1243,8 @@ def slide_negative(d: Deck) -> None:
     in_box(d, s, ax + 0.58, put_y + 0.16, 3.3, 0.85, "Drop. Dealers sell.\nThe drop gets fuel.", size=15, color=BODY, align="left", ml=0, mr=0)
     in_box(d, s, line_x, (call_y + put_y) / 2 - 0.45, 2.4, 0.90, "A break can\nrun.", size=16, color=TEXT, align="center", ml=0, mr=0)
     block(
-        d, s, rx, top, rw, height, "What you do",
-        "Do not fade the first touch.\n\nTrade the break on a 4h close.\n\nGo with it.\n\nThe playbook is a later slide.",
+        d, s, rx, top, rw, height, "If the move runs",
+        "The hedge can add fuel, so a move can extend.\n\nLong gamma gains delta as the move runs. Short gamma loses as it runs.\n\nA naked short has that short gamma, and the loss is not capped.",
         accent=CORAL, ts=18, bs=16, align="center",
     )
 
@@ -1354,7 +1357,7 @@ def slide_flip_close(d: Deck) -> None:
     d.panel(s, ML, 5.72, CONTENT_W, 1.12, accent=BLUE)
     in_box(
         d, s, ML + 0.24, 5.72, CONTENT_W - 0.48, 1.12,
-        "Use the 4h close, or the daily close. Do not change the plan on a touch.\nIf later candles hold on the new side, treat the regime as changed and read the book again.",
+        "A wick through the line is not a held close. A close through still has to hold on a later bar.\nIf later candles hold on the new side, the regime may have changed. Read the book again.",
         size=16, color=BODY, align="left", ml=0.04, mr=0.06,
     )
 
@@ -1380,22 +1383,22 @@ def slide_walls(d: Deck) -> None:
         d.text(s, 4.55, y - 0.16, 3.05, 0.40, label, size=14, color=color, anchor="middle", ml=0, mr=0, mt=0, mb=0)
     block(
         d, s, 8.05, 1.18, 4.86, 5.55, "How to use them",
-        "Call wall: the heavy call\nstrike above. Resistance.\n\nPut wall: the heavy put\nstrike below. Support.\n\nThey are the swing map.\n\nThe regime decides if you\nfade them, or if you trade\na close through them.\n\nThe flip is drawn here so\nyou do not confuse it\nwith a wall.",
+        "Call wall: the heavy call strike above. Often resistance.\n\nPut wall: the heavy put strike below. Often support.\n\nThey are open-interest levels.\n\nThe flip is drawn here so it is not read as a third wall.\n\nThe dealer regime says how the hedge behaves at the level.",
         accent=CYAN, ts=18, bs=15,
     )
 
 
 def slide_walls_regime(d: Deck) -> None:
-    s = d.chrome("Levels", "The regime picks fade or break")
+    s = d.chrome("Levels", "The hedge at a wall depends on the regime")
     block(
         d, s, ML, 1.18, 6.15, 5.55, "Positive gamma at a wall",
-        "The hedge leans back\ninto the range.\n\nA tag is not the trade.\n\nA rejection candle that\ncloses back inside is\nthe fade.\n\nDo not buy the breakout\nwhile spot is still\nabove the flip.",
-        accent=TEAL, ts=20, bs=18,
+        "The hedge leans back into the range.\n\nA tag of the wall and a close back inside are the same side of the flip.\n\nA close that holds outside can be a different regime.\n\nThe wall is still just the heavy strike.",
+        accent=TEAL, ts=20, bs=18, align="center",
     )
     block(
         d, s, 6.76, 1.18, 6.15, 5.55, "Negative gamma at a wall",
-        "The hedge can turn into\na chase once price goes\nthrough.\n\nA touch is not the trade.\n\nA 4h close outside the\nrange is the trade.\nGo with it.\n\nDo not fade the wall\nonly because it is a wall.",
-        accent=CORAL, ts=20, bs=18,
+        "Once price goes through, the hedge can chase.\n\nA wick through the wall is not a held close.\n\nA close that stays outside is a move the hedge may fuel.\n\nThe wall does not stop being a strike just because price tagged it.",
+        accent=CORAL, ts=20, bs=18, align="center",
     )
 
 
@@ -1441,7 +1444,7 @@ def slide_charm(d: Deck) -> None:
 
 
 def slide_uw_rules(d: Deck) -> None:
-    s = d.chrome("Unusual Whales", "Four rules on your gamma page")
+    s = d.chrome("Unusual Whales", "Four rules on the gamma page")
     rules = [
         ("01", "Heatmap colors are net gamma.", "Not put gamma. Not call gamma by itself. The combined number."),
         ("02", "By-strike draws two lines.", "The call wall, and spot. It does not draw the put wall. It does not draw the flip."),
@@ -1560,7 +1563,7 @@ def slide_oi_volume(d: Deck) -> None:
     d.panel(s, ML, 5.72, CONTENT_W, 1.10, accent=CORAL)
     d.text(
         s, ML + 0.24, 5.88, CONTENT_W - 0.48, 0.80,
-        "Do not swap them. A midday push on Directionalized Volume does not move your wall.",
+        "A midday push on Directionalized Volume does not move the open-interest wall.",
         size=18, color=TEXT, anchor="middle", ml=0, mr=0, mt=0, mb=0,
     )
 
@@ -1577,38 +1580,38 @@ def slide_crosscheck(d: Deck) -> None:
         d.text(s, 1.45, y + 0.40, 4.4, 0.40, gloss, size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
     block(
         d, s, 6.52, 1.18, 6.39, 5.55, "If the second source disagrees",
-        "You want the same story,\nnot the same pixel.\n\nSame expiry?\n\nOpen interest, not today's\nvolume?\n\nDealer gamma, or the\ncustomer sign? Customer\ngamma flips the colors.\n\nIf it still disagrees, you\nstill need a close. No trade\noff a level you cannot\nfind twice.",
+        "The same story, not the same pixel.\n\nSame expiry?\n\nOpen interest, not today's volume?\n\nDealer gamma, or the customer sign? Customer gamma flips the colors.\n\nIf they still disagree, the level is not confirmed. The sign convention is a common cause.",
         accent=AMBER, ts=18, bs=16,
     )
 
 
 def slide_month(d: Deck) -> None:
-    s = d.chrome("Time", "The month sets the posture")
+    s = d.chrome("Time", "The month and the day are two books")
     block(
         d, s, ML, 1.18, 6.15, 3.35, "Today's open interest",
-        "Sets the playbook.\n\nSpot above the flip:\npositive. You fade.\n\nSpot below the flip:\nnegative. You trade\nthe break.",
-        accent=TEAL, ts=20, bs=18,
+        "The nearby book.\n\nSpot above the flip:\ndealer gamma is positive.\nThey tend to fade.\n\nSpot below the flip:\ndealer gamma is negative.\nThey can chase.",
+        accent=TEAL, ts=20, bs=18, align="center",
     )
     block(
-        d, s, 6.76, 1.18, 6.15, 3.35, "The past month",
-        "Sets the risk posture.\n\nA positive month is a\npinning environment.\n\nA negative month is\nfaster. Breaks can run.\nStops need more room.",
-        accent=AMBER, ts=20, bs=18,
+        d, s, 6.76, 1.18, 6.15, 3.35, "The longer book",
+        "Further expiries carry their own walls.\n\nA positive longer book is a pinning backdrop.\n\nA negative longer book is a backdrop where breaks can run.\n\nIt does not replace today's strikes.",
+        accent=AMBER, ts=20, bs=18, align="center",
     )
     d.panel(s, ML, 4.72, CONTENT_W, 2.05, accent=BLUE)
-    d.text(
-        s, ML + 0.28, 4.92, CONTENT_W - 0.55, 1.65,
-        "The room changes how many contracts your dollars buy.\nThe dollar amount is still yours, every trade.\nThis deck never sets a percent, and it never sets a dollar risk.\nIf today and the month disagree, trade today's book. Let the month change the room, not the playbook.",
-        size=16, color=BODY, ml=0, mr=0, mt=0, mb=0,
+    in_box(
+        d, s, ML + 0.28, 4.72, CONTENT_W - 0.55, 2.05,
+        "If today and the longer book disagree, they are two facts.\nDo not average them into a new price.\nToday's open interest is the nearby hedge. The longer book is the backdrop.",
+        size=16, color=BODY, align="center", ml=0.08, mr=0.08,
     )
 
 
 def slide_clocks(d: Deck) -> None:
     s = d.chrome("Time", "Where each clock sits")
     clocks = [
-        ("1", "Month", "Risk posture. You pick the dollars.", AMBER),
-        ("2", "Open interest", "Walls, the flip, and the playbook.", TEAL),
-        ("3", "4h close", "The range, and the trigger.", BLUE),
-        ("4", "15m", "Entry timing. The 20, 50, and 200.", PURPLE),
+        ("1", "0DTE", "The one-day gamma spike. Not the swing open interest.", AMBER),
+        ("2", "Weekly book", "The near walls and the near flip.", TEAL),
+        ("3", "Monthly book", "The larger strikes, and the longer regime.", BLUE),
+        ("4", "The chart", "Where a close is visible against those levels.", PURPLE),
     ]
     top, height = 1.16, 5.70
     left_w = 8.05
@@ -1620,8 +1623,8 @@ def slide_clocks(d: Deck) -> None:
         d.text(s, ML + 0.78, y + 0.18, left_w - 0.98, 0.40, title_case(title), size=18, bold=True, color=TEXT, anchor="middle", ml=0.04, mr=0.08, mt=0, mb=0)
         in_box(d, s, ML + 0.78, y + 0.62, left_w - 0.98, bh - 0.74, body, size=16, color=BODY, align="left", ml=0.04, mr=0.08)
     block(
-        d, s, right_x, top, right_w, height, "Two extras",
-        "A daily close is the one to add when the level is a major wall, or the flip.\n\nThe averages do not replace the walls. They confirm them.\n\nThe 15m does not overrule the 4h.",
+        d, s, right_x, top, right_w, height, "Separate books",
+        "Each expiry is its own book.\n\nThe 0DTE column on a heatmap is today's gamma, not the monthly wall.\n\nA price chart shows whether a close held beyond a level. The level still comes from open interest.",
         accent=BLUE, ts=18, bs=16, align="center",
     )
 
@@ -1647,7 +1650,7 @@ def slide_align(d: Deck) -> None:
     d.panel(s, ML, 5.55, CONTENT_W, 1.25, accent=TEAL)
     d.text(
         s, ML + 0.24, 5.72, CONTENT_W - 0.48, 0.95,
-        "It works best when they line up. Then the playbook levels and the chart levels are the same prices.\nWhen they are not, you have two stories. Do not average them into a new price.",
+        "It works best when they line up. Then the gamma levels and the chart levels are the same prices.\nWhen they are not, you have two stories. Do not average them into a new price.",
         size=16, color=BODY, ml=0, mr=0, mt=0, mb=0,
     )
 
@@ -1733,137 +1736,86 @@ def slide_spy_box(d: Deck) -> None:
 
 
 def slide_spy_plan(d: Deck) -> None:
-    s = d.chrome("October 16, 2026", "What you do with that book")
+    s = d.chrome("October 16, 2026", "What that book was saying")
     cards = [
-        (CORAL, "Close through 760", "Still under the flip.\nNegative gamma stands.\nGo with the downside.\nPut side."),
-        (AMBER, "Poke, then back in", "The close is inside\nthe box.\nFailed break.\nNo trade. Old plan."),
-        (TEAL, "Holds above 775", "You crossed the flip\nand the call wall.\nRegime likely changed.\nRe-read before you act."),
+        (CORAL, "Close through 760", "Still under the flip.\nNegative gamma stands.\nThe downside hedge\ncan add fuel."),
+        (AMBER, "Poke, then back in", "The close is inside\nthe box.\nThe outside print\ndid not hold."),
+        (TEAL, "Holds above 775", "Spot crossed the flip\nand the call wall.\nThe regime may\nhave changed."),
     ]
     for (x, w), (accent, title, body) in zip(cols(3), cards):
         block(d, s, x, 1.20, w, 3.55, title, body, accent=accent, ts=18, bs=16)
     d.panel(s, ML, 4.95, CONTENT_W, 1.82, accent=BLUE)
     d.text(
         s, ML + 0.24, 5.12, CONTENT_W - 0.48, 1.48,
-        "Inside 760 to 775 you wait. The regime in the box is negative, so you do not fade either wall.\nThe upside is not a normal break. The flip is about 774.5, so a hold above 775 is a new book.\nDo not fade it on the old plan, and do not chase it on the old plan.",
+        "Inside 760 to 775, spot was under the flip, so most of the box was negative gamma.\nThe flip was about 774.5, half a point under the call wall. A hold above 775 is a cross of both.\nThat is a new read of the book. The old sign does not carry across the flip by itself.",
         size=16, color=BODY, ml=0, mr=0, mt=0, mb=0,
     )
 
 def slide_pos_play(d: Deck) -> None:
-    s = d.chrome("Playbook", "Positive gamma: fade the edge")
-    rules = [
-        "1   Spot is above the flip. The regime is positive.",
-        "2   Price tags the call wall, or the put wall.",
-        "3   A rejection candle closes back inside the range.",
-        "4   Enter on that close. Not on the tag.",
-        "5   Stop is beyond that candle's high, or its low.",
-        "6   You exit if a later candle closes past that extreme.",
-        "7   Do not trade the breakout while this regime holds.",
-    ]
-    d.panel(s, ML, 1.16, 8.05, 5.70, accent=TEAL)
-    d.text(s, ML, 1.28, 8.05, 0.36, "The Rules", size=18, bold=True, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
-    for (y, bh), line in zip(bands(1.72, 4.95, len(rules), gap=0.08), rules):
-        in_box(d, s, ML + 0.18, y, 7.70, bh, line, size=15, color=BODY, align="left", ml=0.08, mr=0.08)
-    right_x = ML + 8.05 + 0.18
-    right_w = CONTENT_W - 8.05 - 0.18
-    upper, lower = bands(1.16, 5.70, 2, gap=0.14)
+    s = d.chrome("Structures", "Buying and selling in positive gamma")
+    (lx, lw), (rx, rw) = cols(2)
     block(
-        d, s, right_x, upper[0], right_w, upper[1], "Which contract",
-        "Fade the call wall with a put.\n\nFade the put wall with a call.",
-        accent=TEAL, ts=16, bs=16, align="center",
+        d, s, lx, 1.16, lw, 5.70, "Long premium",
+        "A long call or a long put is long gamma.\n\nDelta moves with the price.\nTheta is the cost, every day.\n\nA debit spread is the same idea with less gamma, less vega, and a capped gain.\n\nMax loss on both is the debit.",
+        accent=TEAL, ts=20, bs=18, align="center",
     )
     block(
-        d, s, right_x, lower[0], right_w, lower[1], "If it holds outside",
-        "A close outside is not your entry here.\n\nIf that close holds, the regime likely changed. Rebuild. Do not chase it on this plan.",
-        accent=AMBER, ts=16, bs=15, align="center",
+        d, s, rx, 1.16, rw, 5.70, "Credit spreads",
+        "A credit spread sells premium, and the loss is capped.\n\nA call credit spread sits above a call wall.\nA put credit spread sits below a put wall.\n\nMax loss is the width minus the credit.\nThe short strike is where that loss starts.\n\nThe position is short gamma.",
+        accent=AMBER, ts=20, bs=18, align="center",
     )
 
 
 def slide_pos_candle(d: Deck) -> None:
-    s = d.chrome("Playbook", "What the rejection has to look like")
-    top, height = 1.16, 5.70
-    lw = 8.20
-    rw = CONTENT_W - lw - 0.18
-    rx = ML + lw + 0.18
-    d.panel(s, ML, top, lw, height)
-    d.stamp(s, ML + lw - 2.15, top + 0.14, "ILLUSTRATIVE")
-    line_x = ML + 0.40
-    line_w = 5.15
-    call_y = top + 0.95
-    put_y = top + height - 0.85
-    d.hline(s, line_x, call_y, line_w, CYAN, 0.03)
-    d.hline(s, line_x, put_y, line_w, PURPLE, 0.03)
-    d.text(s, line_x, call_y - 0.34, 2.2, 0.30, "Call Wall", size=13, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, line_x, put_y - 0.36, 2.2, 0.30, "Put Wall", size=13, bold=True, color=PURPLE, ml=0, mr=0, mt=0, mb=0)
-    cx = line_x + line_w * 0.42
-    d.candle(s, cx, call_y - 0.42, call_y + 1.20, call_y + 0.42, call_y + 0.78, TEAL, body=0.26)
-    d.text(s, cx + 0.40, call_y - 0.52, 2.8, 0.28, "Stop Beyond This High", size=12, bold=True, color=CORAL, ml=0, mr=0, mt=0, mb=0)
-    in_box(d, s, cx + 0.45, call_y + 0.28, 2.50, 0.75, "Enter on This\nClose, Inside", size=14, color=TEAL, align="left", ml=0, mr=0)
-    d.candle(s, cx, put_y - 1.35, put_y + 0.36, put_y - 0.78, put_y - 0.42, TEAL, body=0.26)
-    in_box(d, s, cx + 0.45, put_y - 1.05, 2.50, 0.70, "Enter on This\nClose, Inside", size=14, color=TEAL, align="left", ml=0, mr=0)
-    d.text(s, cx + 0.40, put_y + 0.42, 2.8, 0.28, "Stop Beyond This Low", size=12, bold=True, color=CORAL, ml=0, mr=0, mt=0, mb=0)
-    block(
-        d, s, rx, top, rw, height, "The close decides",
-        "The wick can leave the range.\n\nThe body has to finish back inside.\n\nA close outside is not a fade.\n\nThe stop sits beyond the rejection extreme. A wick through the stop is not the exit. A later close through it is.",
-        accent=TEAL, ts=16, bs=15, align="center",
-    )
+    s = d.chrome("Structures", "Condors and butterflies around the walls")
+    cards = [
+        (TEAL, "Iron condor", "A short put spread below the put wall, and a short call spread above the call wall.\n\nProfit if price finishes between the short strikes.\nThe loss is defined. It is larger than the credit."),
+        (AMBER, "Butterfly", "Long one wing, short two at the body, long the other wing.\n\nProfit if price finishes near the body.\nThe body is often a heavy strike, where a pin is possible."),
+        (CORAL, "What they share", "Both are short gamma next to a long option.\n\nA quiet range is the gain.\nA move through a wing is the loss.\nThe wings are the defined-risk lines."),
+    ]
+    for (x, w), (accent, title, body) in zip(cols(3), cards):
+        block(d, s, x, 1.16, w, 5.70, title, body, accent=accent, ts=18, bs=16, align="center")
 
 
 def slide_neg_play(d: Deck) -> None:
-    s = d.chrome("Playbook", "Negative gamma: trade the break")
-    rules = [
-        "1   Spot is below the flip. The regime is negative.",
-        "2   Inside the range, you do nothing.",
-        "3   A 4h candle closes outside, through the wall.",
-        "4   Go with that close.",
-        "5   Down break: put side. Up break: call side if still under the flip.",
-        "6   You exit if a later 4h close comes back inside.",
-        "7   Do not fade the first touch.",
-    ]
-    d.panel(s, ML, 1.16, 8.05, 5.70, accent=CORAL)
-    d.text(s, ML, 1.28, 8.05, 0.36, "The Rules", size=18, bold=True, color=CORAL, align="center", ml=0, mr=0, mt=0, mb=0)
-    for (y, bh), line in zip(bands(1.72, 4.95, len(rules), gap=0.08), rules):
-        in_box(d, s, ML + 0.18, y, 7.70, bh, line, size=15, color=BODY, align="left", ml=0.06, mr=0.08)
-    right_x = ML + 8.05 + 0.18
-    right_w = CONTENT_W - 8.05 - 0.18
-    upper, lower = bands(1.16, 5.70, 2, gap=0.14)
+    s = d.chrome("Structures", "Buying and selling in negative gamma")
+    (lx, lw), (rx, rw) = cols(2)
     block(
-        d, s, right_x, upper[0], right_w, upper[1], "Which contract",
-        "Break up: long call, or a call debit spread.\n\nBreak down: long put, or a put debit spread.",
-        accent=CORAL, ts=16, bs=16, align="center",
+        d, s, lx, 1.16, lw, 4.40, "Long options and debit spreads",
+        "Negative dealer gamma means the hedge can chase a move.\n\nA long option is long gamma, so its delta grows with the run.\nA debit spread does the same with less gamma and a capped gain.\n\nTheta is still paid.",
+        accent=CORAL, ts=20, bs=17, align="center",
     )
     block(
-        d, s, right_x, lower[0], right_w, lower[1], "If the break is the flip",
-        "A normal negative break stays under the flip.\n\nIf the close also crosses the flip, a hold means the regime likely changed. Re-read before the next trade.",
-        accent=AMBER, ts=16, bs=15, align="center",
+        d, s, rx, 1.16, rw, 4.40, "Short premium",
+        "A credit spread, condor, or butterfly is short gamma.\n\nThe chase is the loss, up to the defined wing.\nA naked short has the same short gamma and no wing.\n\nThe credit is the most that position can make.",
+        accent=AMBER, ts=20, bs=17, align="center",
+    )
+    d.panel(s, ML, 5.72, CONTENT_W, 1.12, accent=BLUE)
+    in_box(
+        d, s, ML + 0.24, 5.72, CONTENT_W - 0.48, 1.12,
+        "Dealer gamma describes their hedge. These structures are ways to be long or short gamma yourself. They can match the dealer book, or oppose it.",
+        size=16, color=BODY, align="center", ml=0.08, mr=0.08,
     )
 
 
 def slide_neg_candle(d: Deck) -> None:
-    s = d.chrome("Playbook", "What the break has to look like")
-    top, height = 1.16, 5.70
-    lw = 8.20
-    rw = CONTENT_W - lw - 0.18
-    rx = ML + lw + 0.18
-    d.panel(s, ML, top, lw, height)
-    d.stamp(s, ML + lw - 2.15, top + 0.14, "ILLUSTRATIVE")
-    line_x = ML + 0.40
-    line_w = 5.15
-    call_y = top + 1.25
-    put_y = top + height - 1.15
-    d.hline(s, line_x, call_y, line_w, CYAN, 0.03)
-    d.hline(s, line_x, put_y, line_w, PURPLE, 0.03)
-    d.text(s, line_x, call_y - 0.34, 2.2, 0.30, "Call Wall", size=13, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, line_x, put_y + 0.08, 2.2, 0.30, "Put Wall", size=13, bold=True, color=PURPLE, ml=0, mr=0, mt=0, mb=0)
-    cx = line_x + line_w * 0.42
-    d.candle(s, cx, call_y - 0.85, call_y + 0.85, call_y - 0.62, call_y - 0.28, CORAL, body=0.26)
-    in_box(d, s, cx + 0.40, call_y - 0.85, 2.6, 0.80, "4h Close\nThrough. Enter.", size=14, color=CORAL, align="left", ml=0, mr=0)
-    d.candle(s, cx, put_y - 0.85, put_y + 0.70, put_y + 0.22, put_y + 0.52, CORAL, body=0.26)
-    in_box(d, s, cx + 0.40, put_y + 0.05, 2.6, 0.80, "4h Close\nThrough. Enter.", size=14, color=CORAL, align="left", ml=0, mr=0)
-    in_box(d, s, line_x, (call_y + put_y) / 2 - 0.40, 2.3, 0.80, "Inside the Range:\nNo Trade.", size=15, color=DIM, align="center", ml=0, mr=0)
+    s = d.chrome("Your book", "Long gamma and short gamma")
+    (lx, lw), (rx, rw) = cols(2)
     block(
-        d, s, rx, top, rw, height, "The failed break",
-        "You are wrong if a later 4h candle closes back inside the range.\n\nThat is the stop.\n\nA wick back inside is not the exit. The close is.\n\nHard loss is still the debit, if the option goes to zero.",
-        accent=CORAL, ts=16, bs=15, align="center",
+        d, s, lx, 1.16, lw, 4.40, "Long gamma",
+        "Long calls and long puts.\n\nAs price moves, delta increases in that direction.\nA further move can add to the gain.\n\nTheta is the cost.\nA debit spread is long gamma in a smaller size. The short leg cuts the gamma and caps the gain.",
+        accent=TEAL, ts=20, bs=17, align="center",
+    )
+    block(
+        d, s, rx, 1.16, rw, 4.40, "Short gamma",
+        "Short calls, short puts, credit spreads, condors, and butterflies.\n\nAs price moves, delta increases against the position.\nA quiet underlying is when theta is collected.\n\nA large move is when the loss shows up.\nDefined-risk shorts stop at the long strike. Naked shorts do not.",
+        accent=CORAL, ts=20, bs=17, align="center",
+    )
+    d.panel(s, ML, 5.72, CONTENT_W, 1.12, accent=AMBER)
+    in_box(
+        d, s, ML + 0.24, 5.72, CONTENT_W - 0.48, 1.12,
+        "This is your position. Dealer gamma is their hedge. You can be long gamma while dealers are short, or the other way around.",
+        size=16, color=TEXT, align="center", ml=0.08, mr=0.08,
     )
 
 
@@ -1871,253 +1823,210 @@ def slide_poke(d: Deck) -> None:
     s = d.chrome("Breaks", "A poke is not a break")
     d.panel(s, ML, 1.18, 6.15, 4.35)
     d.stamp(s, 0.58, 1.32, "ILLUSTRATIVE")
-    d.text(s, 0.64, 1.72, 5.5, 0.34, "Fails", size=20, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, 0.64, 1.72, 5.5, 0.34, "Comes Back", size=20, bold=True, color=AMBER, align="center", ml=0, mr=0, mt=0, mb=0)
     d.hline(s, 0.75, 2.85, 5.4, LINE, 0.02)
     d.text(s, 0.80, 2.52, 1.5, 0.28, "Range", size=12, color=DIM, ml=0, mr=0, mt=0, mb=0)
     d.candle(s, 2.35, 2.15, 4.15, 3.15, 3.45, DIM)
     d.candle(s, 3.55, 3.05, 4.35, 3.35, 3.85, DIM)
     d.text(s, 4.15, 3.20, 2.1, 1.15, "Pushes out.\nCloses back in.\nNext bar stays in.", size=14, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 0.70, 4.75, 5.5, 0.50, "Old Plan Stands. No Chase.", size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, 0.70, 4.75, 5.5, 0.50, "The Close Came Back In.", size=16, bold=True, color=TEXT, align="center", ml=0, mr=0, mt=0, mb=0)
 
     d.panel(s, 6.76, 1.18, 6.15, 4.35)
     d.stamp(s, 6.94, 1.32, "ILLUSTRATIVE")
-    d.text(s, 7.00, 1.72, 5.5, 0.34, "Holds", size=20, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, 7.00, 1.72, 5.5, 0.34, "Holds", size=20, bold=True, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
     d.hline(s, 7.05, 3.35, 5.4, LINE, 0.02)
     d.text(s, 7.10, 3.02, 1.5, 0.28, "Range", size=12, color=DIM, ml=0, mr=0, mt=0, mb=0)
     d.candle(s, 8.35, 1.95, 3.85, 2.25, 2.65, TEAL)
     d.candle(s, 9.70, 1.85, 3.15, 2.15, 2.55, TEAL)
     d.text(s, 10.15, 3.55, 2.4, 1.05, "Closes out.\nThe next close\nstays out.", size=14, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.text(s, 7.05, 4.75, 5.5, 0.50, "Regime Likely Changed.", size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, 7.05, 4.75, 5.5, 0.50, "A Later Close Held Outside.", size=16, bold=True, color=TEXT, align="center", ml=0, mr=0, mt=0, mb=0)
 
     d.panel(s, ML, 5.70, CONTENT_W, 1.10, accent=AMBER)
-    d.text(
-        s, ML + 0.22, 5.84, CONTENT_W - 0.44, 0.82,
-        "One close starts the idea. A hold is what changes the regime. If a later close snaps back inside, it did not hold.",
-        size=16, color=BODY, anchor="middle", ml=0, mr=0, mt=0, mb=0,
+    in_box(
+        d, s, ML + 0.22, 5.70, CONTENT_W - 0.44, 1.10,
+        "A wick, or one close outside, is not the same as a close that stays outside. If price closes back inside, the outside close did not hold.",
+        size=16, color=BODY, align="center", ml=0.08, mr=0.08,
     )
 
 
 def slide_rebuild(d: Deck) -> None:
-    s = d.chrome("Breaks", "When it holds, change the plan")
+    s = d.chrome("Breaks", "When a close holds, the book can change")
     steps = [
-        ("1", "Close outside", "A 4h or daily candle finishes outside the old range."),
+        ("1", "Close outside", "A candle finishes outside the old range."),
         ("2", "It holds", "A later candle is still closed outside. It did not come back in."),
-        ("3", "Call it changed", "The regime likely changed. Stop using the old fade or the old break."),
-        ("4", "Read the book", "New walls. New flip. New side of spot. Then the new playbook."),
+        ("3", "The book can change", "Spot may have crossed the flip. The walls may be the same, or not."),
+        ("4", "Read it again", "New open interest. New flip. New spot. The old map was the old book."),
     ]
-    for i, (num, title, body) in enumerate(steps):
-        x = ML + (i % 4) * 3.15
-        d.panel(s, x, 1.22, 3.00, 3.15, accent=AMBER)
-        d.text(s, x, 1.40, 2.7, 0.40, num, size=20, bold=True, color=AMBER, align="center", ml=0.1, mr=0.1, mt=0, mb=0)
-        d.text(s, x + 0.12, 1.86, 2.46, 0.50, title_case(title), size=16, bold=True, color=TEXT, align="center", ml=0, mr=0, mt=0, mb=0)
-        d.text(s, x + 0.16, 2.45, 2.7, 1.65, body, size=14, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.panel(s, ML, 4.58, CONTENT_W, 2.18, accent=CORAL)
-    d.text(
-        s, ML + 0.24, 4.78, CONTENT_W - 0.48, 1.80,
-        "Already negative, and the break does not cross the flip: the first 4h close outside is the entry. That is the negative playbook.\nWas positive, or the close crosses the flip: the first close outside is a warning, not a chase. Wait to see if it holds, then re-read.\nIf it closes back inside, it was not a change. You are on the old plan.",
-        size=16, color=BODY, ml=0, mr=0, mt=0, mb=0,
+    xs = cols(4, gap=0.16)
+    for (x, w), (num, title, body) in zip(xs, steps):
+        d.panel(s, x, 1.16, w, 3.30, accent=AMBER)
+        stack_box(
+            d, s, x, 1.16, w, 3.30,
+            [(num, 20, True, AMBER), (title_case(title), 16, True, TEXT), (body, 14, False, BODY)],
+            gap=0.08,
+        )
+    d.panel(s, ML, 4.64, CONTENT_W, 2.16, accent=CORAL)
+    in_box(
+        d, s, ML + 0.24, 4.64, CONTENT_W - 0.48, 2.16,
+        "A close back inside means the outside close did not hold.\n\nIf the close also crosses the flip, the dealer hedge may have changed sign. That is a new read of the book, not a label carried over from the old one.\n\nThe walls are still the open-interest strikes. They move when the book moves.",
+        size=16, color=BODY, align="center", ml=0.1, mr=0.1,
     )
 
 
 def slide_alerts(d: Deck) -> None:
-    s = d.chrome("Entries", "Alerts fire on the close")
-    top, height = 1.16, 4.38
+    s = d.chrome("Squeeze", "A gamma squeeze is the hedge feeding itself")
     (lx, lw), (rx, rw) = cols(2)
-    d.panel(s, lx, top, lw, height)
-    d.text(s, lx, top + 0.14, lw, 0.36, "Touch. No Alert.", size=18, bold=True, color=CORAL, align="center", ml=0, mr=0, mt=0, mb=0)
-    level = top + height * 0.48
-    d.hline(s, lx + 0.35, level, lw * 0.46, AMBER, 0.028)
-    d.text(s, lx + 0.40, level - 0.34, 1.3, 0.28, "Level", size=13, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
-    d.candle(s, lx + lw * 0.32, level - 0.85, level + 1.15, level + 0.35, level + 0.70, DIM, body=0.26)
-    in_box(d, s, lx + lw * 0.50, top + 0.62, lw * 0.46, height - 0.90, "The wick tags the level.\nThe close is back.\nYou do nothing.", size=16, color=BODY, align="left", ml=0.08, mr=0.1)
-
-    d.panel(s, rx, top, rw, height)
-    d.text(s, rx, top + 0.14, rw, 0.36, "Close. Alert.", size=18, bold=True, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
-    d.hline(s, rx + 0.35, level, rw * 0.46, AMBER, 0.028)
-    d.text(s, rx + 0.40, level - 0.34, 1.3, 0.28, "Level", size=13, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
-    d.candle(s, rx + rw * 0.32, level - 1.15, level + 0.85, level - 0.85, level - 0.48, TEAL, body=0.26)
-    in_box(d, s, rx + rw * 0.50, top + 0.62, rw * 0.46, height - 0.90, "The candle finishes through the level.\nThen you check the rest.", size=16, color=BODY, align="left", ml=0.08, mr=0.1)
-
-    d.panel(s, ML, 5.70, CONTENT_W, 1.14, accent=BLUE)
-    in_box(
-        d, s, ML + 0.24, 5.70, CONTENT_W - 0.48, 1.14,
-        "4h or daily. Those are the swing closes. Never an intraday touch.\nIn TradingView, fire the alert on the bar close. A crossing alert can fire mid-candle. That is a touch.",
-        size=16, color=BODY, align="left", ml=0.04, mr=0.06,
+    block(
+        d, s, lx, 1.16, lw, 5.70, "Calls, and a rising price",
+        "Dealers who are short calls are short gamma.\n\nPrice rises. Call delta rises. They buy stock to get back to neutral.\n\nThat buying can push price higher, which raises delta again.\n\nThe loop is strongest near the strike, and near expiry, where gamma peaks.\n\nIt is a feedback story. It is not a schedule, and it does not have to finish.",
+        accent=CORAL, ts=20, bs=17, align="center",
+    )
+    block(
+        d, s, rx, 1.16, rw, 5.70, "Puts, and a falling price",
+        "The other direction is the same gamma.\n\nDealers who are short puts, and a falling price, sell stock to hedge.\n\nThat selling can push price lower.\n\nThe upside version is the one called a squeeze.\nBoth are negative-gamma hedging.\n\nNeither one is a measured share count. The chart of gamma shows where the sensitivity is highest.",
+        accent=TEAL, ts=20, bs=17, align="center",
     )
 
 
 def slide_watch(d: Deck) -> None:
-    s = d.chrome("Entries", "A watch alert, then an entry alert")
-    d.panel(s, ML, 1.16, CONTENT_W, 3.15)
-    d.stamp(s, ML + 0.16, 1.28, "ILLUSTRATIVE")
-    d.text(s, ML + 2.2, 1.30, 8.2, 0.30, "A Level at 100. Not the SPY Book.", size=14, color=DIM, align="center", ml=0, mr=0, mt=0, mb=0)
-    line_y = 2.35
-    d.hline(s, 1.15, line_y, 11.05, LINE, 0.02)
-    marks = [
-        (2.15, DIM, "You Are Here", ""),
-        (5.55, BLUE, "Watch Alert", "1% to 2% Before"),
-        (8.70, AMBER, "Band", ""),
-        (11.05, TEAL, "Entry Alert", "On the Close"),
-    ]
-    d.rect(s, 8.15, line_y - 0.28, 1.15, 0.56, AMBER_DIM, line=AMBER, line_w=1.15)
-    for x, color, title, sub in marks:
-        if title != "Band":
-            d.oval(s, x - 0.11, line_y - 0.11, 0.22, 0.22, color)
-        label = title if sub == "" else title + "\n" + sub
-        in_box(d, s, x - 1.15, line_y + 0.28, 2.30, 0.85, label, size=14, bold=True, color=color, align="center", ml=0.02, mr=0.02)
+    s = d.chrome("Volatility", "VIX is the price of index volatility")
+    (lx, lw), (rx, rw) = cols(2)
     block(
-        d, s, ML, 4.48, 6.15, 2.32, "Watch means look",
-        "You do not buy it.\nYou open the chart.\nThe entry alert is the\n4h or daily close,\nin the direction of\nthe playbook.",
-        accent=BLUE, ts=16, bs=15,
+        d, s, lx, 1.16, lw, 5.70, "What VIX is",
+        "VIX is the market's price for 30-day S&P 500 volatility.\n\nIt is implied volatility. It is not a print of what the index will do.\n\nA higher VIX means richer option premiums.\nThe same delta then hedges with more sensitivity to volatility.\n\nA lower VIX means cheaper premiums.\n\nThe gamma shape still peaks at the strike. VIX scales the premium.",
+        accent=AMBER, ts=20, bs=17, align="center",
     )
     block(
-        d, s, 6.76, 4.48, 6.15, 2.32, "This 1-2% is distance",
-        "It is distance on the chart,\nnot a risk percent.\nOn a wide book it sits\nin front of the wall.\nOctober 16 box: 2%\nwas the whole range.",
-        accent=AMBER, ts=16, bs=15,
+        d, s, rx, 1.16, rw, 5.70, "High IV and low IV",
+        "When implied volatility is high, a long option costs more, and a credit collected is larger.\n\nWhen implied volatility is low, the long option is cheaper, and the credit is smaller.\n\nIV can rise or fall with price held still. That sensitivity is vega.\n\nA fast drop in IV is crush. The crush chart is that drop, including a case where the stock rose and the call still fell.",
+        accent=BLUE, ts=20, bs=17, align="center",
     )
 
 
 def slide_bands(d: Deck) -> None:
-    s = d.chrome("Entries", "The zone is a band. Stay quiet inside it")
-    d.panel(s, ML, 1.18, 6.15, 3.35)
-    d.text(s, 0.64, 1.36, 5.6, 0.34, "A Hairline Gets Wicked", size=16, bold=True, color=CORAL, ml=0, mr=0, mt=0, mb=0)
-    d.hline(s, 1.4, 2.55, 4.4, CORAL, 0.02)
-    d.candle(s, 3.4, 1.90, 3.55, 2.85, 3.15, DIM)
-    d.text(s, 0.70, 3.35, 5.5, 0.85, "One tick through the strike looks\nlike a break. The close decides.", size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.panel(s, 6.76, 1.18, 6.15, 3.35)
-    d.text(s, 7.00, 1.36, 5.6, 0.34, "A Band Covers the Chop", size=16, bold=True, color=TEAL, ml=0, mr=0, mt=0, mb=0)
-    d.rect(s, 8.15, 2.15, 2.6, 0.85, TEAL_DIM, line=TEAL, line_w=1.25)
-    d.candle(s, 9.35, 2.25, 2.90, 2.40, 2.70, TEAL)
-    d.text(s, 7.00, 3.20, 5.6, 1.05, "Inside the band: no entry,\nand no stop-out on a wick.", size=15, color=BODY, ml=0, mr=0, mt=0, mb=0)
-    d.panel(s, ML, 4.70, CONTENT_W, 2.05, accent=AMBER)
-    d.text(
-        s, ML + 0.24, 4.88, CONTENT_W - 0.48, 1.70,
-        "The watch alert is the tap on the shoulder, 1% to 2% before you reach the band.\nThe band is where you stay quiet. Draw it wide enough to cover a wick around the strike.\nIf you need a width, use the chop already on the 4h at that strike. Do not use a one-tick line.\nOn October 16 the walls were about 2% apart, so a 2% watch of one wall sat near the other wall.",
-        size=15, color=BODY, ml=0, mr=0, mt=0, mb=0,
+    s = d.chrome("Markets", "A single stock and an index are different books")
+    (lx, lw), (rx, rw) = cols(2)
+    block(
+        d, s, lx, 1.16, lw, 5.70, "A single stock",
+        "Open interest can sit in size at a few strikes.\n\nThe wall is sharper. The stock can gap through it.\nA trading halt is possible.\n\nThe dealer hedge is in that one name.\nNews and earnings land on the name itself.\n\nThe gamma peak near expiry is the same shape. The book behind it is thinner.",
+        accent=CORAL, ts=20, bs=17, align="center",
+    )
+    block(
+        d, s, rx, 1.16, rw, 5.70, "An index",
+        "The book is deeper. The hedge is spread across many names.\n\nWalls are usually wider, and less abrupt, than a single-name wall.\n\nSPX, SPY, and the futures are related. They are not the same open interest.\n\nA name can move while the index does not, and the reverse.\nThe October 16 example in this deck is SPY.",
+        accent=TEAL, ts=20, bs=17, align="center",
     )
 
 
 def slide_confirm(d: Deck) -> None:
-    s = d.chrome("Entries", "One close, then the other checks")
-    block(
-        d, s, ML, 1.18, 6.15, 2.45, "Strong 4h close",
-        "The candle finishes clearly\nthrough the band. The body\nis on the break side.\n\nThat can be the entry, if\nthe other checks agree.",
-        accent=TEAL, ts=18, bs=16,
-    )
-    block(
-        d, s, 6.76, 1.18, 6.15, 2.45, "15m break",
-        "Use it to time the entry\nonce the 4h idea is set.\n\nA 15m break against the\n4h plan is not a trade.\nThe 4h decides the idea.",
-        accent=BLUE, ts=18, bs=16,
-    )
-    d.text(s, ML, 3.78, CONTENT_W, 0.36, "Convergence. These Should Lean the Same Way.", size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    chips = ["Price Action", "20 / 50 / 200", "Gamma Level", "News", "Flow"]
-    for (x, w), label in zip(cols(5, gap=0.16), chips):
-        d.chip(s, x, 4.22, w, 0.46, label, NEST, TEXT, size=14)
-    d.panel(s, ML, 4.90, CONTENT_W, 1.85, accent=AMBER)
-    d.text(
-        s, ML + 0.24, 5.08, CONTENT_W - 0.48, 1.50,
-        "Check all five. If one of them fights the trade, wait.\nQuiet news is fine. News that fights the trade is not.\nMissing flow is not a yes. If you have no read, say so.\nDo not pretend a blank is a yes.",
-        size=15, color=BODY, ml=0, mr=0, mt=0, mb=0,
-    )
+    s = d.chrome("The model", "What GEX does not know")
+    cards = [
+        (AMBER, "A model, not a tape", "GEX estimates a dealer hedge from open interest. It is not the shares already bought or sold."),
+        (CORAL, "The sign is assumed", "The model assigns options to dealers or to customers. Swap that assumption and the colors flip."),
+        (BLUE, "OI is not the session", "Open interest is the open book. Volume can be opening or closing. The swing map and the day are different."),
+        (TEAL, "It leaves things out", "It does not show the hedge already on, futures versus stock, or inventory you cannot see. A level is pressure, not a promise."),
+    ]
+    for i, (accent, title, body) in enumerate(cards):
+        col = i % 2
+        row = i // 2
+        x = ML + col * 6.34
+        y = 1.16 + row * 2.90
+        block(d, s, x, y, 6.16, 2.74, title, body, accent=accent, ts=18, bs=16, align="center")
 
 
 def slide_mas(d: Deck) -> None:
-    s = d.chrome("Averages", "The 20, the 50, and the 200")
-    top, height = 1.16, 5.70
-    lw = 7.55
-    d.panel(s, ML, top, lw, height)
-    d.stamp(s, ML + 0.16, top + 0.14, "ILLUSTRATIVE")
-    d.text(s, ML + 0.2, top + 0.52, lw - 0.4, 0.32, "Not a Real Ticker. Three Averages, and One Wall.", size=14, color=DIM, align="center", ml=0, mr=0, mt=0, mb=0)
-    rows_ma = [
-        (top + 1.55, "6E7C90", "200", "A8B3C2"),
-        (top + 2.85, BLUE, "50", BLUE),
-        (top + 4.15, TEAL, "20", TEAL),
-    ]
-    for y, color, label, fg in rows_ma:
-        d.hline(s, ML + 0.45, y, lw - 0.90, color, 0.026)
-        d.text(s, ML + 0.50, y - 0.34, 1.2, 0.28, label, size=14, bold=True, color=fg, ml=0, mr=0, mt=0, mb=0)
-    d.oval(s, ML + lw * 0.48, rows_ma[2][0] - 0.10, 0.20, 0.20, CYAN)
-    d.text(s, ML + lw * 0.48 + 0.32, rows_ma[2][0] + 0.18, 2.8, 0.30, "Wall on the 20", size=14, bold=True, color=CYAN, ml=0, mr=0, mt=0, mb=0)
+    s = d.chrome("Structures", "A naked short has no cap")
+    (lx, lw), (rx, rw) = cols(2)
     block(
-        d, s, ML + 7.55 + 0.18, 1.16, CONTENT_W - 7.55 - 0.18, 5.70, "What each one is",
-        "200: the tide. On the\n4h it is the larger swing.\n\n50: the swing itself.\n\n20: the short push.\n\nSame three on the 15m,\nfor the entry only.\n\nBest lineup: the wall and\none average in the same\nplace, and the close agrees.\n\nAn average is not a wall.\nA wall is not an average.",
-        accent=BLUE, ts=16, bs=15,
+        d, s, lx, 1.16, lw, 4.40, "Short call",
+        "The loss has no cap. The stock can rise without a limit.\n\nAssignment turns the short call into short stock, or into the cash to buy the shares.\n\nThe credit is the most the position can make.\nMargin is required. The broker can close the position.",
+        accent=CORAL, ts=20, bs=17, align="center",
+    )
+    block(
+        d, s, rx, 1.16, rw, 4.40, "Short put",
+        "The loss grows as the stock falls.\n\nNear zero, the loss is about the strike times 100, minus the credit.\n\nAssignment turns the short put into long stock.\n\nSame facts: the loss is not capped on the way down, margin is required, and the broker can close it.",
+        accent=AMBER, ts=20, bs=17, align="center",
+    )
+    d.panel(s, ML, 5.72, CONTENT_W, 1.12, accent=BLUE)
+    in_box(
+        d, s, ML + 0.22, 5.72, CONTENT_W - 0.44, 1.12,
+        "A long option at a further strike caps that short. The cap is a spread. Without the long leg, the short is naked. American options can be assigned before expiry.",
+        size=16, color=BODY, align="center", ml=0.08, mr=0.08,
     )
 
 
 def slide_side(d: Deck) -> None:
-    s = d.chrome("Contract", "Call side or put side")
+    s = d.chrome("Structures", "The side is the view. The structure is the risk")
     block(
-        d, s, ML, 1.18, 6.15, 5.55, "Call side",
-        "Upside break.\n\nOr a fade of the put wall,\nin positive gamma.\n\nLong call.\nOr a call debit spread.\n\nYou are long premium.",
-        accent=TEAL, ts=22, bs=20,
+        d, s, ML, 1.16, 6.15, 5.70, "Upside",
+        "A long call, or a call debit spread, is long gamma to the upside.\n\nA call credit spread, or a short call, is short gamma to the upside.\n\nThe first pays a debit. The second collects a credit.\n\nOnly the spread, or a covered short, has a defined loss.",
+        accent=TEAL, ts=20, bs=18, align="center",
     )
     block(
-        d, s, 6.76, 1.18, 6.15, 5.55, "Put side",
-        "Downside break.\n\nOr a fade of the call wall,\nin positive gamma.\n\nLong put.\nOr a put debit spread.\n\nYou are never the\nnaked short.",
-        accent=CORAL, ts=22, bs=20,
+        d, s, 6.76, 1.16, 6.15, 5.70, "Downside",
+        "A long put, or a put debit spread, is long gamma to the downside.\n\nA put credit spread, or a short put, is short gamma to the downside.\n\nSame split: debit or credit.\n\nA naked short put is not capped until the stock is near zero.",
+        accent=CORAL, ts=20, bs=18, align="center",
     )
 
 
 def slide_fork(d: Deck) -> None:
-    s = d.chrome("Contract", "Single contract, or a debit spread")
-    d.panel(s, ML, 1.16, 4.00, 5.70, accent=AMBER)
-    d.text(s, ML, 1.32, 4.00, 0.90, "Ask Three\nThings", size=26, bold=True, color=TEXT, align="center", ml=0.16, mr=0.16, mt=0, mb=0)
-    questions = ["How fast is\nthe move?", "Is IV cheap\nor rich?", "Can you\nwatch it?"]
-    for (y, bh), line in zip(bands(2.40, 4.20, 3, gap=0.12), questions):
-        in_box(d, s, ML + 0.2, y, 3.60, bh, line, size=18, color=BODY, align="center", ml=0.06, mr=0.06)
-    d.arrow(s, 4.48, 3.70, 0.36, 0.28, TEAL, "right")
-    block(
-        d, s, 5.02, 1.16, CONTENT_W - (5.02 - ML), 2.68, "Single long call or put",
-        "Fast or large move. IV is cheap. You can manage the trade.\nRisk is the premium. The working exit is a candle close.",
-        accent=TEAL, ts=20, bs=16,
-    )
-    block(
-        d, s, 5.02, 4.00, CONTENT_W - (5.02 - ML), 2.86, "Debit spread",
-        "Slower move. IV is rich. Or you cannot watch it.\nYou pay a smaller debit. You cap the gain at the short strike.\nThe short leg is covered by the long leg. Not a naked short.",
-        accent=BLUE, ts=20, bs=16,
-    )
+    s = d.chrome("Structures", "Five ways the same view is held")
+    rows = [
+        (TEAL, "Long option", "Long gamma. Debit. Loss capped at the debit. Gain is open."),
+        (BLUE, "Debit spread", "Long gamma, smaller. Debit. Loss capped. Gain capped at the short strike."),
+        (AMBER, "Credit spread", "Short gamma. Credit. Gain capped at the credit. Loss capped at the width."),
+        (PURPLE, "Condor or butterfly", "Short gamma around the walls or a strike. Gain if price sits. Loss defined at the wings."),
+        (CORAL, "Naked short", "Short gamma. Credit. Gain capped. Loss is not capped. Margin is required."),
+    ]
+    top, height = 1.16, 5.70
+    gap = 0.12
+    row_h = (height - gap * (len(rows) - 1)) / len(rows)
+    for i, (accent, name, line) in enumerate(rows):
+        y = top + i * (row_h + gap)
+        d.panel(s, ML, y, CONTENT_W, row_h, accent=accent)
+        d.rect(s, ML, y + 0.055, 2.55, row_h - 0.055, NEST)
+        d.text(s, ML, y + 0.055, 2.55, row_h - 0.055, title_case(name), size=15, bold=True, color=accent, align="center", anchor="middle", ml=0.08, mr=0.08, mt=0, mb=0)
+        in_box(d, s, ML + 2.7, y, CONTENT_W - 2.9, row_h, line, size=16, color=TEXT, align="left", ml=0.1, mr=0.12)
 
 
 def slide_single(d: Deck) -> None:
-    s = d.chrome("Contract", "When the single contract fits")
+    s = d.chrome("Structures", "What a single long option is")
     points = [
-        (TEAL, "Fast or Large", "You need the option to keep paying if price runs past a wall."),
-        (BLUE, "IV Is Cheap", "You are not paying a rich premium for a move that may be slow."),
-        (AMBER, "You Can Manage It", "You can take the candle-close exit. If you cannot watch, use the spread."),
+        (TEAL, "Long gamma", "Delta increases as price moves in favor of the option."),
+        (BLUE, "The debit", "The most the long option can lose is the premium paid."),
+        (AMBER, "Theta and vega", "Time decay is paid every day. A drop in IV can cut the price even if the stock rises."),
     ]
     for i, (accent, title, body) in enumerate(points):
-        y = 1.18 + i * 1.45
-        d.panel(s, ML, y, CONTENT_W, 1.32, accent=accent)
-        in_box(d, s, ML + 0.16, y, 3.45, 1.32, title, size=18, bold=True, color=accent, align="center", ml=0.06, mr=0.06)
-        in_box(d, s, ML + 3.7, y, CONTENT_W - 3.9, 1.32, body, size=16, color=BODY, align="left", ml=0.08, mr=0.1)
-    d.panel(s, ML, 5.55, CONTENT_W, 1.22, accent=CORAL)
-    d.text(
-        s, ML + 0.24, 5.70, CONTENT_W - 0.48, 0.95,
-        "Hard risk is the premium. You cannot lose more than you paid.\nIf the candle-close stop hits first, the loss is whatever the option is worth then, up to that premium.",
-        size=16, color=BODY, ml=0, mr=0, mt=0, mb=0,
+        y = 1.16 + i * 1.48
+        d.panel(s, ML, y, CONTENT_W, 1.36, accent=accent)
+        in_box(d, s, ML + 0.16, y, 3.45, 1.36, title, size=18, bold=True, color=accent, align="center", ml=0.06, mr=0.06)
+        in_box(d, s, ML + 3.7, y, CONTENT_W - 3.9, 1.36, body, size=16, color=BODY, align="left", ml=0.08, mr=0.1)
+    d.panel(s, ML, 5.62, CONTENT_W, 1.20, accent=CORAL)
+    in_box(
+        d, s, ML + 0.24, 5.62, CONTENT_W - 0.48, 1.20,
+        "One contract is 100 shares of exposure, times delta. The shares are the exposure figure. They are not a stock position.",
+        size=16, color=BODY, align="center", ml=0.08, mr=0.08,
     )
 
 
 def slide_spread(d: Deck) -> None:
-    s = d.chrome("Contract", "When the debit spread fits")
-    d.panel(s, ML, 1.18, 7.7, 5.55, accent=BLUE)
-    d.text(s, 0.66, 1.38, 7.3, 0.70, "Same expiry. The short strike\nis further out, and covered.", size=18, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    # two legs diagram
-    d.rect(s, 0.75, 2.30, 3.15, 1.15, TEAL_DIM, line=TEAL, line_w=1.25)
-    d.text(s, 0.85, 2.42, 2.95, 0.90, "Buy the nearer\nstrike. You are long.", size=15, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    d.arrow(s, 4.05, 2.68, 0.45, 0.30, BLUE, "right")
-    d.rect(s, 4.65, 2.30, 3.15, 1.15, BLUE_DIM, line=BLUE, line_w=1.25)
-    d.text(s, 4.75, 2.42, 2.95, 0.90, "Sell the further\nstrike. Covered.", size=15, color=TEXT, ml=0, mr=0, mt=0, mb=0)
-    d.text(
-        s, 0.70, 3.70, 7.1, 2.70,
-        "Call spread: buy a call, sell a\nfurther call.\n\nPut spread: buy a put, sell a\nfurther put.\n\nMax loss is the debit.\nPast the short strike, you\ndo not get paid more.",
-        size=16, color=BODY, ml=0, mr=0, mt=0, mb=0,
+    s = d.chrome("Structures", "What a vertical spread is")
+    d.panel(s, ML, 1.16, 7.7, 5.70, accent=BLUE)
+    d.text(s, 0.66, 1.36, 7.2, 0.70, "Same expiry. One long strike.\nOne short strike, further out.", size=18, color=TEXT, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.rect(s, 0.75, 2.20, 3.15, 1.15, TEAL_DIM, line=TEAL, line_w=1.25)
+    in_box(d, s, 0.85, 2.20, 2.95, 1.15, "Long the nearer\nstrike.", size=16, color=TEXT, align="center", ml=0.06, mr=0.06)
+    d.arrow(s, 4.05, 2.58, 0.45, 0.30, BLUE, "right")
+    d.rect(s, 4.65, 2.20, 3.15, 1.15, BLUE_DIM, line=BLUE, line_w=1.25)
+    in_box(d, s, 4.75, 2.20, 2.95, 1.15, "Short the further\nstrike.", size=16, color=TEXT, align="center", ml=0.06, mr=0.06)
+    in_box(
+        d, s, 0.70, 3.55, 7.1, 3.05,
+        "Debit spread: the long strike costs more. Max loss is the debit. Past the short strike the gain stops.\n\nCredit spread: the short strike brings in more. Max gain is the credit. Max loss is the width minus the credit.\n\nCall spread for the upside. Put spread for the downside.",
+        size=16, color=BODY, align="center", ml=0.08, mr=0.1,
     )
     block(
-        d, s, 8.30, 1.18, 4.61, 5.55, "Use it when",
-        "The move is slower.\n\nIV is rich.\n\nOr you cannot watch.\n\nOne caution. These are\nAmerican options. The\nshort leg can be assigned\nearly. Know the broker\nrule before you hold a\nspread into expiry.",
-        accent=AMBER, ts=18, bs=16,
+        d, s, 8.30, 1.16, 4.61, 5.70, "The short leg",
+        "It is covered by the long leg of the same expiry.\n\nAmerican options can be assigned early on that short leg.\n\nThe long leg is what makes the loss defined.\n\nWithout it, the short is naked.",
+        accent=AMBER, ts=18, bs=16, align="center",
     )
 
 
@@ -2165,28 +2074,28 @@ def slide_rich_iv(d: Deck) -> None:
             in_box(d, s, x, y, 4.35, 1.22, money(data[key]), size=28, bold=True, color=TEXT, align="center", ml=0.08, mr=0.08)
     d.text(
         s, ML, 6.40, CONTENT_W, 0.60,
-        "The single call more than doubles. The spread debit rises less. Rich IV is why the spread is the fit when the move is not a fast one you must keep open.",
+        "The single call more than doubles. The spread debit rises less. Rich IV raises the single more than it raises the spread.",
         size=15, color=BODY, ml=0, mr=0, mt=0, mb=0,
     )
 
 
 def slide_place(d: Deck) -> None:
-    s = d.chrome("Contract", "Place the contract on the map")
-    d.panel(s, ML, 1.18, CONTENT_W, 0.85, accent=AMBER)
-    d.text(
-        s, ML + 0.22, 1.32, CONTENT_W - 0.44, 0.58,
-        "A picture of the October 16 book. Not an order. You still check IV, and you still write your own dollars.",
-        size=16, color=TEXT, anchor="middle", ml=0, mr=0, mt=0, mb=0,
+    s = d.chrome("October 16, 2026", "How a structure sat on that map")
+    d.panel(s, ML, 1.16, CONTENT_W, 0.85, accent=AMBER)
+    in_box(
+        d, s, ML + 0.22, 1.16, CONTENT_W - 0.44, 0.85,
+        "A picture of the October 16 book. Not an order. IV for that session is not in the example.",
+        size=16, color=TEXT, align="center", ml=0.08, mr=0.08,
     )
     block(
-        d, s, ML, 2.20, 6.15, 4.50, "Put side, through 760",
-        "Fast, IV cheap, you can watch:\nlong put.\n\nSlow, IV rich, or you cannot\nwatch: put debit spread.\n\nLong strike near the money,\nor near the level that has to\nwork. Short strike further\nout, at a target you can name.",
-        accent=CORAL, ts=18, bs=16,
+        d, s, ML, 2.18, 6.15, 4.55, "Through 760, still negative",
+        "Spot stays under the flip.\n\nA long put, or a put debit spread, is long gamma to the downside.\n\nA put credit spread is short gamma under the put wall.\n\nA naked short put has no cap if the drop continues.",
+        accent=CORAL, ts=18, bs=16, align="center",
     )
     block(
-        d, s, 6.76, 2.20, 6.15, 4.50, "Call side, through 775",
-        "That close also crosses\nthe flip. Re-read first.\n\nIf the new book is a long\ncall idea: same fork.\nSingle if it is fast and you\ncan watch. Spread if IV is\nrich or you cannot.\n\nDo not sell a strike the long\nleg does not cover.",
-        accent=TEAL, ts=18, bs=16,
+        d, s, 6.76, 2.18, 6.15, 4.55, "Through 775, across the flip",
+        "That close crosses the call wall and the flip, about 774.5.\n\nThe dealer sign may have changed. Read the book again.\n\nA long call is long gamma above there.\nA call credit spread is short gamma at the wall.\nA naked short call has no cap if the rise continues.",
+        accent=TEAL, ts=18, bs=16, align="center",
     )
 
 
@@ -2215,7 +2124,7 @@ def slide_delta_bands(d: Deck) -> None:
         )
     d.text(
         s, ML, 6.62, CONTENT_W, 0.40,
-        "EXAMPLE. 21 days, IV 25%, spot 100, rate 4%, no dividend. Exposure is delta times 100 shares, on a small move. You do not buy the shares.",
+        "EXAMPLE. 21 days, IV 25%, spot 100, rate 4%, no dividend. Exposure is delta times 100 shares, on a small move. That figure is not a share position.",
         size=12, color=DIM, ml=0, mr=0, mt=0, mb=0,
     )
 
@@ -2260,8 +2169,8 @@ def slide_theta(d: Deck) -> None:
         accent=BLUE, ts=16, bs=14,
     )
     d.text(
-        s, ML, 6.62, 7.5, 0.40,
-        "You pay theta every day you are long. Less decay is not a reason to hold a wrong idea.",
+        s, ML, 6.58, CONTENT_W, 0.42,
+        "A long option pays theta every day it is open. A short option collects that theta.",
         size=13, color=DIM, ml=0, mr=0, mt=0, mb=0,
     )
 
@@ -2285,98 +2194,77 @@ def slide_crush(d: Deck) -> None:
 
 
 def slide_events(d: Deck) -> None:
-    s = d.chrome("Events", "Earnings, and the rare 0DTE")
+    s = d.chrome("Events", "Earnings, and the 0DTE book")
     block(
-        d, s, ML, 1.18, 6.15, 5.55, "Earnings",
-        "IV is commonly bid up\ninto the report, then it\ndrops. That drop is crush.\n\nCheck the actual IV.\nDo not assume it.\n\nRich IV, or you cannot\nwatch: debit spread.\n\nCheap IV, a fast move,\nand you can watch:\nsingle contract.",
-        accent=AMBER, ts=22, bs=18,
+        d, s, ML, 1.16, 6.15, 5.70, "Earnings",
+        "IV is often bid up into the report, then it drops.\n\nThat drop is crush. The option can lose value even if the stock moves the right way.\n\nThe actual IV is on the chain. It is not assumed.\n\nA long option carries that vega. A spread carries less of it.",
+        accent=AMBER, ts=22, bs=18, align="center",
     )
     block(
-        d, s, 6.76, 1.18, 6.15, 5.55, "0DTE",
-        "This is the 1-day spike\non the gamma chart.\n\nTheta is gone by the close.\n\nOccasional, and only when\nyou can manage that close.\n\nSame playbook. Same\ncandle close. Same cash\ndebit. No naked short.\n\nDo not use the 0DTE\ncolumn as the swing map.",
-        accent=CORAL, ts=22, bs=18,
+        d, s, 6.76, 1.16, 6.15, 5.70, "0DTE",
+        "This is the one-day spike on the gamma chart.\n\nTheta is gone by the close.\n\nThe 0DTE column is that day's gamma.\n\nIt is not the weekly or monthly open interest, and it is not the swing wall.",
+        accent=CORAL, ts=22, bs=18, align="center",
     )
 
 
 def slide_stops(d: Deck) -> None:
-    s = d.chrome("Risk", "The stop follows the regime")
-    block(
-        d, s, ML, 1.18, 6.15, 3.15, "Positive gamma fade",
-        "The stop sits beyond the\nrejection high, or the low.\n\nYou exit when a candle\ncloses through that price.\nA wick through it is not\nthe exit.",
-        accent=TEAL, ts=18, bs=16,
-    )
-    block(
-        d, s, 6.76, 1.18, 6.15, 3.15, "Negative gamma break",
-        "You exit when a 4h candle\ncloses back inside the range.\n\nThe break failed.\nA wick back inside is not\nthe exit. The close is.",
-        accent=CORAL, ts=18, bs=16,
-    )
-    d.panel(s, ML, 4.52, CONTENT_W, 2.22, accent=AMBER)
-    d.text(
-        s, ML + 0.24, 4.70, CONTENT_W - 0.48, 1.88,
-        "Both regimes: the hard ceiling on the loss is the debit you paid.\nThe candle close is how you leave when the idea is wrong, before the option is worth zero.\nDo not move the stop farther once that close has already killed the idea.\nPick the stop before you enter. Write it down. Do not switch it after you are in.",
-        size=16, color=BODY, ml=0, mr=0, mt=0, mb=0,
-    )
+    s = d.chrome("Risk", "Where the loss stops")
+    cards = [
+        (TEAL, "Long option", "The premium paid. The contract can go to zero. It cannot go below zero."),
+        (BLUE, "Debit spread", "The debit. The gain stops at the distance between the strikes, minus that debit."),
+        (AMBER, "Credit spread", "The width of the strikes, minus the credit. The gain stops at the credit."),
+        (CORAL, "Naked short", "No defined stop in the option itself. A short call is open-ended. A short put runs toward the strike."),
+    ]
+    for i, (accent, title, body) in enumerate(cards):
+        y = 1.16 + i * 1.42
+        d.panel(s, ML, y, CONTENT_W, 1.30, accent=accent)
+        in_box(d, s, ML + 0.16, y, 3.3, 1.30, title_case(title), size=18, bold=True, color=accent, align="center", ml=0.06, mr=0.08)
+        in_box(d, s, ML + 3.6, y, CONTENT_W - 3.85, 1.30, body, size=16, color=BODY, align="left", ml=0.1, mr=0.12)
 
 
 def slide_risk(d: Deck) -> None:
-    s = d.chrome("Risk", "You choose the dollars")
-    d.panel(s, ML, 1.18, CONTENT_W, 1.55, accent=AMBER)
-    d.text(
-        s, ML + 0.24, 1.36, CONTENT_W - 0.48, 1.20,
-        "Every trade, you write the dollars you are willing to lose.\nThis deck will not give you a percent of the account. It will not give you a dollar amount.",
-        size=18, color=TEXT, ml=0, mr=0, mt=0, mb=0,
-    )
-    (lx, lw), (rx, rw) = cols(2, gap=0.18)
-    # The formula needs the wider card. Split 7.7 / 4.6 on the same row edges.
-    lw, rw = 7.55, CONTENT_W - 7.55 - 0.18
-    rx = ML + lw + 0.18
-    d.panel(s, ML, 2.90, lw, 2.55, accent=BLUE)
-    d.text(s, ML, 3.04, lw, 0.34, "The Only Math", size=16, bold=True, color=BLUE, align="center", ml=0, mr=0, mt=0, mb=0)
-    in_box(
-        d, s, ML + 0.2, 3.40, lw - 0.4, 1.85,
-        "Your dollars  /  (option price x 100)  =  contracts",
-        size=20, bold=True, color=TEXT, align="center", ml=0.06, mr=0.06,
+    s = d.chrome("Risk", "Margin and early assignment")
+    (lx, lw), (rx, rw) = cols(2)
+    block(
+        d, s, lx, 1.16, lw, 5.70, "Margin",
+        "A long option is paid in full. The debit is the cash outlay.\n\nA short option requires margin, because the loss may exceed the credit.\n\nA defined-risk spread margins the width, not an open-ended move.\n\nThe broker can close a position that no longer fits the margin.",
+        accent=BLUE, ts=20, bs=17, align="center",
     )
     block(
-        d, s, rx, 2.90, rw, 2.55, "EXAMPLE arithmetic",
-        "You wrote 400.\nDebit is 2.00.\n2.00 x 100 = 200.\n400 / 200 = 2 contracts.\nReplace 400. It is not\na suggestion.",
-        accent=AMBER, ts=16, bs=15,
-    )
-    d.text(
-        s, ML, 5.60, CONTENT_W, 1.20,
-        "At a stop before expiry the option may still have value. It may not, if the move was violent or time is gone.\nBe willing to lose the debit. In negative gamma the invalidation can sit back at the other side of the range.\nMeasure that room, then do the division. The same dollars buy fewer contracts when the debit is large.",
-        size=15, color=BODY, ml=0, mr=0, mt=0, mb=0,
+        d, s, rx, 1.16, rw, 5.70, "Early assignment",
+        "American options can be assigned before expiry.\n\nThe short leg of a spread is the one that can be assigned.\n\nThe long leg is the cover. It does not stop the assignment notice. It caps the stock position that assignment creates.\n\nA naked short has no long leg behind it.",
+        accent=AMBER, ts=20, bs=17, align="center",
     )
 
 
 def slide_flow(d: Deck) -> None:
     s = d.chrome("Flow", "Flow, dark pool, and the dollars")
     flow_cards = [
-        (PURPLE, "Options flow", "Large prints at a wall carry more weight than prints in the middle.\n\nWeight. Not the entry. The close is the entry."),
-        (BLUE, "Dark pool", "Large stock prints near a wall add weight to that wall.\n\nSame rule. Weight, not a trigger."),
-        (AMBER, "Not a close", "A print does not replace the 4h close, the regime, or the wall you already marked."),
+        (PURPLE, "Options flow", "Large prints at a wall are more size than prints in the middle of the range.\n\nSize is not the gamma map."),
+        (BLUE, "Dark pool", "Large stock prints near a wall are size in the stock, at that price.\n\nSize is not the open-interest wall."),
+        (AMBER, "A print", "A print does not replace the regime, the wall, or a close.\n\nIt is a number of contracts, or of shares."),
     ]
     for (x, w), (accent, title, body) in zip(cols(3), flow_cards):
         block(d, s, x, 1.16, w, 3.55, title, body, accent=accent, ts=18, bs=16, align="center")
     d.panel(s, ML, 4.90, CONTENT_W, 1.85, accent=TEAL)
-    d.text(s, ML + 0.22, 5.05, CONTENT_W - 0.44, 0.36, "Always the Dollar Premium. Price x contracts x 100.", size=16, bold=True, color=TEXT, ml=0, mr=0, mt=0, mb=0)
+    d.text(s, ML + 0.22, 5.05, CONTENT_W - 0.44, 0.36, "Dollar Premium. Price x Contracts x 100.", size=16, bold=True, color=TEXT, align="center", ml=0, mr=0, mt=0, mb=0)
     d.text(
         s, ML + 0.22, 5.48, CONTENT_W - 0.44, 1.05,
-        "EXAMPLE.  2.00 x 500 x 100 = 100,000 dollars.    12.00 x 80 x 100 = 96,000 dollars.\nSimilar money. Very different if you only count contracts. Read the dollars.",
-        size=16, color=BODY, ml=0, mr=0, mt=0, mb=0,
+        "EXAMPLE.  2.00 x 500 x 100 = 100,000 dollars.    12.00 x 80 x 100 = 96,000 dollars.\nSimilar money. Very different if you only count contracts.",
+        size=16, color=BODY, align="center", ml=0, mr=0, mt=0, mb=0,
     )
 
 
 def slide_run16(d: Deck) -> None:
-    s = d.chrome("October 16, 2026", "Run that book through the list")
+    s = d.chrome("October 16, 2026", "That book, in one pass")
     rows = [
-        ("Month", "Not in this example. You still write your dollars. Do not skip the step."),
         ("Levels", "Put wall 760. Call wall 775. Flip about 774.5. Spot about 763.2."),
-        ("Regime", "Negative. Spot is under the flip. Do not fade the box."),
-        ("4h", "The range was 760 to 775. It matched the walls."),
-        ("Plan", "Wait. Close through 760: go with the put. Hold above 775: re-read."),
-        ("Contract", "Fast and cheap IV and you can watch: single. Else a debit spread. Check IV. It is not given here."),
-        ("Stop", "A 4h close back inside. Hard risk is the debit. Flow is weight, in dollars, at the walls."),
+        ("Regime", "Negative. Spot was under the flip. Most of 760 to 775 was too."),
+        ("Range", "The 4h range was 760 to 775. It matched the walls."),
+        ("760", "A close through 760 stayed under the flip. The downside hedge could add fuel."),
+        ("775", "A hold above 775 crossed the call wall and the flip. That is a new read."),
+        ("Structure", "Long gamma rides a run. Short gamma, including a naked short, is exposed to it."),
+        ("Model", "IV for that day is not in the example. GEX is a model of this book, not a tape."),
     ]
     for i, (label, line) in enumerate(rows):
         y = 1.16 + i * 0.78
@@ -2387,30 +2275,29 @@ def slide_run16(d: Deck) -> None:
 
 
 def slide_check(d: Deck) -> None:
-    s = d.chrome("Checklist", "Before you enter")
+    s = d.chrome("Checklist", "Before the structure")
     groups = [
         ("Regime", [
-            "Month noted. Your dollars are written down.",
-            "Flip marked. You know which side spot is on.",
-            "Positive: fade only. Negative: break only.",
+            "Spot versus the flip, on the expiry you mean.",
+            "Dealer positive: the hedge tends to fade.",
+            "Dealer negative: the hedge can chase.",
         ]),
         ("Levels", [
             "Put wall and call wall, from open interest.",
-            "Cross-checked on a second public source.",
-            "4h range drawn. You know if it matches.",
+            "The same story on a second public source.",
+            "Customer gamma and dealer gamma are opposite signs.",
         ]),
-        ("Trigger", [
-            "Watch is 1-2% out. Distance, not risk.",
-            "Entry alert is a 4h or daily close.",
-            "The zone is a band. You are not inside it.",
-            "15m break, or a strong 4h close.",
-            "Price, averages, level, news, flow agree.",
+        ("The model", [
+            "GEX is an estimate from open interest.",
+            "It is not the shares already hedged.",
+            "0DTE gamma is not the swing wall.",
+            "A wick is not a held close.",
         ]),
-        ("Contract", [
-            "Single or spread: speed, IV, and attention.",
-            "Contracts = your dollars / the debit.",
-            "Stop is a candle close. You can say where.",
-            "Cash debit only. No naked short.",
+        ("Structure", [
+            "Long gamma or short gamma, for your position.",
+            "Defined loss, or a naked short with no cap.",
+            "Debit, or credit. Theta is the other side of gamma.",
+            "Dollar premium is price times contracts times 100.",
         ]),
     ]
     for i, (title, items) in enumerate(groups):
@@ -2426,120 +2313,112 @@ def slide_check(d: Deck) -> None:
 
 
 def slide_mistakes(d: Deck) -> None:
-    s = d.chrome("Mistakes", "Easy ways to get this wrong")
+    s = d.chrome("Mistakes", "Easy ways to misread the book")
     items = [
         "Treating the flip as support.",
-        "Fading a wall while spot is under the flip.",
-        "Buying a breakout while spot is over the flip.",
-        "Entering on a touch, or on a wick.",
         "Reading the heatmap as put gamma.",
         "Looking for a put-wall line on the by-strike chart.",
         "Looking for a flip line on the by-strike chart.",
         "Setting a swing level from Directionalized Volume.",
-        "Counting contracts and skipping the dollars.",
-        "Chasing a poke that closed back inside.",
-        "Keeping the old plan after a close outside has held.",
-        "Selling options naked, or using margin.",
-        "Letting a 15m break overrule the 4h.",
-        "Copying the dealer by shorting stock.",
+        "Using the 0DTE column as the swing wall.",
+        "Confusing dealer gamma with your own gamma.",
+        "Treating GEX as shares already traded.",
+        "Ignoring the customer-versus-dealer sign.",
+        "Calling a wick a held close.",
+        "Counting contracts and skipping the dollar premium.",
+        "Forgetting a naked short has no cap.",
+        "Averaging two expiries into a new strike.",
+        "Reading a pin as a promise.",
     ]
     for i, line in enumerate(items):
         col = i // 7
         row = i % 7
         x = ML + col * 6.34
-        y = 1.18 + row * 0.78
-        d.panel(s, x, y, 6.16, 0.68)
-        d.rect(s, x, y, 0.62, 0.68, NEST)
-        d.text(s, x, y, 0.62, 0.68, f"{i+1:02d}", size=14, bold=True, color=CORAL, align="center", anchor="middle", ml=0, mr=0, mt=0, mb=0)
-        d.text(s, x + 0.74, y, 5.25, 0.68, line, size=14, color=TEXT, anchor="middle", ml=0.06, mr=0.08, mt=0, mb=0)
+        y = 1.16 + row * 0.78
+        d.panel(s, x, y, 6.16, 0.70)
+        d.rect(s, x, y, 0.62, 0.70, NEST)
+        d.text(s, x, y, 0.62, 0.70, f"{i+1:02d}", size=14, bold=True, color=CORAL, align="center", anchor="middle", ml=0, mr=0, mt=0, mb=0)
+        d.text(s, x + 0.74, y, 5.25, 0.70, line, size=14, color=TEXT, anchor="middle", ml=0.06, mr=0.08, mt=0, mb=0)
 
 
 def slide_gloss_a(d: Deck) -> None:
     s = d.chrome("Glossary", "The words")
     terms = [
-        ("Delta", "Share count for the dealer. For you, how the option tracks the stock."),
+        ("Delta", "Share count for the dealer hedge. For a long option, how it tracks the stock."),
         ("Gamma", "How fast delta changes as the stock price moves."),
-        ("Theta", "Decay. The value time takes out of a long option."),
+        ("Long gamma", "Your delta increases as price moves your way. Long options. You pay theta."),
+        ("Short gamma", "Your delta moves against you as price runs. Short options. You collect theta."),
+        ("Theta", "Decay. What time takes from a long option, and what a short option collects."),
         ("Vega", "How much the option price changes when IV changes."),
-        ("IV", "The volatility implied by the option's price."),
-        ("IV crush", "A fast drop in IV, often after an event. The option can lose value anyway."),
-        ("Charm", "Delta's change as time passes. Price and IV held still. Textbook only."),
-        ("Vanna", "Delta's change as IV changes. Price held still. Textbook only."),
+        ("IV", "The volatility implied by the option's price. VIX is the index version."),
+        ("GEX", "A model of dealer hedge from open interest. Not a tape of shares."),
     ]
     for i, (term, line) in enumerate(terms):
         y = 1.16 + i * 0.70
-        d.rect(s, ML, y, 2.15, 0.62, NEST)
-        d.text(s, ML, y, 2.15, 0.62, title_case(term), size=15, bold=True, color=AMBER, align="center", anchor="middle", ml=0.06, mr=0.06, mt=0, mb=0)
-        d.text(s, ML + 2.35, y, 10.0, 0.62, line, size=16, color=BODY, anchor="middle", ml=0.08, mr=0.08, mt=0, mb=0)
+        d.rect(s, ML, y, 2.35, 0.62, NEST)
+        d.text(s, ML, y, 2.35, 0.62, title_case(term), size=14, bold=True, color=AMBER, align="center", anchor="middle", ml=0.06, mr=0.06, mt=0, mb=0)
+        d.text(s, ML + 2.55, y, 9.8, 0.62, line, size=15, color=BODY, anchor="middle", ml=0.08, mr=0.08, mt=0, mb=0)
 
 
 def slide_gloss_b(d: Deck) -> None:
-    s = d.chrome("Glossary", "The levels and the orders")
+    s = d.chrome("Glossary", "The levels and the structures")
     terms = [
-        ("Call Wall", "Heavy call open interest above spot. Resistance."),
-        ("Put Wall", "Heavy put open interest below spot. Support. Longest purple bar under spot."),
+        ("Call Wall", "Heavy call open interest above spot. Often resistance."),
+        ("Put Wall", "Heavy put open interest below spot. Often support. Longest purple bar under spot."),
         ("Flip", "Where net gamma changes sign. A behavior change. Not support."),
-        ("Positive gamma", "Above the flip. Dealers fade the move. Price can range and pin."),
-        ("Negative gamma", "Below the flip. Dealers chase. Price can trend and accelerate."),
-        ("Open interest", "Contracts still open. The swing book. Walls and regime."),
-        ("Directionalized Volume", "Today's flow. The intraday view. Not the swing map."),
-        ("Pin", "Price sticking near a heavy strike while the hedges lean back in."),
-        ("OPEX", "Expiration. A large expiry resets the walls. Read the book again."),
-        ("Debit spread", "Long one option, short a further strike, same expiry. Max loss is the debit."),
-        ("Premium", "The price you pay. The hard risk on a long call, long put, or debit spread."),
-        ("0DTE", "Expires the same day. Extreme gamma. Extreme theta. Occasional only."),
-        ("Candle close", "The bar has finished. The only alert that counts in this deck."),
+        ("Positive gamma", "Above the flip, for the dealer book. The hedge tends to fade. Price can range and pin."),
+        ("Negative gamma", "Below the flip, for the dealer book. The hedge can chase. Price can extend."),
+        ("Gamma squeeze", "Short-gamma hedging that buys into a rise, or sells into a drop, and can feed the move."),
+        ("Credit spread", "Short a nearer strike, long a further one. Max gain is the credit. Max loss is the width minus the credit."),
+        ("Iron condor", "A short put spread and a short call spread. Profit if price finishes between the short strikes."),
+        ("Butterfly", "Long the wings, short two at the body. Profit if price finishes near the body."),
+        ("Naked short", "A short option with no long leg covering it. The loss is not capped. Margin is required."),
+        ("0DTE", "Expires the same day. Extreme gamma. Extreme theta. Not the swing open interest."),
+        ("IV crush", "A fast drop in IV, often after an event. The option can lose value anyway."),
     ]
     left_terms = terms[:6]
     right_terms = terms[6:12]
-    last = terms[12]
     pairs = list(zip(left_terms, right_terms))
-    row_top, row_h = 1.14, 0.72
-    gap = 0.08
+    row_top, row_h = 1.14, 0.90
+    gap = 0.06
     for i, (left, right) in enumerate(pairs):
         y = row_top + i * (row_h + gap)
         for col, (term, line) in enumerate((left, right)):
             x = ML + col * 6.33
             d.rect(s, x, y, 6.16, row_h, CARD, line=LINE, line_w=1.0)
-            d.text(s, x + 0.14, y + 0.04, 5.88, 0.26, title_case(term), size=13, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
-            d.text(s, x + 0.14, y + 0.30, 5.88, 0.40, line, size=12, color=BODY, anchor="middle", ml=0, mr=0, mt=0, mb=0)
-    if last:
-        y = row_top + len(pairs) * (row_h + gap)
-        term, line = last
-        d.rect(s, ML, y, CONTENT_W, row_h, CARD, line=LINE, line_w=1.0)
-        d.text(s, ML + 0.18, y + 0.04, 3.2, 0.62, title_case(term), size=14, bold=True, color=AMBER, anchor="middle", ml=0, mr=0, mt=0, mb=0)
-        d.text(s, ML + 3.5, y, CONTENT_W - 3.7, row_h, line, size=14, color=BODY, anchor="middle", ml=0.08, mr=0.1, mt=0, mb=0)
+            d.text(s, x + 0.14, y + 0.06, 5.88, 0.28, title_case(term), size=14, bold=True, color=AMBER, ml=0, mr=0, mt=0, mb=0)
+            d.text(s, x + 0.14, y + 0.36, 5.88, 0.48, line, size=13, color=BODY, anchor="middle", ml=0, mr=0, mt=0, mb=0)
 
 
 def slide_one(d: Deck) -> None:
     s = d.chrome("Wrap-up", "The whole swing on one page")
     left = [
-        "1  Note the month. Write your dollars.",
-        "2  Mark put wall, call wall, flip, spot.",
-        "3  Cross-check the three levels.",
-        "4  Draw the 4h range on the walls.",
-        "5  Above the flip: fade a rejection close.",
-        "6  Below the flip: trade the 4h break.",
-        "7  Fast, cheap IV, you can watch: single.",
-        "8  Otherwise: a debit spread.",
-        "9  Stop on a candle close. Risk is the debit.",
+        "1  Mark put wall, call wall, flip, and spot.",
+        "2  Name the expiry. 0DTE is not the swing book.",
+        "3  Check the three levels on a second source.",
+        "4  Dealer positive: the hedge tends to fade.",
+        "5  Dealer negative: the hedge can chase.",
+        "6  Your gamma is long or short, separately.",
+        "7  A credit spread, condor, or butterfly is short gamma.",
+        "8  A naked short has no cap, and it uses margin.",
+        "9  GEX is a model. A wick is not a held close.",
     ]
     right = [
         "Flip: behavior change. Not support.",
-        "Walls: call resistance, put support.",
+        "Walls: call strike above, put strike below.",
         "Heatmap color: net gamma.",
         "Put wall: longest purple bar below spot.",
-        "By-strike draws call wall and spot only.",
-        "Open interest: swing. Volume: today.",
-        "Alert on the close. Never a touch.",
-        "1-2% watch is distance, not risk.",
-        "Inside the band, stay quiet.",
-        "15m times the entry. 4h decides.",
-        "Cash only. No naked short.",
+        "By-strike draws the call wall and spot only.",
+        "Open interest: the swing. Volume: the day.",
+        "VIX: the price of index volatility.",
+        "Squeeze: the hedge can feed the move.",
+        "Single names gap. Index books are deeper.",
+        "Dollar premium: price x contracts x 100.",
+        "Customer gamma flips the dealer colors.",
     ]
     (lx, lw), (rx, rw) = cols(2)
     d.panel(s, lx, 1.14, lw, 5.20, accent=TEAL)
-    d.text(s, lx, 1.26, lw, 0.34, "Do It in This Order", size=16, bold=True, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
+    d.text(s, lx, 1.26, lw, 0.34, "Read It in This Order", size=16, bold=True, color=TEAL, align="center", ml=0, mr=0, mt=0, mb=0)
     for (y, bh), line in zip(bands(1.68, 4.48, len(left), gap=0.04), left):
         in_box(d, s, lx + 0.16, y, lw - 0.32, bh, line, size=15, color=BODY, align="left", ml=0.06, mr=0.06)
     d.panel(s, rx, 1.14, rw, 5.20, accent=AMBER)
@@ -2549,7 +2428,7 @@ def slide_one(d: Deck) -> None:
     d.panel(s, ML, 6.48, CONTENT_W, 0.50, accent=None)
     d.text(
         s, ML, 6.48, CONTENT_W, 0.50,
-        "Dealers hedge. Gamma shows the push. You act on the close. You choose the risk.",
+        "Dealers hedge. Gamma shows the push. Your gamma is a separate book.",
         size=15, bold=True, color=TEXT, align="center", anchor="middle", ml=0.1, mr=0.1, mt=0, mb=0,
     )
 
